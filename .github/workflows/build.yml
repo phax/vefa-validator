@@ -49,7 +49,7 @@ jobs:
           MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
       - name: Docker login
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         if: matrix.jdk == 11
         with:
           username: ${{ secrets.DOCKER_USERNAME }}

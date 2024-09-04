@@ -1,4 +1,4 @@
-IMAGE=anskaffelser/validator
+IMAGE=phelger/vefa-validator
 
 package:
 	@mvn clean package
