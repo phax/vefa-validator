@@ -12,7 +12,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 
-import lombok.extern.slf4j.Slf4j;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;
@@ -22,47 +21,52 @@ import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.api.IDeclarationWithChildren;
 import no.difi.vefa.validator.lang.ValidatorException;
 
-@Slf4j
-@Type("xml.sbdh")
-public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarationWithChildren {
+@Type ("xml.sbdh")
+public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarationWithChildren
+{
 
-    private static final String NAMESPACE =
-            "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader";
+  private static final String NAMESPACE = "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader";
 
-    @Inject
-    @Named("sbdh-extractor")
-    private Provider<XsltExecutable> extractor;
+  @Inject
+  @Named ("sbdh-extractor")
+  private Provider <XsltExecutable> extractor;
 
-    @Inject
-    private Processor processor;
+  @Inject
+  private Processor processor;
 
-    @Override
-    public boolean verify(byte[] content, List<String> parent) {
-        return parent.get(0).startsWith(NAMESPACE);
+  @Override
+  public boolean verify (final byte [] content, final List <String> parent)
+  {
+    return parent.get (0).startsWith (NAMESPACE);
+  }
+
+  @Override
+  public List <String> detect (final InputStream contentStream, final List <String> parent)
+  {
+    return Arrays.asList (parent.get (0), "SBDH:1.0");
+  }
+
+  @Override
+  public Iterable <CachedFile> children (final InputStream inputStream) throws ValidatorException
+  {
+    try
+    {
+      final ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+
+      final XsltTransformer xsltTransformer = extractor.get ().load ();
+      xsltTransformer.setSource (new StreamSource (inputStream));
+      xsltTransformer.setDestination (processor.newSerializer (baos));
+      xsltTransformer.transform ();
+      xsltTransformer.close ();
+
+      if (baos.size () <= 38)
+        return Collections.emptyList ();
+
+      return Collections.singletonList (CachedFile.of (baos.toByteArray ()));
     }
-
-    @Override
-    public List<String> detect(InputStream contentStream, List<String> parent) {
-        return Arrays.asList(parent.get(0), "SBDH:1.0");
+    catch (final SaxonApiException e)
+    {
+      throw new ValidatorException ("Unable to extract SBDH content.", e);
     }
-
-    @Override
-    public Iterable<CachedFile> children(InputStream inputStream) throws ValidatorException {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-            XsltTransformer xsltTransformer = extractor.get().load();
-            xsltTransformer.setSource(new StreamSource(inputStream));
-            xsltTransformer.setDestination(processor.newSerializer(baos));
-            xsltTransformer.transform();
-            xsltTransformer.close();
-
-            if (baos.size() <= 38)
-                return Collections.emptyList();
-
-            return Collections.singletonList(CachedFile.of(baos.toByteArray()));
-        } catch (SaxonApiException e) {
-            throw new ValidatorException("Unable to extract SBDH content.", e);
-        }
-    }
+  }
 }

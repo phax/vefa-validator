@@ -7,10 +7,12 @@ import java.nio.file.Path;
 
 import javax.xml.transform.stream.StreamSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.asic.IAsicReader;
 
 import jakarta.xml.bind.Unmarshaller;
-import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.xsd.vefa.validator._1.ArtifactType;
@@ -19,9 +21,9 @@ import no.difi.xsd.vefa.validator._1.Artifacts;
 /**
  * Defines a directory as source for validation artifacts.
  */
-@Slf4j
 class DirectorySourceInstance extends AbstractSourceInstance
 {
+  private static final Logger log = LoggerFactory.getLogger (DirectorySourceInstance.class);
 
   /**
    * Constructor, loads validation artifacts into memory.

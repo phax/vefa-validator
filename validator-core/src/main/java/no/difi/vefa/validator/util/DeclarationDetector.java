@@ -8,81 +8,108 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IDeclaration;
 import no.difi.vefa.validator.lang.ValidatorException;
 
-@Slf4j
 @Singleton
-public class DeclarationDetector {
+public class DeclarationDetector
+{
+  public static final DeclarationIdentifier UNKNOWN = new DeclarationIdentifier (null,
+                                                                                 null,
+                                                                                 Collections.singletonList ("unknown"));
+  private static final Logger log = LoggerFactory.getLogger (DeclarationDetector.class);
+  private final List <DeclarationWrapper> rootDeclarationWrappers = new ArrayList <> ();
 
-    public static final DeclarationIdentifier UNKNOWN =
-            new DeclarationIdentifier(null, null, Collections.singletonList("unknown"));
+  @Inject
+  public DeclarationDetector (final List <IDeclaration> declarations)
+  {
+    final Map <String, DeclarationWrapper> wrapperMap = new HashMap <> ();
 
-    private List<DeclarationWrapper> rootDeclarationWrappers = new ArrayList<>();
-
-    @Inject
-    public DeclarationDetector(List<IDeclaration> declarations) {
-        Map<String, DeclarationWrapper> wrapperMap = new HashMap<>();
-
-        for (IDeclaration declaration : declarations) {
-            if (declaration.getClass().isAnnotationPresent(Type.class)) {
-                for (String type : declaration.getClass().getAnnotation(Type.class).value()) {
-                    wrapperMap.put(type, DeclarationWrapper.of(type, declaration));
-                }
-            }
+    for (final IDeclaration declaration : declarations)
+    {
+      if (declaration.getClass ().isAnnotationPresent (Type.class))
+      {
+        for (final String type : declaration.getClass ().getAnnotation (Type.class).value ())
+        {
+          wrapperMap.put (type, DeclarationWrapper.of (type, declaration));
         }
-
-        for (String key : wrapperMap.keySet()) {
-            if (key.contains(".")) {
-                String parent = key.substring(0, key.lastIndexOf("."));
-                wrapperMap.get(parent).getChildren().add(wrapperMap.get(key));
-            } else {
-                rootDeclarationWrappers.add(wrapperMap.get(key));
-            }
-        }
+      }
     }
 
-    public DeclarationIdentifier detect(InputStream contentStream) throws IOException {
-        return detect(rootDeclarationWrappers, null, contentStream, UNKNOWN);
+    for (final String key : wrapperMap.keySet ())
+    {
+      if (key.contains ("."))
+      {
+        final String parent = key.substring (0, key.lastIndexOf ("."));
+        wrapperMap.get (parent).getChildren ().add (wrapperMap.get (key));
+      }
+      else
+      {
+        rootDeclarationWrappers.add (wrapperMap.get (key));
+      }
+    }
+  }
+
+  public DeclarationIdentifier detect (final InputStream contentStream) throws IOException
+  {
+    return detect (rootDeclarationWrappers, null, contentStream, UNKNOWN);
+  }
+
+  private DeclarationIdentifier detect (final List <DeclarationWrapper> wrappers,
+                                        byte [] content,
+                                        final InputStream contentStream,
+                                        final DeclarationIdentifier parent) throws IOException
+  {
+
+    if (content == null)
+    {
+      content = StreamUtils.read50KAndReset (contentStream);
     }
 
-    private DeclarationIdentifier detect(List<DeclarationWrapper> wrappers, byte[] content, InputStream contentStream,
-                                         DeclarationIdentifier parent) throws IOException {
+    for (final DeclarationWrapper wrapper : wrappers)
+    {
+      try
+      {
+        if (wrapper.verify (content, parent == null ? null : parent.getIdentifier ()))
+        {
+          contentStream.mark (0);
+          final List <String> identifier = wrapper.detect (contentStream,
+                                                           parent == null ? null : parent.getIdentifier ());
 
-        if (content == null) {
-            content = StreamUtils.readAndReset(contentStream, 10 * 1024);
+          if (identifier == null)
+            break;
+          log.debug ("Found: {} - {}", wrapper.getType (), identifier);
+
+          return detect (wrapper.getChildren (),
+                         content,
+                         contentStream,
+                         new DeclarationIdentifier (parent, wrapper, identifier));
         }
-
-        for (DeclarationWrapper wrapper : wrappers) {
-            try {
-                if (wrapper.verify(content, parent == null ? null : parent.getIdentifier())) {
-                    contentStream.mark(0);
-                    List<String> identifier = wrapper.detect(contentStream,
-                            parent == null ? null : parent.getIdentifier());
-
-                    if (identifier == null)
-                        break;
-                    log.debug("Found: {} - {}", wrapper.getType(), identifier);
-
-                    return detect(wrapper.getChildren(), content, contentStream,
-                            new DeclarationIdentifier(parent, wrapper, identifier));
-                }
-            } catch (ValidatorException e) {
-                log.warn(e.getMessage(), e);
-            } finally {
-                try {
-                    contentStream.reset();
-                } catch (IOException e) {
-                    log.warn("Couldn't reset stream!", e);
-                }
-            }
+      }
+      catch (final ValidatorException e)
+      {
+        log.warn (e.getMessage (), e);
+      }
+      finally
+      {
+        try
+        {
+          contentStream.reset ();
         }
-
-        return parent;
+        catch (final IOException e)
+        {
+          log.warn ("Couldn't reset stream!", e);
+        }
+      }
     }
+
+    return parent;
+  }
 }

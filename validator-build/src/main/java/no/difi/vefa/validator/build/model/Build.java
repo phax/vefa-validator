@@ -11,85 +11,125 @@ import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
 
-import lombok.Getter;
 import no.difi.vefa.validator.api.IValidation;
 import no.difi.xsd.vefa.validator._1.Configurations;
 
-@Getter
-public class Build {
+public class Build
+{
+  private final Map <String, String> setting = new HashMap <> ();
 
-    private Map<String, String> setting = new HashMap<>();
+  private final Path projectPath;
+  private final Path [] sourcePath;
+  private final Path targetFolder;
 
-    private Path projectPath;
-    private Path[] sourcePath;
-    private Path targetFolder;
+  private Configurations configurations;
 
-    private Configurations configurations;
+  private final List <Path> testFolders = new ArrayList <> ();
+  private final List <IValidation> testValidations = new ArrayList <> ();
 
-    private List<Path> testFolders = new ArrayList<>();
-    private List<IValidation> testValidations = new ArrayList<>();
+  public static Build of (final String arg, final CommandLine cmd)
+  {
+    final Build build = new Build (Paths.get (arg),
+                                   cmd.getOptionValue ("source", ""),
+                                   cmd.getOptionValue ("target",
+                                                       cmd.hasOption ("profile") ? String.format ("target-%s",
+                                                                                                  cmd.getOptionValue ("profile"))
+                                                                                 : "target"));
+    build.setSetting ("config",
+                      cmd.getOptionValue ("config",
+                                          cmd.hasOption ("profile") ? String.format ("buildconfig-%s.xml",
+                                                                                     cmd.getOptionValue ("profile"))
+                                                                    : "buildconfig.xml"));
+    build.setSetting ("name", cmd.getOptionValue ("name", "rules"));
+    build.setSetting ("build", cmd.getOptionValue ("build", UUID.randomUUID ().toString ()));
+    build.setSetting ("weight", cmd.getOptionValue ("weight", "0"));
 
-    public static Build of(String arg, CommandLine cmd) {
-        Build build = new Build(Paths.get(arg),
-                cmd.getOptionValue("source", ""),
-                cmd.getOptionValue("target", cmd.hasOption("profile") ? String.format("target-%s", cmd.getOptionValue("profile")) : "target"));
-        build.setSetting("config", cmd.getOptionValue("config", cmd.hasOption("profile") ? String.format("buildconfig-%s.xml", cmd.getOptionValue("profile")) : "buildconfig.xml"));
-        build.setSetting("name", cmd.getOptionValue("name", "rules"));
-        build.setSetting("build", cmd.getOptionValue("build", UUID.randomUUID().toString()));
-        build.setSetting("weight", cmd.getOptionValue("weight", "0"));
+    return build;
+  }
 
-        return build;
+  public Build (final Path projectPath)
+  {
+    this (projectPath, "", "target");
+  }
+
+  public Build (final Path projectPath, final String sourceFolder, final String targetFolder)
+  {
+    this.projectPath = projectPath;
+
+    final String [] sfs = sourceFolder.split (",");
+    this.sourcePath = new Path [sfs.length];
+    for (int i = 0; i < sfs.length; i++)
+      sourcePath[i] = projectPath.resolve (sfs[i]);
+
+    this.targetFolder = projectPath.resolve (targetFolder);
+  }
+
+  public Build (final Path projectPath, final Path [] sourceFolder, final Path targetFolder)
+  {
+    this.projectPath = projectPath;
+    this.sourcePath = sourceFolder;
+    this.targetFolder = targetFolder;
+  }
+
+  public Configurations getConfigurations ()
+  {
+    if (configurations == null)
+    {
+      configurations = new Configurations ();
+      configurations.setName (getSetting ("name"));
+      configurations.setTimestamp (System.currentTimeMillis ());
     }
 
-    public Build(Path projectPath) {
-        this(projectPath, "", "target");
-    }
+    return configurations;
+  }
 
-    public Build(Path projectPath, String sourceFolder, String targetFolder) {
-        this.projectPath = projectPath;
+  public void setSetting (final String key, final String value)
+  {
+    setting.put (key, value);
+  }
 
-        String[] sfs = sourceFolder.split(",");
-        this.sourcePath = new Path[sfs.length];
-        for (int i = 0; i < sfs.length; i++)
-            sourcePath[i] = projectPath.resolve(sfs[i]);
+  public String getSetting (final String key)
+  {
+    return setting.get (key);
+  }
 
-        this.targetFolder = projectPath.resolve(targetFolder);
-    }
+  public void addTestFolder (final File testFolder)
+  {
+    addTestFolder (testFolder.toPath ());
+  }
 
-    public Build(Path projectPath, Path[] sourceFolder, Path targetFolder) {
-        this.projectPath = projectPath;
-        this.sourcePath = sourceFolder;
-        this.targetFolder = targetFolder;
-    }
+  public void addTestFolder (final Path testFolder)
+  {
+    testFolders.add (testFolder);
+  }
 
-    public Configurations getConfigurations() {
-        if (configurations == null) {
-            configurations = new Configurations();
-            configurations.setName(getSetting("name"));
-            configurations.setTimestamp(System.currentTimeMillis());
-        }
+  public void addTestValidation (final IValidation validation)
+  {
+    testValidations.add (validation);
+  }
 
-        return configurations;
-    }
+  public Path getProjectPath ()
+  {
+    return projectPath;
+  }
 
-    public void setSetting(String key, String value) {
-        setting.put(key, value);
-    }
+  public Path [] getSourcePath ()
+  {
+    return sourcePath;
+  }
 
-    public String getSetting(String key) {
-        return setting.get(key);
-    }
+  public Path getTargetFolder ()
+  {
+    return targetFolder;
+  }
 
-    public void addTestFolder(File testFolder) {
-        addTestFolder(testFolder.toPath());
-    }
+  public List <Path> getTestFolders ()
+  {
+    return testFolders;
+  }
 
-    public void addTestFolder(Path testFolder) {
-        testFolders.add(testFolder);
-    }
-
-    public void addTestValidation(IValidation validation) {
-        testValidations.add(validation);
-    }
-
+  public List <IValidation> getTestValidations ()
+  {
+    return testValidations;
+  }
 }

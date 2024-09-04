@@ -19,60 +19,70 @@ import no.difi.vefa.validator.util.StreamUtils;
 /**
  * Document declaration for OASIS Universal Business Language (UBL).
  */
-@Type("xml.uncefact")
-public class UnCefactDeclaration extends AbstractXmlDeclaration {
+@Type ("xml.uncefact")
+public class UnCefactDeclaration extends AbstractXmlDeclaration
+{
 
-    private final static List<String> informationElements = Arrays.asList(
-            "BusinessProcessSpecifiedDocumentContextParameter",
-            "GuidelineSpecifiedDocumentContextParameter");
+  private final static List <String> informationElements = Arrays.asList ("BusinessProcessSpecifiedDocumentContextParameter",
+                                                                          "GuidelineSpecifiedDocumentContextParameter");
 
-    private static Pattern pattern = Pattern.compile("urn:un:unece:uncefact:data:standard:(.+)::(.+)");
+  private static Pattern pattern = Pattern.compile ("urn:un:unece:uncefact:data:standard:(.+)::(.+)");
 
-    @Override
-    public boolean verify(byte[] content, List<String> parent) {
-        return pattern.matcher(parent.get(0)).matches();
-    }
+  @Override
+  public boolean verify (final byte [] content, final List <String> parent)
+  {
+    return pattern.matcher (parent.get (0)).matches ();
+  }
 
-    @Override
-    public List<String> detect(InputStream contentStream, List<String> parent) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(parent.get(0).split("::")[1]);
+  @Override
+  public List <String> detect (final InputStream contentStream, final List <String> parent)
+  {
+    final StringBuilder stringBuilder = new StringBuilder ();
+    stringBuilder.append (parent.get (0).split ("::")[1]);
 
-        try {
-            byte[] content= StreamUtils.readAndReset(contentStream, 10*1024);
-            XMLEventReader xmlEventReader =
-                    XML_INPUT_FACTORY.createXMLEventReader(new ByteArrayInputStream(content));
-            while (xmlEventReader.hasNext()) {
-                XMLEvent xmlEvent = xmlEventReader.nextEvent();
+    try
+    {
+      final byte [] content = StreamUtils.read50KAndReset (contentStream);
+      final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new ByteArrayInputStream (content));
+      while (xmlEventReader.hasNext ())
+      {
+        XMLEvent xmlEvent = xmlEventReader.nextEvent ();
 
-                if (xmlEvent.isStartElement()) {
-                    StartElement startElement = (StartElement) xmlEvent;
+        if (xmlEvent.isStartElement ())
+        {
+          StartElement startElement = (StartElement) xmlEvent;
 
-                    if (informationElements.contains(startElement.getName().getLocalPart())) {
-                        startElement = (StartElement) xmlEventReader.nextTag();
+          if (informationElements.contains (startElement.getName ().getLocalPart ()))
+          {
+            startElement = (StartElement) xmlEventReader.nextTag ();
 
-                        if ("ID".equals(startElement.getName().getLocalPart())) {
-                            xmlEvent = xmlEventReader.nextEvent();
+            if ("ID".equals (startElement.getName ().getLocalPart ()))
+            {
+              xmlEvent = xmlEventReader.nextEvent ();
 
-                            if (xmlEvent instanceof Characters) {
-                                stringBuilder.append("::");
-                                stringBuilder.append(((Characters) xmlEvent).getData());
-                            }
-                        }
-                    }
-                }
-
-                if (xmlEvent.isEndElement()) {
-                    EndElement endElement = (EndElement) xmlEvent;
-
-                    if ("ExchangedDocumentContext".equals(endElement.getName().getLocalPart()))
-                        return Collections.singletonList(stringBuilder.toString());
-                }
+              if (xmlEvent instanceof Characters)
+              {
+                stringBuilder.append ("::");
+                stringBuilder.append (((Characters) xmlEvent).getData ());
+              }
             }
-        } catch (Exception e) {
-            // No action.
+          }
         }
 
-        return null;
+        if (xmlEvent.isEndElement ())
+        {
+          final EndElement endElement = (EndElement) xmlEvent;
+
+          if ("ExchangedDocumentContext".equals (endElement.getName ().getLocalPart ()))
+            return Collections.singletonList (stringBuilder.toString ());
+        }
+      }
     }
+    catch (final Exception e)
+    {
+      // No action.
+    }
+
+    return null;
+  }
 }

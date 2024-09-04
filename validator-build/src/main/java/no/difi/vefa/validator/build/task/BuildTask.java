@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.NameFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -18,7 +20,6 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
-import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.api.IPreparer;
 import no.difi.vefa.validator.build.model.Build;
 import no.difi.vefa.validator.build.util.AsicArchiver;
@@ -31,10 +32,10 @@ import no.difi.xsd.vefa.validator._1.Configurations;
 import no.difi.xsd.vefa.validator._1.FileType;
 import no.difi.xsd.vefa.validator._1.StylesheetType;
 
-@Slf4j
 @Singleton
 public class BuildTask
 {
+  private static final Logger log = LoggerFactory.getLogger (BuildTask.class);
 
   private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (Configurations.class, BuildConfigurations.class);
 

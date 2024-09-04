@@ -1,13 +1,14 @@
 package no.difi.vefa.validator.dist;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 public class Cli
 {
   public static final String LOG_PREFIX = "[phax@VEFA Validator] ";
   private static final String COMMAND_BUILD = "build";
   private static final String COMMAND_TESTER = "tester";
+  private static final Logger log = LoggerFactory.getLogger (Cli.class);
 
   public static void main (final String... args) throws Exception
   {

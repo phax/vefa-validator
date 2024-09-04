@@ -8,8 +8,9 @@ import java.io.OutputStream;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.api.IValidation;
 import no.difi.vefa.validator.properties.SimpleProperties;
 import no.difi.vefa.validator.source.ClasspathSource;
@@ -17,9 +18,9 @@ import no.difi.xsd.vefa.validator._1.AssertionType;
 import no.difi.xsd.vefa.validator._1.FlagType;
 import no.difi.xsd.vefa.validator._1.SectionType;
 
-@Slf4j
 public class Testing
 {
+  private static final Logger log = LoggerFactory.getLogger (Testing.class);
 
   private static Validator validator;
 
@@ -103,7 +104,7 @@ public class Testing
   public void simpleValidatorTest ()
   {
     final IValidation validation = validator.validate (getClass ().getResourceAsStream ("/documents/NOGOV-T10-R014.xml"),
-                                                      new SimpleProperties ().set ("feature.nesting", true));
+                                                       new SimpleProperties ().set ("feature.nesting", true));
     assertEquals (validation.getReport ().getFlag (), FlagType.OK);
     assertEquals (validation.getChildren ().size (), 3);
   }

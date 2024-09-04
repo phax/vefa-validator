@@ -37,7 +37,7 @@ public class SimpleXmlDeclaration extends AbstractXmlDeclaration
 
     try
     {
-      final byte [] bytes = StreamUtils.readAndReset (contentStream, 10 * 1024);
+      final byte [] bytes = StreamUtils.read50KAndReset (contentStream);
       return Collections.singletonList (String.format ("%s::%s",
                                                        namespace,
                                                        localName == null ? XmlUtils.extractLocalName (new String (bytes))

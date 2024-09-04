@@ -11,31 +11,39 @@ import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.StreamUtils;
 import no.difi.vefa.validator.util.XmlUtils;
 
-@Type("xml")
-public class XmlDeclaration extends AbstractXmlDeclaration {
+@Type ("xml")
+public class XmlDeclaration extends AbstractXmlDeclaration
+{
 
-    @Override
-    public boolean verify(byte[] content, List<String> parent) throws ValidatorException {
-        return XmlUtils.extractRootNamespace(new String(content)) != null;
+  @Override
+  public boolean verify (final byte [] content, final List <String> parent) throws ValidatorException
+  {
+    return XmlUtils.extractRootNamespace (new String (content)) != null;
+  }
+
+  @Override
+  public List <String> detect (final InputStream contentStream, final List <String> parent) throws ValidatorException
+  {
+
+    try
+    {
+      final byte [] content = StreamUtils.read50KAndReset (contentStream);
+      final String c = new String (content);
+      return Collections.singletonList (String.format ("%s::%s",
+                                                       XmlUtils.extractRootNamespace (c),
+                                                       XmlUtils.extractLocalName (c)));
+    }
+    catch (final IOException e)
+    {
+      // Simply ignore
     }
 
-    @Override
-    public List<String> detect(InputStream contentStream, List<String> parent) throws ValidatorException {
+    return null;
+  }
 
-        try {
-            byte[] content = StreamUtils.readAndReset(contentStream, 10 * 1024);
-            String c = new String(content);
-            return Collections.singletonList(String.format(
-                    "%s::%s", XmlUtils.extractRootNamespace(c), XmlUtils.extractLocalName(c)));
-        } catch (IOException e) {
-            // Simply ignore
-        }
-
-        return null;
-    }
-
-    @Override
-    public IExpectation expectations(byte[] content) throws ValidatorException {
-        return null;
-    }
+  @Override
+  public IExpectation expectations (final byte [] content) throws ValidatorException
+  {
+    return null;
+  }
 }

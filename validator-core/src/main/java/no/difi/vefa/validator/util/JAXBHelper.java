@@ -5,7 +5,7 @@ import jakarta.xml.bind.JAXBContext;
 public class JAXBHelper
 {
 
-  public static JAXBContext context (final Class... classes)
+  public static JAXBContext context (final Class <?>... classes)
   {
     try
     {

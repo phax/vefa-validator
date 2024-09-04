@@ -10,7 +10,6 @@ import com.helger.asic.AsicReaderFactory;
 import com.helger.asic.IAsicReader;
 
 import jakarta.xml.bind.JAXBContext;
-import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.api.IArtifactHolder;
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.ISourceInstance;
@@ -18,11 +17,9 @@ import no.difi.vefa.validator.util.ArtifactHolderImpl;
 import no.difi.vefa.validator.util.JAXBHelper;
 import no.difi.xsd.vefa.validator._1.Artifacts;
 
-@Slf4j
 public abstract class AbstractSourceInstance implements ISourceInstance, Closeable
 {
   protected static final AsicReaderFactory ASIC_READER_FACTORY = AsicReaderFactory.newFactory ();
-
   protected static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (Artifacts.class);
 
   protected IProperties properties;

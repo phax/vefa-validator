@@ -10,7 +10,6 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
-import lombok.extern.slf4j.Slf4j;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltCompiler;
@@ -20,31 +19,39 @@ import no.difi.vefa.validator.util.ClasspathURIResolver;
 /**
  * @author erlend
  */
-@Slf4j
-public class SchematronModule extends AbstractModule {
+public class SchematronModule extends AbstractModule
+{
 
-    @Provides
-    @Named("schematron-step3")
-    @Singleton
-    public XsltExecutable getSchematronCompiler(Processor processor) {
-        try (InputStream inputStream = getClass().getResourceAsStream("/iso-schematron-xslt2/iso_svrl_for_xslt2.xsl")) {
-            XsltCompiler xsltCompiler = processor.newXsltCompiler();
-            xsltCompiler.setURIResolver(new ClasspathURIResolver("/iso-schematron-xslt2"));
-            return xsltCompiler.compile(new StreamSource(inputStream));
-        } catch (IOException | SaxonApiException e) {
-            throw new IllegalStateException("Unable to load parsing of Schematron.");
-        }
+  @Provides
+  @Named ("schematron-step3")
+  @Singleton
+  public XsltExecutable getSchematronCompiler (final Processor processor)
+  {
+    try (InputStream inputStream = getClass ().getResourceAsStream ("/iso-schematron-xslt2/iso_svrl_for_xslt2.xsl"))
+    {
+      final XsltCompiler xsltCompiler = processor.newXsltCompiler ();
+      xsltCompiler.setURIResolver (new ClasspathURIResolver ("/iso-schematron-xslt2"));
+      return xsltCompiler.compile (new StreamSource (inputStream));
     }
+    catch (IOException | SaxonApiException e)
+    {
+      throw new IllegalStateException ("Unable to load parsing of Schematron.");
+    }
+  }
 
-    @Provides
-    @Named("schematron-svrl-parser")
-    @Singleton
-    public XsltExecutable getSchematronSvrlParser(Processor processor) {
-        try (InputStream inputStream = getClass().getResourceAsStream("/vefa-validator/xslt/svrl-parser.xslt")) {
-            XsltCompiler xsltCompiler = processor.newXsltCompiler();
-            return xsltCompiler.compile(new StreamSource(inputStream));
-        } catch (IOException | SaxonApiException e) {
-            throw new IllegalStateException("Unable to load parsing of Schematron reports.");
-        }
+  @Provides
+  @Named ("schematron-svrl-parser")
+  @Singleton
+  public XsltExecutable getSchematronSvrlParser (final Processor processor)
+  {
+    try (InputStream inputStream = getClass ().getResourceAsStream ("/vefa-validator/xslt/svrl-parser.xslt"))
+    {
+      final XsltCompiler xsltCompiler = processor.newXsltCompiler ();
+      return xsltCompiler.compile (new StreamSource (inputStream));
     }
+    catch (IOException | SaxonApiException e)
+    {
+      throw new IllegalStateException ("Unable to load parsing of Schematron reports.");
+    }
+  }
 }

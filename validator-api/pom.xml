@@ -43,10 +43,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
               <groupId>${jaxb-plugin.group}</groupId>
               <artifactId>${jaxb-plugin.artifact}</artifactId>
               <version>${jaxb-plugin.version}</version>

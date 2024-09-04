@@ -158,6 +158,14 @@
         <version>2.0.2</version>
       </dependency>
 
+      <!-- Utils -->
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.34</version>
+        <scope>provided</scope>
+      </dependency>
+
       <!-- JAXB -->
       <dependency>
         <groupId>jakarta.xml.bind</groupId>
@@ -176,13 +184,6 @@
 
 
   <dependencies>
-    <!-- Utils -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.34</version>
-      <scope>provided</scope>
-    </dependency>
 
     <!-- Testing -->
     <dependency>

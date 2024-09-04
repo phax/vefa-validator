@@ -7,29 +7,30 @@ import java.util.Map;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.ITrigger;
 import no.difi.vefa.validator.lang.ValidatorException;
 
-@Slf4j
 @Singleton
-public class TriggerFactory {
+public class TriggerFactory
+{
+  private final Map <String, ITrigger> triggers = new HashMap <> ();
 
-    private final Map<String, ITrigger> triggers = new HashMap<>();
-
-    @Inject
-    public TriggerFactory(List<ITrigger> triggers) {
-        for (ITrigger trigger : triggers) {
-            for (String type : trigger.getClass().getAnnotation(Type.class).value())
-                this.triggers.put(type, trigger);
-        }
+  @Inject
+  public TriggerFactory (final List <ITrigger> triggers)
+  {
+    for (final ITrigger trigger : triggers)
+    {
+      for (final String type : trigger.getClass ().getAnnotation (Type.class).value ())
+        this.triggers.put (type, trigger);
     }
+  }
 
-    public ITrigger get(String identifier) throws ValidatorException {
-        if (triggers.containsKey(identifier))
-            return triggers.get(identifier);
+  public ITrigger get (final String identifier) throws ValidatorException
+  {
+    if (triggers.containsKey (identifier))
+      return triggers.get (identifier);
 
-        throw new ValidatorException(String.format("Trigger '%s' not found.", identifier));
-    }
+    throw new ValidatorException (String.format ("Trigger '%s' not found.", identifier));
+  }
 }

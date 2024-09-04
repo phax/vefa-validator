@@ -15,54 +15,62 @@ import javax.xml.stream.events.XMLEvent;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.util.StreamUtils;
 
-@Type("xml.nobl")
-public class NoblDeclaration extends AbstractXmlDeclaration {
+@Type ("xml.nobl")
+public class NoblDeclaration extends AbstractXmlDeclaration
+{
 
-    private static final Pattern PATTERN = Pattern.compile("urn:fdc:difi.no:2018:nobl:(.+)-1::(.+)");
+  private static final Pattern PATTERN = Pattern.compile ("urn:fdc:difi.no:2018:nobl:(.+)-1::(.+)");
 
-    private static final List<String> FIELDS = Arrays.asList("CustomizationID", "ProfileID");
+  private static final List <String> FIELDS = Arrays.asList ("CustomizationID", "ProfileID");
 
-    @Override
-    public boolean verify(byte[] content, List<String> parent) {
-        return PATTERN.matcher(parent.get(0)).matches();
-    }
+  @Override
+  public boolean verify (final byte [] content, final List <String> parent)
+  {
+    return PATTERN.matcher (parent.get (0)).matches ();
+  }
 
-    @Override
-    public List<String> detect(InputStream contentStream, List<String> parent) {
-        List<String> results = new ArrayList<>();
+  @Override
+  public List <String> detect (final InputStream contentStream, final List <String> parent)
+  {
+    final List <String> results = new ArrayList <> ();
 
-        String type = parent.get(0).split("::")[1];
+    final String type = parent.get (0).split ("::")[1];
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(type);
+    final StringBuilder stringBuilder = new StringBuilder ();
+    stringBuilder.append (type);
 
-        try {
-            byte[] content= StreamUtils.readAndReset(contentStream, 10*1024);
-            XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader(new ByteArrayInputStream(content));
-            while (xmlEventReader.hasNext()) {
-                XMLEvent xmlEvent = xmlEventReader.nextEvent();
+    try
+    {
+      final byte [] content = StreamUtils.read50KAndReset (contentStream);
+      final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new ByteArrayInputStream (content));
+      while (xmlEventReader.hasNext ())
+      {
+        XMLEvent xmlEvent = xmlEventReader.nextEvent ();
 
-                if (xmlEvent.isStartElement()) {
-                    StartElement startElement = (StartElement) xmlEvent;
+        if (xmlEvent.isStartElement ())
+        {
+          final StartElement startElement = (StartElement) xmlEvent;
 
-                    if (FIELDS.contains(startElement.getName().getLocalPart())) {
-                        xmlEvent = xmlEventReader.nextEvent();
-                        if (xmlEvent instanceof Characters) {
-                            stringBuilder
-                                    .append("::")
-                                    .append(((Characters) xmlEvent).getData());
+          if (FIELDS.contains (startElement.getName ().getLocalPart ()))
+          {
+            xmlEvent = xmlEventReader.nextEvent ();
+            if (xmlEvent instanceof Characters)
+            {
+              stringBuilder.append ("::").append (((Characters) xmlEvent).getData ());
 
-                            results.add(String.format("%s::%s", type, ((Characters) xmlEvent).getData()));
-                        }
-                    }
-                }
+              results.add (String.format ("%s::%s", type, ((Characters) xmlEvent).getData ()));
             }
-        } catch (Exception e) {
-            // No action.
+          }
         }
-
-        results.add(stringBuilder.toString());
-
-        return results;
+      }
     }
+    catch (final Exception e)
+    {
+      // No action.
+    }
+
+    results.add (stringBuilder.toString ());
+
+    return results;
+  }
 }
