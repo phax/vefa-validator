@@ -1,16 +1,17 @@
 package no.difi.vefa.validator.checker;
 
+import java.io.InputStream;
+
+import javax.xml.XMLConstants;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.ArtifactHolder;
 import no.difi.vefa.validator.api.Checker;
 import no.difi.vefa.validator.api.CheckerFactory;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.HolderLSResolveResource;
-
-import javax.xml.XMLConstants;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.SchemaFactory;
-import java.io.InputStream;
 
 /**
  * @author erlend

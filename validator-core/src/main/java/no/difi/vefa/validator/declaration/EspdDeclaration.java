@@ -1,18 +1,19 @@
 package no.difi.vefa.validator.declaration;
 
-import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.lang.ValidatorException;
-import no.difi.vefa.validator.util.StreamUtils;
-
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.events.Characters;
-import javax.xml.stream.events.StartElement;
-import javax.xml.stream.events.XMLEvent;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
+
+import no.difi.vefa.validator.annotation.Type;
+import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.util.StreamUtils;
 
 
 @Type("xml.espd")

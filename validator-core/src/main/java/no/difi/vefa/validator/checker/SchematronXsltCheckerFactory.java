@@ -1,7 +1,12 @@
 package no.difi.vefa.validator.checker;
 
+import java.io.InputStream;
+
+import javax.xml.transform.stream.StreamSource;
+
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XsltCompiler;
 import no.difi.vefa.validator.annotation.Type;
@@ -10,9 +15,6 @@ import no.difi.vefa.validator.api.Checker;
 import no.difi.vefa.validator.api.CheckerFactory;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.SaxonErrorListener;
-
-import javax.xml.transform.stream.StreamSource;
-import java.io.InputStream;
 
 /**
  * @author erlend

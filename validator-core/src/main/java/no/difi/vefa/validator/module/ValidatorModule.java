@@ -1,25 +1,40 @@
 package no.difi.vefa.validator.module;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.multibindings.Multibinder;
-import no.difi.vefa.validator.api.*;
-import no.difi.vefa.validator.checker.SchematronCheckerFactory;
-import no.difi.vefa.validator.checker.SchematronXsltCheckerFactory;
-import no.difi.vefa.validator.checker.XsdCheckerFactory;
-import no.difi.vefa.validator.configuration.AsiceConfigurationProvider;
-import no.difi.vefa.validator.configuration.ValidatorTestConfigurationProvider;
-import no.difi.vefa.validator.declaration.*;
-import no.difi.vefa.validator.renderer.XsltRendererFactory;
-import no.difi.vefa.validator.trigger.AsiceTrigger;
-import no.difi.xsd.vefa.validator._1.Configurations;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.multibindings.Multibinder;
+
+import no.difi.vefa.validator.api.CheckerFactory;
+import no.difi.vefa.validator.api.ConfigurationProvider;
+import no.difi.vefa.validator.api.Declaration;
+import no.difi.vefa.validator.api.RendererFactory;
+import no.difi.vefa.validator.api.Trigger;
+import no.difi.vefa.validator.checker.SchematronCheckerFactory;
+import no.difi.vefa.validator.checker.SchematronXsltCheckerFactory;
+import no.difi.vefa.validator.checker.XsdCheckerFactory;
+import no.difi.vefa.validator.configuration.AsiceConfigurationProvider;
+import no.difi.vefa.validator.configuration.ValidatorTestConfigurationProvider;
+import no.difi.vefa.validator.declaration.AsiceDeclaration;
+import no.difi.vefa.validator.declaration.AsiceXmlDeclaration;
+import no.difi.vefa.validator.declaration.EspdDeclaration;
+import no.difi.vefa.validator.declaration.NoblDeclaration;
+import no.difi.vefa.validator.declaration.SbdhDeclaration;
+import no.difi.vefa.validator.declaration.UblDeclaration;
+import no.difi.vefa.validator.declaration.UnCefactDeclaration;
+import no.difi.vefa.validator.declaration.ValidatorTestDeclaration;
+import no.difi.vefa.validator.declaration.ValidatorTestSetDeclaration;
+import no.difi.vefa.validator.declaration.XmlDeclaration;
+import no.difi.vefa.validator.declaration.ZipDeclaration;
+import no.difi.vefa.validator.renderer.XsltRendererFactory;
+import no.difi.vefa.validator.trigger.AsiceTrigger;
+import no.difi.xsd.vefa.validator._1.Configurations;
 
 /**
  * @author erlend

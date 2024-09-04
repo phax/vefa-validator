@@ -1,15 +1,15 @@
 package no.difi.vefa.validator.declaration;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
+
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.Expectation;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.StreamUtils;
 import no.difi.vefa.validator.util.XmlUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.List;
 
 @Type("xml")
 public class XmlDeclaration extends AbstractXmlDeclaration {

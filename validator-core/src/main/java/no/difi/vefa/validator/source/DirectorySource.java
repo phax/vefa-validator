@@ -1,29 +1,33 @@
 package no.difi.vefa.validator.source;
 
+import java.nio.file.Path;
+
 import no.difi.vefa.validator.api.Properties;
 import no.difi.vefa.validator.api.SourceInstance;
 import no.difi.vefa.validator.lang.ValidatorException;
 
-import java.nio.file.Path;
-
 /**
  * Defines a directories as source for validation artifacts.
  */
-public class DirectorySource extends AbstractSource {
+public class DirectorySource extends AbstractSource
+{
 
-    private Path[] directories;
+  private final Path [] directories;
 
-    /**
-     * Initiate the new source.
-     *
-     * @param directories Directories containing validation artifacts.
-     */
-    public DirectorySource(Path... directories) {
-        this.directories = directories;
-    }
+  /**
+   * Initiate the new source.
+   *
+   * @param directories
+   *        Directories containing validation artifacts.
+   */
+  public DirectorySource (final Path... directories)
+  {
+    this.directories = directories;
+  }
 
-    @Override
-    public SourceInstance createInstance(Properties properties) throws ValidatorException {
-        return new DirectorySourceInstance(properties, directories);
-    }
+  @Override
+  public SourceInstance createInstance (final Properties properties) throws ValidatorException
+  {
+    return new DirectorySourceInstance (properties, directories);
+  }
 }

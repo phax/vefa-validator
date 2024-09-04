@@ -1,12 +1,10 @@
 package no.difi.vefa.validator.util;
 
-import com.google.common.io.ByteStreams;
-import no.difi.vefa.validator.api.Document;
-
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+
+import com.google.common.io.ByteStreams;
 
 public class StreamUtils {
 

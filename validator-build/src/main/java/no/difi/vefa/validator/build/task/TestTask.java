@@ -1,8 +1,9 @@
 package no.difi.vefa.validator.build.task;
 
 import com.google.inject.Singleton;
-import no.difi.vefa.validator.build.model.Build;
+
 import no.difi.vefa.validator.api.Validation;
+import no.difi.vefa.validator.build.model.Build;
 import no.difi.vefa.validator.tester.Tester;
 import no.difi.xsd.vefa.validator._1.FlagType;
 

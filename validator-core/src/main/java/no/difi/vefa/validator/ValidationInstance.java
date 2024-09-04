@@ -1,18 +1,38 @@
 package no.difi.vefa.validator;
 
-import com.google.common.io.ByteStreams;
-import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.api.*;
-import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
-import no.difi.vefa.validator.lang.ValidatorException;
-import no.difi.vefa.validator.properties.CombinedProperties;
-import no.difi.vefa.validator.util.*;
-import no.difi.xsd.vefa.validator._1.*;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import com.google.common.io.ByteStreams;
+
+import lombok.extern.slf4j.Slf4j;
+import no.difi.vefa.validator.api.CachedFile;
+import no.difi.vefa.validator.api.ConvertedDocument;
+import no.difi.vefa.validator.api.Document;
+import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.Section;
+import no.difi.vefa.validator.api.Validation;
+import no.difi.vefa.validator.api.ValidationSource;
+import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
+import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.properties.CombinedProperties;
+import no.difi.vefa.validator.util.CombinedFlagFilterer;
+import no.difi.vefa.validator.util.DeclarationDetector;
+import no.difi.vefa.validator.util.DeclarationIdentifier;
+import no.difi.vefa.validator.util.DeclarationWrapper;
+import no.difi.vefa.validator.util.StreamUtils;
+import no.difi.xsd.vefa.validator._1.AssertionType;
+import no.difi.xsd.vefa.validator._1.FileType;
+import no.difi.xsd.vefa.validator._1.FlagType;
+import no.difi.xsd.vefa.validator._1.Report;
+import no.difi.xsd.vefa.validator._1.TriggerType;
 
 /**
  * Result of a validation.

@@ -1,13 +1,13 @@
 package no.difi.vefa.validator.source;
 
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.api.SourceInstance;
-import no.difi.vefa.validator.lang.ValidatorException;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.SourceInstance;
+import no.difi.vefa.validator.lang.ValidatorException;
 
 /**
  * Defines a repository as source for validation artifacts.

@@ -1,13 +1,17 @@
 package no.difi.vefa.validator.util;
 
-import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.api.*;
-import no.difi.vefa.validator.lang.ValidatorException;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
+import no.difi.vefa.validator.api.CachedFile;
+import no.difi.vefa.validator.api.Declaration;
+import no.difi.vefa.validator.api.DeclarationWithChildren;
+import no.difi.vefa.validator.api.DeclarationWithConverter;
+import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.lang.ValidatorException;
 
 @Slf4j
 public class DeclarationWrapper implements Declaration, DeclarationWithChildren, DeclarationWithConverter {

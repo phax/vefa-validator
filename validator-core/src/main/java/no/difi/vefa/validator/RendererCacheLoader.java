@@ -1,16 +1,17 @@
 package no.difi.vefa.validator;
 
+import java.util.List;
+
 import com.google.common.cache.CacheLoader;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.Renderer;
 import no.difi.vefa.validator.api.RendererFactory;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.xsd.vefa.validator._1.StylesheetType;
-
-import java.util.List;
 
 /**
  * Pool of prepared renderers. Size if configured using properties.

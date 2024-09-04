@@ -1,25 +1,30 @@
 package no.difi.vefa.validator.source;
 
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.lang.ValidatorException;
-import org.mockito.Mockito;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertNotNull;
 
 import java.net.URI;
 
-public class RepositorySourceTest {
+import org.junit.Test;
+import org.mockito.Mockito;
 
-    // Dump test
-    @Test
-    public void simple() {
-        Assert.assertNotNull(RepositorySource.forTest());
-        Assert.assertNotNull(RepositorySource.forProduction());
-    }
+import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.lang.ValidatorException;
 
-    @Test(expectedExceptions = ValidatorException.class)
-    public void triggerException() throws ValidatorException {
-        RepositorySource source = new RepositorySource((URI) null);
-        source.createInstance(Mockito.mock(Properties.class));
-    }
+public class RepositorySourceTest
+{
+
+  // Dump test
+  @Test
+  public void simple ()
+  {
+    assertNotNull (RepositorySource.forTest ());
+    assertNotNull (RepositorySource.forProduction ());
+  }
+
+  @Test (expected = ValidatorException.class)
+  public void triggerException () throws ValidatorException
+  {
+    final RepositorySource source = new RepositorySource ((URI) null);
+    source.createInstance (Mockito.mock (Properties.class));
+  }
 }

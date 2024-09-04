@@ -1,11 +1,11 @@
 package no.difi.vefa.validator.util;
 
+import javax.xml.transform.SourceLocator;
+
 import lombok.extern.slf4j.Slf4j;
 import net.sf.saxon.s9api.MessageListener2;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
-
-import javax.xml.transform.SourceLocator;
 
 @Slf4j
 public class SaxonMessageListener implements MessageListener2 {

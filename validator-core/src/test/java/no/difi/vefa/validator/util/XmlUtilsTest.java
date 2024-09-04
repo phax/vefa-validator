@@ -1,15 +1,17 @@
 package no.difi.vefa.validator.util;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import org.junit.Test;
 
 public class XmlUtilsTest {
 
     @Test
     public void simpleTest() {
         String xml = "<test xmlns=\"http://difi.no/xsd/vefa/validator/1.0\" configuration=\"ehf-t10-base-2.0\">";
-        Assert.assertEquals(XmlUtils.extractRootNamespace(xml), "http://difi.no/xsd/vefa/validator/1.0");
-        Assert.assertEquals(XmlUtils.extractLocalName(xml), "test");
+        assertEquals(XmlUtils.extractRootNamespace(xml), "http://difi.no/xsd/vefa/validator/1.0");
+        assertEquals(XmlUtils.extractLocalName(xml), "test");
     }
 
     @Test
@@ -20,9 +22,9 @@ public class XmlUtilsTest {
                 "    xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\"\n" +
                 "    xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\"\n" +
                 "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
-        Assert.assertEquals(XmlUtils.extractRootNamespace(xml),
+        assertEquals(XmlUtils.extractRootNamespace(xml),
                 "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
-        Assert.assertEquals(XmlUtils.extractLocalName(xml), "Invoice");
+        assertEquals(XmlUtils.extractLocalName(xml), "Invoice");
     }
 
     @Test
@@ -40,21 +42,21 @@ public class XmlUtilsTest {
                 "xmlns:espd-req=\"urn:grow:names:specification:ubl:schema:xsd:ESPDRequest-1\" " +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
                 "xmlns:espd=\"urn:grow:names:specification:ubl:schema:xsd:ESPDRequest-1\">";
-        Assert.assertEquals(XmlUtils.extractRootNamespace(xml),
+        assertEquals(XmlUtils.extractRootNamespace(xml),
                 "urn:grow:names:specification:ubl:schema:xsd:ESPDRequest-1");
-        Assert.assertEquals(XmlUtils.extractLocalName(xml), "ESPDRequest");
+        assertEquals(XmlUtils.extractLocalName(xml), "ESPDRequest");
     }
 
     @Test
     public void simpleNull() {
-        Assert.assertNull(XmlUtils.extractRootNamespace("nothing of interest..."));
-        Assert.assertNull(XmlUtils.extractLocalName("nothing of interest..."));
+        assertNull(XmlUtils.extractRootNamespace("nothing of interest..."));
+        assertNull(XmlUtils.extractLocalName("nothing of interest..."));
     }
 
     @Test
     public void simpleNoNamespace() {
-        Assert.assertNull(XmlUtils.extractRootNamespace("<simple></simple>"));
-        Assert.assertEquals(XmlUtils.extractLocalName("<simple></simple>"), "simple");
+        assertNull(XmlUtils.extractRootNamespace("<simple></simple>"));
+        assertEquals(XmlUtils.extractLocalName("<simple></simple>"), "simple");
     }
 
     @Test

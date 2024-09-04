@@ -3,6 +3,7 @@ package no.difi.vefa.validator.module;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+
 import no.difi.vefa.validator.ValidatorDefaults;
 import no.difi.vefa.validator.api.Properties;
 import no.difi.vefa.validator.properties.CombinedProperties;

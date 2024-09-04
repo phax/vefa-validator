@@ -1,57 +1,67 @@
 package no.difi.vefa.validator.declaration;
 
-import com.google.common.io.ByteStreams;
-import no.difi.asic.AsicVerifierFactory;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
 
-public class AsiceDeclarationTest {
+import org.junit.Test;
 
-    private AsiceDeclaration declaration = new AsiceDeclaration();
+import com.google.common.io.ByteStreams;
+import com.helger.asic.AsicVerifierFactory;
 
-    private AsiceXmlDeclaration xmlDeclaration = new AsiceXmlDeclaration();
+public class AsiceDeclarationTest
+{
 
-    @Test
-    public void validFile() throws Exception {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+  private final AsiceDeclaration declaration = new AsiceDeclaration ();
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/documents/asic-cades-test-valid.asice")) {
-            ByteStreams.copy(inputStream, byteArrayOutputStream);
-        }
+  private final AsiceXmlDeclaration xmlDeclaration = new AsiceXmlDeclaration ();
 
-        Assert.assertTrue(declaration.verify(byteArrayOutputStream.toByteArray(), null));
+  @Test
+  public void validFile () throws Exception
+  {
+    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ();
+
+    try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/asic-cades-test-valid.asice"))
+    {
+      ByteStreams.copy (inputStream, byteArrayOutputStream);
     }
 
-    @Test
-    public void invalidFile() throws Exception {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    assertTrue (declaration.verify (byteArrayOutputStream.toByteArray (), null));
+  }
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/documents/peppol-bis-invoice-sbdh.zip")) {
-            ByteStreams.copy(inputStream, byteArrayOutputStream);
-        }
+  @Test
+  public void invalidFile () throws Exception
+  {
+    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ();
 
-        Assert.assertFalse(declaration.verify(byteArrayOutputStream.toByteArray(), null));
+    try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/peppol-bis-invoice-sbdh.zip"))
+    {
+      ByteStreams.copy (inputStream, byteArrayOutputStream);
     }
 
-    @Test
-    public void simpleXmlFile() throws Exception {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    assertFalse (declaration.verify (byteArrayOutputStream.toByteArray (), null));
+  }
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/documents/asic-xml.xml")) {
-            ByteStreams.copy(inputStream, byteArrayOutputStream);
-        }
+  @Test
+  public void simpleXmlFile () throws Exception
+  {
+    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ();
 
-        Assert.assertTrue(xmlDeclaration.verify(byteArrayOutputStream.toByteArray(),
-                Collections.singletonList("urn:etsi.org:specification:02918:v1.2.1::asic")));
-
-        ByteArrayOutputStream converted = new ByteArrayOutputStream();
-        xmlDeclaration.convert(new ByteArrayInputStream(byteArrayOutputStream.toByteArray()), converted);
-
-        AsicVerifierFactory.newFactory().verify(new ByteArrayInputStream(converted.toByteArray()));
+    try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/asic-xml.xml"))
+    {
+      ByteStreams.copy (inputStream, byteArrayOutputStream);
     }
+
+    assertTrue (xmlDeclaration.verify (byteArrayOutputStream.toByteArray (),
+                                       Collections.singletonList ("urn:etsi.org:specification:02918:v1.2.1::asic")));
+
+    final ByteArrayOutputStream converted = new ByteArrayOutputStream ();
+    xmlDeclaration.convert (new ByteArrayInputStream (byteArrayOutputStream.toByteArray ()), converted);
+
+    AsicVerifierFactory.newFactory ().verify (new ByteArrayInputStream (converted.toByteArray ()));
+  }
 }

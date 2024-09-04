@@ -1,11 +1,12 @@
 package no.difi.vefa.validator.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Objects;
 
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.TransformerException;
-import java.util.Objects;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SaxonErrorListener implements ErrorListener {
 

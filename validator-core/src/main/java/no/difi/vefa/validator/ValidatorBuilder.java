@@ -1,16 +1,17 @@
 package no.difi.vefa.validator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.inject.Guice;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
+
 import no.difi.vefa.validator.api.Properties;
 import no.difi.vefa.validator.api.Source;
 import no.difi.vefa.validator.module.PropertiesModule;
 import no.difi.vefa.validator.module.SourceModule;
 import no.difi.vefa.validator.module.ValidatorModule;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Builder supporting creation of validator.

@@ -1,38 +1,46 @@
 package no.difi.vefa.validator;
 
-
-import no.difi.vefa.validator.api.Validation;
-import no.difi.xsd.vefa.validator._1.FlagType;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 
-public class ProfilingTest {
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
-    private Validator validator;
+import no.difi.vefa.validator.api.Validation;
+import no.difi.xsd.vefa.validator._1.FlagType;
 
-    @BeforeClass
-    public void beforeClass() throws Exception {
-        validator = ValidatorBuilder.newValidator().build();
+public class ProfilingTest
+{
+
+  private static Validator validator;
+
+  @BeforeClass
+  public static void beforeClass () throws Exception
+  {
+    validator = ValidatorBuilder.newValidator ().build ();
+  }
+
+  @Test
+  @Ignore
+  public void simple () throws Exception
+  {
+    for (int i = 0; i < 2000; i++)
+    {
+      try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/huge-001.xml.gz"))
+      {
+        final GZIPInputStream gzipInputStream = new GZIPInputStream (inputStream);
+
+        final Validation validation = validator.validate (gzipInputStream);
+        assertEquals (FlagType.ERROR, validation.getReport ().getFlag ());
+
+        gzipInputStream.close ();
+        inputStream.close ();
+
+        System.out.println (i);
+      }
     }
-
-    @Test(enabled = false)
-    public void simple() throws Exception {
-        for (int i = 0; i < 2000; i++) {
-            try (InputStream inputStream = getClass().getResourceAsStream("/documents/huge-001.xml.gz")) {
-                GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
-
-                Validation validation = validator.validate(gzipInputStream);
-                Assert.assertEquals(FlagType.ERROR, validation.getReport().getFlag());
-
-                gzipInputStream.close();
-                inputStream.close();
-
-                System.out.println(i);
-            }
-        }
-    }
+  }
 }

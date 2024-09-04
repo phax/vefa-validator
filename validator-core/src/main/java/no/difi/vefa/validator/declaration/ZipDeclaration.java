@@ -1,13 +1,5 @@
 package no.difi.vefa.validator.declaration;
 
-import com.google.common.io.ByteStreams;
-import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.CachedFile;
-import no.difi.vefa.validator.api.Declaration;
-import no.difi.vefa.validator.api.DeclarationWithChildren;
-import no.difi.vefa.validator.api.Expectation;
-import no.difi.vefa.validator.util.StreamUtils;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,6 +10,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import com.google.common.io.ByteStreams;
+
+import no.difi.vefa.validator.annotation.Type;
+import no.difi.vefa.validator.api.CachedFile;
+import no.difi.vefa.validator.api.Declaration;
+import no.difi.vefa.validator.api.DeclarationWithChildren;
+import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.util.StreamUtils;
 
 @Type("zip")
 public class ZipDeclaration implements Declaration, DeclarationWithChildren {

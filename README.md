@@ -1,12 +1,19 @@
 [![Maven Central](https://img.shields.io/maven-central/v/no.difi.vefa/validator-parent.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22no.difi.vefa%22%20AND%20validator)
 [![Docker](https://img.shields.io/docker/pulls/difi/vefa-validator.svg)](https://hub.docker.com/r/difi/vefa-validator/)
 
-
 # VEFA Validator 2.x
 
 This repository contains the code of the validation library for Java of which may be used to validate document related to eProcurement. The library is intended to be included in your software where you need support for document validation, it is not prossible to perform validation by simply compiling the project.
 
 This library does not contain validation rules for any of the eProcurement documents supported. If you have issues related to specific types of documents, please make sure to create whose issues in the respective repository, e.g. [ehf-postaward-g3](https://github.com/anskaffelser/ehf-postaward-g3) for Post-Award documents or [eforms-sdk-nor](https://github.com/anskaffelser/eforms-sdk-nor) for eForms.
+
+## Fork Philip
+
+What was changed:
+* Changed baseline to Java 11+
+* Updated to JAXB 4.x
+* Using JUnit instead of TestNG
+* Improved log messages
 
 
 ## Features

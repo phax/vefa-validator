@@ -1,24 +1,30 @@
 package no.difi.vefa.validator.util;
 
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
+
 import no.difi.xsd.vefa.validator._1.Configurations;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
-public class JAXBHelperTest {
+public class JAXBHelperTest
+{
 
-    @Test
-    public void simpleContructor() {
-        new JAXBHelper();
-    }
+  @Test
+  public void simpleContructor ()
+  {
+    new JAXBHelper ();
+  }
 
-    @Test
-    public void simpleSuccess() {
-        Assert.assertNotNull(JAXBHelper.context(Configurations.class));
-    }
+  @Test
+  public void simpleSuccess ()
+  {
+    assertNotNull (JAXBHelper.context (Configurations.class));
+  }
 
-    @Test(expectedExceptions = RuntimeException.class)
-    @SuppressWarnings("all")
-    public void simpleError() {
-        JAXBHelper.context(null);
-    }
+  @Test (expected = RuntimeException.class)
+  @SuppressWarnings ("all")
+  public void simpleError ()
+  {
+    JAXBHelper.context (null);
+  }
 }

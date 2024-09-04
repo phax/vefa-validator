@@ -1,12 +1,6 @@
 package no.difi.vefa.validator.checker;
 
-import no.difi.vefa.validator.api.Checker;
-import no.difi.vefa.validator.api.Document;
-import no.difi.vefa.validator.api.Section;
-import no.difi.xsd.vefa.validator._1.AssertionType;
-import no.difi.xsd.vefa.validator._1.FlagType;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+import java.io.IOException;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -16,7 +10,15 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.Validator;
-import java.io.IOException;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+
+import no.difi.vefa.validator.api.Checker;
+import no.difi.vefa.validator.api.Document;
+import no.difi.vefa.validator.api.Section;
+import no.difi.xsd.vefa.validator._1.AssertionType;
+import no.difi.xsd.vefa.validator._1.FlagType;
 
 public class XsdChecker implements Checker {
 

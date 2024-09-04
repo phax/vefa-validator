@@ -1,15 +1,16 @@
 package no.difi.vefa.validator.build.preparer;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+
 import no.difi.commons.schematron.SchematronCompiler;
 import no.difi.commons.schematron.SchematronException;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.Preparer;
-
-import java.io.IOException;
-import java.nio.file.Path;
 
 @Type({".sch", ".scmt"})
 public class SchematronPreparer implements Preparer {

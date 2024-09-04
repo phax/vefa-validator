@@ -1,11 +1,12 @@
 package no.difi.vefa.validator.util;
 
-import no.difi.vefa.validator.api.ArtifactHolder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import no.difi.vefa.validator.api.ArtifactHolder;
 
 public class HolderLSResolveResource implements LSResourceResolver {
 

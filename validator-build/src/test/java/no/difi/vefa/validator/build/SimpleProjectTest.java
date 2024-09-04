@@ -1,43 +1,50 @@
 package no.difi.vefa.validator.build;
 
-import com.google.inject.Inject;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class SimpleProjectTest {
+import org.junit.Before;
+import org.junit.Test;
 
-    @Inject
-    private Cli cli;
+import com.google.inject.Inject;
 
-    @BeforeClass
-    public void before() {
-        Cli.getInjector().injectMembers(this);
-    }
+public class SimpleProjectTest
+{
 
-    @Test
-    public void simple() throws Exception {
-        Path path = Paths.get(getClass().getResource("/project/simple").toURI());
+  @Inject
+  private Cli cli;
 
-        // Assert.assertFalse(Files.exists(path.resolve("target")));
+  @Before
+  public void before ()
+  {
+    Cli.getInjector ().injectMembers (this);
+  }
 
-        Assert.assertEquals(cli.perform(path.toString()), 0);
+  @Test
+  public void simple () throws Exception
+  {
+    final Path path = Paths.get (getClass ().getResource ("/project/simple").toURI ());
 
-        Assert.assertTrue(Files.exists(path.resolve("target")));
-    }
+    // assertFalse(Files.exists(path.resolve("target")));
 
-    @Test
-    public void simpleWithTests() throws Exception {
-        Path path = Paths.get(getClass().getResource("/project/simple").toURI());
+    assertEquals (cli.perform (path.toString ()), 0);
 
-        // Assert.assertFalse(Files.exists(path.resolve("target")));
+    assertTrue (Files.exists (path.resolve ("target")));
+  }
 
-        Assert.assertEquals(cli.perform("-test", "-x", path.toString()), 0);
+  @Test
+  public void simpleWithTests () throws Exception
+  {
+    final Path path = Paths.get (getClass ().getResource ("/project/simple").toURI ());
 
-        Assert.assertTrue(Files.exists(path.resolve("target")));
-    }
+    // assertFalse(Files.exists(path.resolve("target")));
+
+    assertEquals (cli.perform ("-test", "-x", path.toString ()), 0);
+
+    assertTrue (Files.exists (path.resolve ("target")));
+  }
 }

@@ -1,13 +1,21 @@
 package no.difi.vefa.validator;
 
-import com.google.common.collect.Lists;
-import no.difi.vefa.validator.api.FlagFilterer;
-import no.difi.xsd.vefa.validator._1.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.Lists;
+
+import no.difi.vefa.validator.api.FlagFilterer;
+import no.difi.xsd.vefa.validator._1.AssertionType;
+import no.difi.xsd.vefa.validator._1.ConfigurationType;
+import no.difi.xsd.vefa.validator._1.FileType;
+import no.difi.xsd.vefa.validator._1.FlagType;
+import no.difi.xsd.vefa.validator._1.RuleActionType;
+import no.difi.xsd.vefa.validator._1.RuleType;
+import no.difi.xsd.vefa.validator._1.StylesheetType;
+import no.difi.xsd.vefa.validator._1.TriggerType;
 
 /**
  * Configurations found in validation artifacts are updated to this kind of object.

@@ -1,12 +1,15 @@
 package no.difi.vefa.validator.checker;
 
+import org.junit.Test;
+
 import no.difi.vefa.validator.lang.ValidatorException;
-import org.testng.annotations.Test;
 
-public class SchematronXsltCheckerTest {
+public class SchematronXsltCheckerTest
+{
 
-    @Test(expectedExceptions = ValidatorException.class)
-    public void simpleTriggerException() throws Exception {
-        new SchematronXsltCheckerFactory().prepare(null, null);
-    }
+  @Test (expected = ValidatorException.class)
+  public void simpleTriggerException () throws Exception
+  {
+    new SchematronXsltCheckerFactory ().prepare (null, null);
+  }
 }

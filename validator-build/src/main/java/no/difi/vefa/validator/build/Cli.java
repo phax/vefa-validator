@@ -1,9 +1,20 @@
 package no.difi.vefa.validator.build;
 
+import java.io.IOException;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
+
+import jakarta.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.build.model.Build;
 import no.difi.vefa.validator.build.module.BuildModule;
@@ -11,10 +22,6 @@ import no.difi.vefa.validator.build.module.SchematronModule;
 import no.difi.vefa.validator.build.task.BuildTask;
 import no.difi.vefa.validator.build.task.TestTask;
 import no.difi.vefa.validator.module.SaxonModule;
-import org.apache.commons.cli.*;
-
-import javax.xml.bind.JAXBException;
-import java.io.IOException;
 
 @Slf4j
 public class Cli {

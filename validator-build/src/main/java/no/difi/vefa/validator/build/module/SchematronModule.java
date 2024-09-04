@@ -1,16 +1,17 @@
 package no.difi.vefa.validator.build.module;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+
 import net.sf.saxon.s9api.Processor;
 import no.difi.commons.schematron.SchematronCompiler;
 import no.difi.commons.schematron.SchematronException;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author erlend

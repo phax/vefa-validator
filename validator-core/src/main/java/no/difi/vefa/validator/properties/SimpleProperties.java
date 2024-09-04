@@ -1,9 +1,9 @@
 package no.difi.vefa.validator.properties;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Simple implementation of Properties using a HashMap to store values.

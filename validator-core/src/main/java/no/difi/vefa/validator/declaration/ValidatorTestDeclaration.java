@@ -1,18 +1,12 @@
 package no.difi.vefa.validator.declaration;
 
-import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.DeclarationWithConverter;
-import no.difi.vefa.validator.api.Expectation;
-import no.difi.vefa.validator.expectation.ValidatorTestExpectation;
-import no.difi.vefa.validator.lang.ValidatorException;
-import no.difi.vefa.validator.util.JAXBHelper;
-import no.difi.vefa.validator.util.StreamUtils;
-import no.difi.xsd.vefa.validator._1.Test;
-import org.w3c.dom.Node;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -23,12 +17,20 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collections;
-import java.util.List;
+
+import org.w3c.dom.Node;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import lombok.extern.slf4j.Slf4j;
+import no.difi.vefa.validator.annotation.Type;
+import no.difi.vefa.validator.api.DeclarationWithConverter;
+import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.expectation.ValidatorTestExpectation;
+import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.util.JAXBHelper;
+import no.difi.vefa.validator.util.StreamUtils;
+import no.difi.xsd.vefa.validator._1.Test;
 
 @Slf4j
 @Type("xml.test")

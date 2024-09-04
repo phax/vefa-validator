@@ -1,9 +1,9 @@
 package no.difi.vefa.validator;
 
+import java.io.InputStream;
+
 import no.difi.vefa.validator.api.Properties;
 import no.difi.vefa.validator.api.ValidationSource;
-
-import java.io.InputStream;
 
 class ValidationSourceImpl implements ValidationSource {
 

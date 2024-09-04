@@ -1,14 +1,19 @@
 package no.difi.vefa.validator.build.model;
 
-import lombok.Getter;
-import no.difi.vefa.validator.api.Validation;
-import no.difi.xsd.vefa.validator._1.Configurations;
-import org.apache.commons.cli.CommandLine;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.apache.commons.cli.CommandLine;
+
+import lombok.Getter;
+import no.difi.vefa.validator.api.Validation;
+import no.difi.xsd.vefa.validator._1.Configurations;
 
 @Getter
 public class Build {

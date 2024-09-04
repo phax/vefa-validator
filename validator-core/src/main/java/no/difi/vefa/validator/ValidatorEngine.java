@@ -1,22 +1,35 @@
 package no.difi.vefa.validator;
 
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.transform.stream.StreamSource;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.api.ArtifactHolder;
 import no.difi.vefa.validator.api.SourceInstance;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.JAXBHelper;
-import no.difi.xsd.vefa.validator._1.*;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
+import no.difi.xsd.vefa.validator._1.ConfigurationType;
+import no.difi.xsd.vefa.validator._1.Configurations;
+import no.difi.xsd.vefa.validator._1.DeclarationType;
+import no.difi.xsd.vefa.validator._1.FileType;
+import no.difi.xsd.vefa.validator._1.PackageType;
+import no.difi.xsd.vefa.validator._1.StylesheetType;
+import no.difi.xsd.vefa.validator._1.TriggerType;
 
 /**
  * This class handles all raw configurations detected in source of validation artifacts and preserves links

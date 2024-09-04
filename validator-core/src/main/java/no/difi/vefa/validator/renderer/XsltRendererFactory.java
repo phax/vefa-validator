@@ -1,6 +1,11 @@
 package no.difi.vefa.validator.renderer;
 
+import java.io.InputStream;
+
+import javax.xml.transform.stream.StreamSource;
+
 import com.google.inject.Inject;
+
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XsltCompiler;
 import no.difi.vefa.validator.annotation.Type;
@@ -11,9 +16,6 @@ import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.HolderURIResolver;
 import no.difi.vefa.validator.util.SaxonErrorListener;
 import no.difi.xsd.vefa.validator._1.StylesheetType;
-
-import javax.xml.transform.stream.StreamSource;
-import java.io.InputStream;
 
 /**
  * @author erlend

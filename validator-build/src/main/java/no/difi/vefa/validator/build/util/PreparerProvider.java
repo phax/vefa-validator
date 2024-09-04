@@ -1,10 +1,5 @@
 package no.difi.vefa.validator.build.util;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.Preparer;
-
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -14,6 +9,12 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import no.difi.vefa.validator.annotation.Type;
+import no.difi.vefa.validator.api.Preparer;
 
 /**
  * @author erlend

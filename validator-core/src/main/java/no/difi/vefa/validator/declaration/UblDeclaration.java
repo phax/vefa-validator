@@ -1,7 +1,17 @@
 package no.difi.vefa.validator.declaration;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import javax.xml.transform.stream.StreamSource;
+
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;
@@ -9,14 +19,6 @@ import net.sf.saxon.s9api.XsltTransformer;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.StreamUtils;
-
-import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Document declaration for OASIS Universal Business Language (UBL).

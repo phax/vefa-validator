@@ -1,19 +1,5 @@
 package no.difi.vefa.validator;
 
-import com.google.common.cache.LoadingCache;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.api.*;
-import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
-import no.difi.vefa.validator.lang.ValidatorException;
-import no.difi.vefa.validator.properties.CombinedProperties;
-import no.difi.vefa.validator.trigger.TriggerFactory;
-import no.difi.vefa.validator.util.CombinedFlagFilterer;
-import no.difi.vefa.validator.util.DeclarationDetector;
-import no.difi.vefa.validator.util.DeclarationIdentifier;
-import no.difi.xsd.vefa.validator._1.*;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +7,30 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.cache.LoadingCache;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import lombok.extern.slf4j.Slf4j;
+import no.difi.vefa.validator.api.Checker;
+import no.difi.vefa.validator.api.Document;
+import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.Renderer;
+import no.difi.vefa.validator.api.Section;
+import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
+import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.properties.CombinedProperties;
+import no.difi.vefa.validator.trigger.TriggerFactory;
+import no.difi.vefa.validator.util.CombinedFlagFilterer;
+import no.difi.vefa.validator.util.DeclarationDetector;
+import no.difi.vefa.validator.util.DeclarationIdentifier;
+import no.difi.xsd.vefa.validator._1.ConfigurationType;
+import no.difi.xsd.vefa.validator._1.FileType;
+import no.difi.xsd.vefa.validator._1.FlagType;
+import no.difi.xsd.vefa.validator._1.PackageType;
+import no.difi.xsd.vefa.validator._1.StylesheetType;
+import no.difi.xsd.vefa.validator._1.TriggerType;
 
 /**
  * Contains CheckerPools and Configuration, and is entry point for validation.

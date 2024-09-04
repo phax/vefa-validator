@@ -1,10 +1,10 @@
 package no.difi.vefa.validator.util;
 
-import org.w3c.dom.ls.LSInput;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
+
+import org.w3c.dom.ls.LSInput;
 
 public class HolderLSInput implements LSInput {
 

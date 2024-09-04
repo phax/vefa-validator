@@ -1,8 +1,10 @@
 package no.difi.vefa.validator.builder;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
 import no.difi.xsd.vefa.validator._1.ConfigurationType;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 public class ConfigurationBuilderTest {
 
@@ -17,13 +19,13 @@ public class ConfigurationBuilderTest {
                 .build("unit-test")
                 .build();
 
-        Assert.assertEquals(cfg.getIdentifier().getValue(), "test");
-        Assert.assertEquals(cfg.getTitle(), "Test");
-        Assert.assertEquals(cfg.getStandardId(), "test#test");
-        Assert.assertEquals(cfg.getWeight(), -10L);
-        Assert.assertEquals(cfg.getTrigger().size(), 1);
-        Assert.assertEquals(cfg.getTrigger().get(0).getIdentifier(), "test");
-        Assert.assertEquals(cfg.getBuild(), "unit-test");
+        assertEquals(cfg.getIdentifier().getValue(), "test");
+        assertEquals(cfg.getTitle(), "Test");
+        assertEquals(cfg.getStandardId(), "test#test");
+        assertEquals(cfg.getWeight(), -10L);
+        assertEquals(cfg.getTrigger().size(), 1);
+        assertEquals(cfg.getTrigger().get(0).getIdentifier(), "test");
+        assertEquals(cfg.getBuild(), "unit-test");
     }
 
 }

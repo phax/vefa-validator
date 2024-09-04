@@ -1,10 +1,19 @@
 package no.difi.vefa.validator.checker;
 
+import java.io.InputStream;
+
+import javax.xml.transform.stream.StreamSource;
+
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
-import net.sf.saxon.s9api.*;
+
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.XdmDestination;
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.s9api.XsltExecutable;
+import net.sf.saxon.s9api.XsltTransformer;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.ArtifactHolder;
 import no.difi.vefa.validator.api.Checker;
@@ -12,9 +21,6 @@ import no.difi.vefa.validator.api.CheckerFactory;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.SaxonErrorListener;
 import no.difi.vefa.validator.util.SaxonMessageListener;
-
-import javax.xml.transform.stream.StreamSource;
-import java.io.InputStream;
 
 /**
  * Implementation performing step 3 (compilation) of Schematron.

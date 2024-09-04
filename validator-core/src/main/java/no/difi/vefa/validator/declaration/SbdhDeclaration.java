@@ -1,8 +1,17 @@
 package no.difi.vefa.validator.declaration;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import javax.xml.transform.stream.StreamSource;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+
 import lombok.extern.slf4j.Slf4j;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -12,13 +21,6 @@ import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.api.DeclarationWithChildren;
 import no.difi.vefa.validator.lang.ValidatorException;
-
-import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Slf4j
 @Type("xml.sbdh")

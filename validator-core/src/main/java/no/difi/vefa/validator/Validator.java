@@ -1,13 +1,5 @@
 package no.difi.vefa.validator;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.api.Validation;
-import no.difi.vefa.validator.api.ValidationSource;
-import no.difi.xsd.vefa.validator._1.PackageType;
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +8,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import lombok.extern.slf4j.Slf4j;
+import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.Validation;
+import no.difi.vefa.validator.api.ValidationSource;
+import no.difi.xsd.vefa.validator._1.PackageType;
 
 /**
  * Validator containing an instance of validation configuration and validation artifacts.

@@ -1,15 +1,5 @@
 package no.difi.vefa.validator.declaration;
 
-import com.google.common.io.ByteStreams;
-import no.difi.asic.AsicReader;
-import no.difi.asic.AsicReaderFactory;
-import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.CachedFile;
-import no.difi.vefa.validator.api.DeclarationWithChildren;
-import no.difi.vefa.validator.api.DeclarationWithConverter;
-import no.difi.vefa.validator.api.Expectation;
-import no.difi.vefa.validator.lang.ValidatorException;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,63 +10,91 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-@Type("zip.asice")
-public class AsiceDeclaration extends AbstractXmlDeclaration
-        implements DeclarationWithChildren, DeclarationWithConverter {
+import com.google.common.io.ByteStreams;
+import com.helger.asic.AsicReaderFactory;
+import com.helger.asic.IAsicReader;
 
-    private static final String MIME = "application/vnd.etsi.asic-e+zip";
+import no.difi.vefa.validator.annotation.Type;
+import no.difi.vefa.validator.api.CachedFile;
+import no.difi.vefa.validator.api.DeclarationWithChildren;
+import no.difi.vefa.validator.api.DeclarationWithConverter;
+import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.lang.ValidatorException;
 
-    @Override
-    public boolean verify(byte[] content, List<String> parent) {
-        if (content[28] != 0)
-            return false;
+@Type ("zip.asice")
+public class AsiceDeclaration extends AbstractXmlDeclaration implements
+                              DeclarationWithChildren,
+                              DeclarationWithConverter
+{
 
-        try {
-            ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(content));
-            ZipEntry entry = zipInputStream.getNextEntry();
+  private static final String MIME = "application/vnd.etsi.asic-e+zip";
 
-            if ("mimetype".equals(entry.getName()))
-                return MIME.equals(new String(ByteStreams.toByteArray(zipInputStream)));
-        } catch (IOException e) {
-            // No action.
-        }
+  @Override
+  public boolean verify (final byte [] content, final List <String> parent)
+  {
+    if (content[28] != 0)
+      return false;
 
-        return false;
+    try
+    {
+      final ZipInputStream zipInputStream = new ZipInputStream (new ByteArrayInputStream (content));
+      final ZipEntry entry = zipInputStream.getNextEntry ();
+
+      if ("mimetype".equals (entry.getName ()))
+        return MIME.equals (new String (ByteStreams.toByteArray (zipInputStream)));
+    }
+    catch (final IOException e)
+    {
+      // No action.
     }
 
-    @Override
-    public List<String> detect(InputStream contentStream, List<String> parent) {
-        return Collections.singletonList(MIME);
+    return false;
+  }
+
+  @Override
+  public List <String> detect (final InputStream contentStream, final List <String> parent)
+  {
+    return Collections.singletonList (MIME);
+  }
+
+  @Override
+  public Expectation expectations (final byte [] content)
+  {
+    return null;
+  }
+
+  @Override
+  public void convert (final InputStream inputStream, final OutputStream outputStream) throws ValidatorException
+  {
+    try
+    {
+      ByteStreams.copy (inputStream, outputStream);
     }
-
-    @Override
-    public Expectation expectations(byte[] content) {
-        return null;
+    catch (final IOException e)
+    {
+      throw new ValidatorException (e.getMessage (), e);
     }
+  }
 
-    @Override
-    public void convert(InputStream inputStream, OutputStream outputStream) throws ValidatorException {
-        try {
-            ByteStreams.copy(inputStream, outputStream);
-        } catch (IOException e) {
-            throw new ValidatorException(e.getMessage(), e);
-        }
+  @Override
+  public Iterable <CachedFile> children (final InputStream inputStream)
+  {
+    try
+    {
+      final IAsicReader asicReader = AsicReaderFactory.newFactory ().open (inputStream);
+      final List <CachedFile> files = new ArrayList <> ();
+
+      String filename;
+      while ((filename = asicReader.getNextFile ()) != null)
+      {
+        files.add (CachedFile.of (filename, ByteStreams.toByteArray (asicReader.inputStream ())));
+      }
+
+      return files;
     }
-
-    @Override
-    public Iterable<CachedFile> children(InputStream inputStream) {
-        try {
-            AsicReader asicReader = AsicReaderFactory.newFactory().open(inputStream);
-            List<CachedFile> files = new ArrayList<>();
-
-            String filename;
-            while ((filename = asicReader.getNextFile()) != null) {
-                files.add(CachedFile.of(filename, ByteStreams.toByteArray(asicReader.inputStream())));
-            }
-
-            return files;
-        } catch (IOException e) {
-            return null;
-        }
+    catch (final IOException e)
+    {
+      return null;
     }
+  }
 }

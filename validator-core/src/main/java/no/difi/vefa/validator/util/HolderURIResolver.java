@@ -1,12 +1,13 @@
 package no.difi.vefa.validator.util;
 
-import no.difi.vefa.validator.api.ArtifactHolder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
+import no.difi.vefa.validator.api.ArtifactHolder;
 
 public class HolderURIResolver implements URIResolver {
 

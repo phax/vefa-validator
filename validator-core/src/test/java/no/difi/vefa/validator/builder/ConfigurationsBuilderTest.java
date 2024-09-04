@@ -1,8 +1,11 @@
 package no.difi.vefa.validator.builder;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import org.junit.Test;
+
 import no.difi.xsd.vefa.validator._1.Configurations;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 public class ConfigurationsBuilderTest {
 
@@ -14,8 +17,8 @@ public class ConfigurationsBuilderTest {
                 .pkg("Test")
                 .build();
 
-        Assert.assertEquals(cfg.getConfiguration().size(), 1);
-        Assert.assertNull(cfg.getPackage().get(0).getUrl());
-        Assert.assertEquals(cfg.getPackage().get(0).getValue(), "Test");
+        assertEquals(cfg.getConfiguration().size(), 1);
+        assertNull(cfg.getPackage().get(0).getUrl());
+        assertEquals(cfg.getPackage().get(0).getValue(), "Test");
     }
 }

@@ -1,6 +1,14 @@
 package no.difi.vefa.validator.renderer;
 
-import net.sf.saxon.s9api.*;
+import java.io.OutputStream;
+
+import javax.xml.transform.stream.StreamSource;
+
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.XdmAtomicValue;
+import net.sf.saxon.s9api.XsltExecutable;
+import net.sf.saxon.s9api.XsltTransformer;
 import no.difi.vefa.validator.api.ArtifactHolder;
 import no.difi.vefa.validator.api.Document;
 import no.difi.vefa.validator.api.Properties;
@@ -9,9 +17,6 @@ import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.HolderURIResolver;
 import no.difi.xsd.vefa.validator._1.SettingType;
 import no.difi.xsd.vefa.validator._1.StylesheetType;
-
-import javax.xml.transform.stream.StreamSource;
-import java.io.OutputStream;
 
 /**
  * Defines presenter for templates defined by XSLT.

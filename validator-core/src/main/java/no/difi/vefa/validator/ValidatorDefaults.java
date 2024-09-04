@@ -1,9 +1,9 @@
 package no.difi.vefa.validator;
 
+import java.util.concurrent.TimeUnit;
+
 import no.difi.vefa.validator.api.Properties;
 import no.difi.vefa.validator.properties.SimpleProperties;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Class to hold defaults in validator.

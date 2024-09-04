@@ -1,15 +1,20 @@
 package no.difi.vefa.validator.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.Declaration;
 import no.difi.vefa.validator.lang.ValidatorException;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
 
 @Slf4j
 @Singleton
