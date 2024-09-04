@@ -39,13 +39,13 @@ v2.3.1
 
 ## Getting started
 
-Include dependency in your pom.xml:
+Include dependency in your `pom.xml`, where `x.y.z` denotes the latest release version:
 
 ```xml
 <dependency>
-  <groupId>no.difi.vefa</groupId>
+  <groupId>com.helger.vefa</groupId>
   <artifactId>validator-core</artifactId>
-  <version>2.1.0</version>
+  <version>x.y.z</version>
 </dependency>
 ```
 
