@@ -10,10 +10,15 @@ This library does not contain validation rules for any of the eProcurement docum
 ## Fork Philip
 
 What was changed:
+
+v2.3.1
 * Changed baseline to Java 11+
 * Updated to JAXB 4.x
 * Using JUnit instead of TestNG
 * Improved log messages
+* Get rid of Lombok
+* Read sample of 50K instead of 10K to allow for real-world instances as well
+* Default output to "info" level
 
 
 ## Features
