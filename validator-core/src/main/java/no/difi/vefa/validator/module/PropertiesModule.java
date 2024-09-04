@@ -5,7 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import no.difi.vefa.validator.ValidatorDefaults;
-import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.properties.CombinedProperties;
 
 /**
@@ -13,19 +13,19 @@ import no.difi.vefa.validator.properties.CombinedProperties;
  */
 public class PropertiesModule extends AbstractModule {
 
-    private final Properties properties;
+    private final IProperties properties;
 
     public PropertiesModule() {
         this(null);
     }
 
-    public PropertiesModule(Properties properties) {
+    public PropertiesModule(IProperties properties) {
         this.properties = properties;
     }
 
     @Provides
     @Singleton
-    public Properties getProperties() {
+    public IProperties getProperties() {
         // Create config combined with default values.
         return new CombinedProperties(properties, ValidatorDefaults.PROPERTIES);
     }

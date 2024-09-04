@@ -7,15 +7,15 @@ import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
-import no.difi.vefa.validator.api.ArtifactHolder;
+import no.difi.vefa.validator.api.IArtifactHolder;
 
 public class HolderURIResolver implements URIResolver {
 
-    private ArtifactHolder artifactHolder;
+    private IArtifactHolder artifactHolder;
 
     private Path rootPath;
 
-    public HolderURIResolver(ArtifactHolder artifactHolder, String rootPath) {
+    public HolderURIResolver(IArtifactHolder artifactHolder, String rootPath) {
         this.artifactHolder = artifactHolder;
         this.rootPath = Paths.get(rootPath).getParent();
     }

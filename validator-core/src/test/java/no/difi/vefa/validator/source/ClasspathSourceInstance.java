@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.asic.IAsicReader;
 
 import jakarta.xml.bind.Unmarshaller;
-import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.xsd.vefa.validator._1.ArtifactType;
 import no.difi.xsd.vefa.validator._1.Artifacts;
@@ -21,7 +21,7 @@ class ClasspathSourceInstance extends AbstractSourceInstance
 
   private static Logger logger = LoggerFactory.getLogger (ClasspathSourceInstance.class);
 
-  public ClasspathSourceInstance (final Properties properties, final String location) throws ValidatorException
+  public ClasspathSourceInstance (final IProperties properties, final String location) throws ValidatorException
   {
     super (properties);
 

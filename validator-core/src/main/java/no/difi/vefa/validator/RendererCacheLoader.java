@@ -8,8 +8,8 @@ import com.google.inject.Singleton;
 
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.Renderer;
-import no.difi.vefa.validator.api.RendererFactory;
+import no.difi.vefa.validator.api.IRenderer;
+import no.difi.vefa.validator.api.IRendererFactory;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.xsd.vefa.validator._1.StylesheetType;
 
@@ -18,7 +18,7 @@ import no.difi.xsd.vefa.validator._1.StylesheetType;
  */
 @Slf4j
 @Singleton
-public class RendererCacheLoader extends CacheLoader<String, Renderer> {
+public class RendererCacheLoader extends CacheLoader<String, IRenderer> {
 
     public static final int DEFAULT_SIZE = 250;
 
@@ -26,14 +26,14 @@ public class RendererCacheLoader extends CacheLoader<String, Renderer> {
     private ValidatorEngine validatorEngine;
 
     @Inject
-    private List<RendererFactory> factories;
+    private List<IRendererFactory> factories;
 
     @Override
-    public Renderer load(String key) throws Exception {
+    public IRenderer load(String key) throws Exception {
         try {
             StylesheetType stylesheetType = validatorEngine.getStylesheet(key);
 
-            for (RendererFactory factory : factories) {
+            for (IRendererFactory factory : factories) {
                 for (String extension : factory.getClass().getAnnotation(Type.class).value()) {
                     if (stylesheetType.getPath().toLowerCase().endsWith(extension)) {
                         log.debug("Renderer '{}'", key);

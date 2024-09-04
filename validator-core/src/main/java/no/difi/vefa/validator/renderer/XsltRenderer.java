@@ -9,10 +9,10 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmAtomicValue;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
-import no.difi.vefa.validator.api.ArtifactHolder;
+import no.difi.vefa.validator.api.IArtifactHolder;
 import no.difi.vefa.validator.api.Document;
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.api.Renderer;
+import no.difi.vefa.validator.api.IProperties;
+import no.difi.vefa.validator.api.IRenderer;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.HolderURIResolver;
 import no.difi.xsd.vefa.validator._1.SettingType;
@@ -22,7 +22,7 @@ import no.difi.xsd.vefa.validator._1.StylesheetType;
  * Defines presenter for templates defined by XSLT.
  */
 @Deprecated
-public class XsltRenderer implements Renderer {
+public class XsltRenderer implements IRenderer {
 
     private XsltExecutable xsltExecutable;
 
@@ -31,13 +31,13 @@ public class XsltRenderer implements Renderer {
      */
     private StylesheetType stylesheetType;
 
-    private ArtifactHolder artifactHolder;
+    private IArtifactHolder artifactHolder;
 
     private String path;
 
     private Processor processor;
 
-    public XsltRenderer(XsltExecutable xsltExecutable, StylesheetType stylesheetType, ArtifactHolder artifactHolder, String path, Processor processor) {
+    public XsltRenderer(XsltExecutable xsltExecutable, StylesheetType stylesheetType, IArtifactHolder artifactHolder, String path, Processor processor) {
         this.xsltExecutable = xsltExecutable;
         this.artifactHolder = artifactHolder;
         this.stylesheetType = stylesheetType;
@@ -49,7 +49,7 @@ public class XsltRenderer implements Renderer {
      * {@inheritDoc}
      */
     @Override
-    public void render(Document document, Properties properties, OutputStream outputStream) throws ValidatorException {
+    public void render(Document document, IProperties properties, OutputStream outputStream) throws ValidatorException {
         try {
             XsltTransformer xsltTransformer = xsltExecutable.load();
             xsltTransformer.setURIResolver(new HolderURIResolver(artifactHolder, path));

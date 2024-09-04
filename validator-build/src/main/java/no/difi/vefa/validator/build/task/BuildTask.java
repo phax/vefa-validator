@@ -19,7 +19,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.api.Preparer;
+import no.difi.vefa.validator.api.IPreparer;
 import no.difi.vefa.validator.build.model.Build;
 import no.difi.vefa.validator.build.util.AsicArchiver;
 import no.difi.vefa.validator.build.util.DirectoryCleaner;
@@ -79,7 +79,7 @@ public class BuildTask
 
               preparerProvider.prepare (configFolder.toPath ().resolve (fileType.getSource ()),
                                         contentsPath.resolve (fileType.getPath ()),
-                                        Preparer.Type.FILE);
+                                        IPreparer.EType.FILE);
 
               fileType.setSource (null);
             }
@@ -91,7 +91,7 @@ public class BuildTask
 
               preparerProvider.prepare (configFolder.toPath ().resolve (stylesheet.getSource ()),
                                         contentsPath.resolve (stylesheet.getPath ()),
-                                        Preparer.Type.STYLESHEET);
+                                        IPreparer.EType.STYLESHEET);
 
               stylesheet.setSource (null);
             }
@@ -111,7 +111,7 @@ public class BuildTask
 
             preparerProvider.prepare (configFolder.toPath ().resolve (fileType.getSource ()),
                                       contentsPath.resolve (fileType.getPath ()),
-                                      Preparer.Type.INCLUDE);
+                                      IPreparer.EType.INCLUDE);
           }
 
           configurations.getPackage ().addAll (config.getPackage ());

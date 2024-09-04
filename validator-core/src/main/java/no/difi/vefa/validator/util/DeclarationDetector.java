@@ -13,7 +13,7 @@ import com.google.inject.Singleton;
 
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.Declaration;
+import no.difi.vefa.validator.api.IDeclaration;
 import no.difi.vefa.validator.lang.ValidatorException;
 
 @Slf4j
@@ -26,10 +26,10 @@ public class DeclarationDetector {
     private List<DeclarationWrapper> rootDeclarationWrappers = new ArrayList<>();
 
     @Inject
-    public DeclarationDetector(List<Declaration> declarations) {
+    public DeclarationDetector(List<IDeclaration> declarations) {
         Map<String, DeclarationWrapper> wrapperMap = new HashMap<>();
 
-        for (Declaration declaration : declarations) {
+        for (IDeclaration declaration : declarations) {
             if (declaration.getClass().isAnnotationPresent(Type.class)) {
                 for (String type : declaration.getClass().getAnnotation(Type.class).value()) {
                     wrapperMap.put(type, DeclarationWrapper.of(type, declaration));

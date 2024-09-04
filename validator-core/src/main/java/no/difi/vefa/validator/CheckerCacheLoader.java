@@ -8,8 +8,8 @@ import com.google.inject.Singleton;
 
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.Checker;
-import no.difi.vefa.validator.api.CheckerFactory;
+import no.difi.vefa.validator.api.IChecker;
+import no.difi.vefa.validator.api.ICheckerFactory;
 import no.difi.vefa.validator.lang.ValidatorException;
 
 /**
@@ -17,20 +17,20 @@ import no.difi.vefa.validator.lang.ValidatorException;
  */
 @Slf4j
 @Singleton
-public class CheckerCacheLoader extends CacheLoader<String, Checker> {
+public class CheckerCacheLoader extends CacheLoader<String, IChecker> {
 
     public static final int DEFAULT_SIZE = 250;
 
     @Inject
-    private List<CheckerFactory> factories;
+    private List<ICheckerFactory> factories;
 
     @Inject
     private ValidatorEngine validatorEngine;
 
     @Override
-    public Checker load(String key) throws Exception {
+    public IChecker load(String key) throws Exception {
         try {
-            for (CheckerFactory factory : factories) {
+            for (ICheckerFactory factory : factories) {
                 for (String extension : factory.getClass().getAnnotation(Type.class).value()) {
                     if (key.toLowerCase().endsWith(extension)) {
                         return factory.prepare(validatorEngine.getResource(key), key.split("#")[1]);

@@ -9,24 +9,24 @@ import com.google.inject.Singleton;
 
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.Trigger;
+import no.difi.vefa.validator.api.ITrigger;
 import no.difi.vefa.validator.lang.ValidatorException;
 
 @Slf4j
 @Singleton
 public class TriggerFactory {
 
-    private final Map<String, Trigger> triggers = new HashMap<>();
+    private final Map<String, ITrigger> triggers = new HashMap<>();
 
     @Inject
-    public TriggerFactory(List<Trigger> triggers) {
-        for (Trigger trigger : triggers) {
+    public TriggerFactory(List<ITrigger> triggers) {
+        for (ITrigger trigger : triggers) {
             for (String type : trigger.getClass().getAnnotation(Type.class).value())
                 this.triggers.put(type, trigger);
         }
     }
 
-    public Trigger get(String identifier) throws ValidatorException {
+    public ITrigger get(String identifier) throws ValidatorException {
         if (triggers.containsKey(identifier))
             return triggers.get(identifier);
 

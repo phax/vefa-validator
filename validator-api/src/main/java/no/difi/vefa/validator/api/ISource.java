@@ -5,7 +5,7 @@ import no.difi.vefa.validator.lang.ValidatorException;
 /**
  * Source for validation artifacts.
  */
-public interface Source {
+public interface ISource {
 
     /**
      * Instance of source with validation artifacts ready for use.
@@ -13,6 +13,6 @@ public interface Source {
      * @throws ValidatorException
      * @return Instance containing validation artifacts.
      */
-    SourceInstance createInstance(Properties properties) throws ValidatorException;
+    ISourceInstance createInstance(IProperties properties) throws ValidatorException;
 
 }

@@ -13,7 +13,7 @@ public class SectionTest {
 
   @Test
   public void simpleNullFlag() {
-    final FlagFilterer flagFilterer = Mockito.mock(FlagFilterer.class);
+    final IFlagFilterer flagFilterer = Mockito.mock(IFlagFilterer.class);
     final Section section = new Section(flagFilterer);
 
     section.add("TEST", "Simple test", null);
@@ -27,7 +27,7 @@ public class SectionTest {
 
   @Test
   public void simpleOkFlag() {
-    final FlagFilterer flagFilterer = Mockito.mock(FlagFilterer.class);
+    final IFlagFilterer flagFilterer = Mockito.mock(IFlagFilterer.class);
     final Section section = new Section(flagFilterer);
 
     section.add("TEST", "Simple test", FlagType.OK);
@@ -41,7 +41,7 @@ public class SectionTest {
 
   @Test
   public void simpleWarningFlag() {
-    final FlagFilterer flagFilterer = Mockito.mock(FlagFilterer.class);
+    final IFlagFilterer flagFilterer = Mockito.mock(IFlagFilterer.class);
     final Section section = new Section(flagFilterer);
 
     section.add("TEST", "Simple test", FlagType.WARNING);

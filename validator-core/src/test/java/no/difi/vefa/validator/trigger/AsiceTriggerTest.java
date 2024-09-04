@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import no.difi.vefa.validator.Validator;
 import no.difi.vefa.validator.ValidatorBuilder;
-import no.difi.vefa.validator.api.Validation;
+import no.difi.vefa.validator.api.IValidation;
 import no.difi.vefa.validator.source.ClasspathSource;
 import no.difi.xsd.vefa.validator._1.FlagType;
 
@@ -37,7 +37,7 @@ public class AsiceTriggerTest
   @Ignore
   public void simpleInvalidAsice ()
   {
-    final Validation validation = validator.validate (getClass ().getResourceAsStream ("/documents/asic-cades-test-invalid-signature.asice"));
+    final IValidation validation = validator.validate (getClass ().getResourceAsStream ("/documents/asic-cades-test-invalid-signature.asice"));
     assertEquals (validation.getReport ().getFlag (), FlagType.FATAL);
   }
 
@@ -46,7 +46,7 @@ public class AsiceTriggerTest
   {
     try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/asic-cades-test-valid.asice"))
     {
-      final Validation validation = validator.validate (inputStream);
+      final IValidation validation = validator.validate (inputStream);
       assertEquals (validation.getReport ().getFlag (), FlagType.OK);
     }
   }

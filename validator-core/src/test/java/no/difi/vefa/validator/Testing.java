@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.api.Validation;
+import no.difi.vefa.validator.api.IValidation;
 import no.difi.vefa.validator.properties.SimpleProperties;
 import no.difi.vefa.validator.source.ClasspathSource;
 import no.difi.xsd.vefa.validator._1.AssertionType;
@@ -42,7 +42,7 @@ public class Testing
   @Test
   public void simpleError () throws Exception
   {
-    final Validation validation = validator.validate (getClass ().getResourceAsStream ("/documents/T10-hode-feilkoder.xml"));
+    final IValidation validation = validator.validate (getClass ().getResourceAsStream ("/documents/T10-hode-feilkoder.xml"));
 
     for (final SectionType sectionType : validation.getReport ().getSection ())
     {
@@ -73,7 +73,7 @@ public class Testing
   @Test
   public void simpleOk () throws Exception
   {
-    final Validation validation = validator.validate (getClass ().getResourceAsStream ("/documents/ehf-invoice-2.0.xml"));
+    final IValidation validation = validator.validate (getClass ().getResourceAsStream ("/documents/ehf-invoice-2.0.xml"));
 
     for (final SectionType sectionType : validation.getReport ().getSection ())
     {
@@ -102,7 +102,7 @@ public class Testing
   @Test
   public void simpleValidatorTest ()
   {
-    final Validation validation = validator.validate (getClass ().getResourceAsStream ("/documents/NOGOV-T10-R014.xml"),
+    final IValidation validation = validator.validate (getClass ().getResourceAsStream ("/documents/NOGOV-T10-R014.xml"),
                                                       new SimpleProperties ().set ("feature.nesting", true));
     assertEquals (validation.getReport ().getFlag (), FlagType.OK);
     assertEquals (validation.getChildren ().size (), 3);
@@ -111,7 +111,7 @@ public class Testing
   @Test
   public void billing3Test ()
   {
-    final Validation validation = validator.validate (getClass ().getResourceAsStream ("/documents/peppol-billing-3.0.xml"));
+    final IValidation validation = validator.validate (getClass ().getResourceAsStream ("/documents/peppol-billing-3.0.xml"));
     assertEquals (validation.getReport ().getFlag (), FlagType.OK);
     assertEquals (validation.getReport ().getTitle (), "PEPPOL BIS Billing 3.0 (Profile 01)");
   }
@@ -119,7 +119,7 @@ public class Testing
   @Test
   public void testValidationWithLongUblExtension ()
   {
-    final Validation validation = validator.validate (getClass ().getResourceAsStream ("/documents/peppol-billing-3.0_long_ubl_extension.xml"));
+    final IValidation validation = validator.validate (getClass ().getResourceAsStream ("/documents/peppol-billing-3.0_long_ubl_extension.xml"));
     assertEquals (validation.getReport ().getFlag (), FlagType.WARNING);
     assertEquals (validation.getReport ().getTitle (), "PEPPOL BIS Billing 3.0 (Profile 01)");
   }
@@ -127,7 +127,7 @@ public class Testing
   @Test
   public void testValidationEmptyUbl ()
   {
-    final Validation validation = validator.validate (getClass ().getResourceAsStream ("/documents/ubl-invoice-empty.xml"));
+    final IValidation validation = validator.validate (getClass ().getResourceAsStream ("/documents/ubl-invoice-empty.xml"));
     assertEquals (validation.getReport ().getFlag (), FlagType.UNKNOWN);
   }
 }

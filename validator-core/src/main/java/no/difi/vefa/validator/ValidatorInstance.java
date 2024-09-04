@@ -13,10 +13,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.api.Checker;
+import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.Document;
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.api.Renderer;
+import no.difi.vefa.validator.api.IProperties;
+import no.difi.vefa.validator.api.IRenderer;
 import no.difi.vefa.validator.api.Section;
 import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
 import no.difi.vefa.validator.lang.ValidatorException;
@@ -49,7 +49,7 @@ class ValidatorInstance implements Closeable {
      * Current validator configuration.
      */
     @Inject
-    private Properties properties;
+    private IProperties properties;
 
     /**
      * Declarations to use.
@@ -61,14 +61,14 @@ class ValidatorInstance implements Closeable {
      * Cache of checkers.
      */
     @Inject
-    private LoadingCache<String, Checker> checkerCache;
+    private LoadingCache<String, IChecker> checkerCache;
 
     /**
      * Pool of presenters.
      */
     @Deprecated
     @Inject
-    private LoadingCache<String, Renderer> rendererCache;
+    private LoadingCache<String, IRenderer> rendererCache;
 
     /**
      * Trigger factory.
@@ -95,7 +95,7 @@ class ValidatorInstance implements Closeable {
      *
      * @return Current properties.
      */
-    protected Properties getProperties() {
+    protected IProperties getProperties() {
         return properties;
     }
 
@@ -142,9 +142,9 @@ class ValidatorInstance implements Closeable {
      * @param outputStream Stream for dumping of result.
      */
     @Deprecated
-    protected void render(StylesheetType stylesheet, Document document, Properties properties,
+    protected void render(StylesheetType stylesheet, Document document, IProperties properties,
                           OutputStream outputStream) throws ValidatorException {
-        Renderer renderer;
+        IRenderer renderer;
         try {
             renderer = rendererCache.get(stylesheet.getIdentifier());
         } catch (Exception e) {
@@ -166,7 +166,7 @@ class ValidatorInstance implements Closeable {
      */
     protected Section check(FileType fileType, Document document, Configuration configuration)
             throws ValidatorException {
-        Checker checker;
+        IChecker checker;
         try {
             checker = checkerCache.get(fileType.getPath());
         } catch (Exception e) {

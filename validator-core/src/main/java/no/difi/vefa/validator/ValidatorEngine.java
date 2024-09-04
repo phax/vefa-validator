@@ -19,8 +19,8 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.api.ArtifactHolder;
-import no.difi.vefa.validator.api.SourceInstance;
+import no.difi.vefa.validator.api.IArtifactHolder;
+import no.difi.vefa.validator.api.ISourceInstance;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.JAXBHelper;
 import no.difi.xsd.vefa.validator._1.ConfigurationType;
@@ -64,20 +64,20 @@ class ValidatorEngine implements Closeable {
      */
     private List<PackageType> packages = new ArrayList<>();
 
-    private Map<String, ArtifactHolder> content = new HashMap<>();
+    private Map<String, IArtifactHolder> content = new HashMap<>();
 
     /**
      * Loading a new validator engine loading configurations from current source.
      */
     @Inject
-    public ValidatorEngine(SourceInstance sourceInstance, List<Configurations> configurations)
+    public ValidatorEngine(ISourceInstance sourceInstance, List<Configurations> configurations)
             throws ValidatorException {
         // Load configurations from ValidatorBuilder.
         for (Configurations c : configurations)
             loadConfigurations("", c);
 
         try {
-            for (Map.Entry<String, ArtifactHolder> entry : sourceInstance.getContent().entrySet()) {
+            for (Map.Entry<String, IArtifactHolder> entry : sourceInstance.getContent().entrySet()) {
                 for (String filename : entry.getValue().getFilenames()) {
                     if (filename.startsWith("config") && filename.endsWith(".xml")) {
                         try (InputStream inputStream = entry.getValue().getInputStream(filename)) {
@@ -253,7 +253,7 @@ class ValidatorEngine implements Closeable {
         return packages;
     }
 
-    public ArtifactHolder getResource(String resource) throws IOException {
+    public IArtifactHolder getResource(String resource) throws IOException {
         String[] parts = resource.split("#", 2);
         return content.get(parts[0]);
     }

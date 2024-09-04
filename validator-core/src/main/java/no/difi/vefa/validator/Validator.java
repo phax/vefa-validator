@@ -13,9 +13,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.api.Validation;
-import no.difi.vefa.validator.api.ValidationSource;
+import no.difi.vefa.validator.api.IProperties;
+import no.difi.vefa.validator.api.IValidation;
+import no.difi.vefa.validator.api.IValidationSource;
 import no.difi.xsd.vefa.validator._1.PackageType;
 
 /**
@@ -40,7 +40,7 @@ public class Validator implements Closeable {
      * @return Validation result.
      * @throws IOException
      */
-    public Validation validate(File file) throws IOException {
+    public IValidation validate(File file) throws IOException {
         return validate(file.toPath());
     }
 
@@ -51,7 +51,7 @@ public class Validator implements Closeable {
      * @return Validation result.
      * @throws IOException
      */
-    public Validation validate(Path file) throws IOException {
+    public IValidation validate(Path file) throws IOException {
         try (InputStream inputStream = Files.newInputStream(file)) {
             return validate(inputStream);
         }
@@ -63,7 +63,7 @@ public class Validator implements Closeable {
      * @param inputStream Stream containing content.
      * @return Validation result.
      */
-    public Validation validate(InputStream inputStream) {
+    public IValidation validate(InputStream inputStream) {
         return validate(new ValidationSourceImpl(inputStream));
     }
 
@@ -74,7 +74,7 @@ public class Validator implements Closeable {
      * @param properties  Properties used for individual validation.
      * @return Validation result.
      */
-    public Validation validate(InputStream inputStream, Properties properties) {
+    public IValidation validate(InputStream inputStream, IProperties properties) {
         return validate(new ValidationSourceImpl(inputStream, properties));
     }
 
@@ -84,7 +84,7 @@ public class Validator implements Closeable {
      * @param validationSource Package containing source.
      * @return Validation result.
      */
-    public Validation validate(ValidationSource validationSource) {
+    public IValidation validate(IValidationSource validationSource) {
         return ValidationInstance.of(this.validatorInstance, validationSource);
     }
 
@@ -95,7 +95,7 @@ public class Validator implements Closeable {
      * @return Validation result
      * @throws IOException
      */
-    public Validation validate(String filePath) throws IOException {
+    public IValidation validate(String filePath) throws IOException {
         return validate(Paths.get(filePath));
     }
 

@@ -11,8 +11,8 @@ import jakarta.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
-import no.difi.vefa.validator.api.DeclarationWithChildren;
-import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.api.IDeclarationWithChildren;
+import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.JAXBHelper;
 import no.difi.xsd.vefa.validator._1.Test;
@@ -20,7 +20,7 @@ import no.difi.xsd.vefa.validator._1.TestSet;
 
 @Slf4j
 @Type("xml.testset")
-public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements DeclarationWithChildren {
+public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements IDeclarationWithChildren {
 
     private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context(TestSet.class, Test.class);
 
@@ -29,7 +29,7 @@ public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements
     }
 
     @Override
-    public Expectation expectations(byte[] content) throws ValidatorException {
+    public IExpectation expectations(byte[] content) throws ValidatorException {
         return null;
     }
 

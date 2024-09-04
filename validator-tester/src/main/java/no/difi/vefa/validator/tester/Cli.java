@@ -1,6 +1,6 @@
 package no.difi.vefa.validator.tester;
 
-import no.difi.vefa.validator.api.Validation;
+import no.difi.vefa.validator.api.IValidation;
 import no.difi.xsd.vefa.validator._1.FlagType;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -32,7 +32,7 @@ public class Cli {
             testFolders.add(Paths.get(arg));
 
         String artifacts = cmd.getOptionValue("a", "https://vefa.difi.no/validator/repo/");
-        List<Validation> validations;
+        List<IValidation> validations;
         if (artifacts.startsWith("http"))
             validations = Tester.perform(URI.create(artifacts), testFolders);
         else
@@ -40,7 +40,7 @@ public class Cli {
 
         int result = 0;
         if (cmd.hasOption("x"))
-            for (Validation validation : validations)
+            for (IValidation validation : validations)
                 if (validation.getReport().getFlag().compareTo(FlagType.EXPECTED) > 0)
                     result = Math.max(result, validation.getReport().getFlag().compareTo(FlagType.EXPECTED));
 

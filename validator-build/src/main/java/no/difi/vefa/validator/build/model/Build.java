@@ -12,7 +12,7 @@ import java.util.UUID;
 import org.apache.commons.cli.CommandLine;
 
 import lombok.Getter;
-import no.difi.vefa.validator.api.Validation;
+import no.difi.vefa.validator.api.IValidation;
 import no.difi.xsd.vefa.validator._1.Configurations;
 
 @Getter
@@ -27,7 +27,7 @@ public class Build {
     private Configurations configurations;
 
     private List<Path> testFolders = new ArrayList<>();
-    private List<Validation> testValidations = new ArrayList<>();
+    private List<IValidation> testValidations = new ArrayList<>();
 
     public static Build of(String arg, CommandLine cmd) {
         Build build = new Build(Paths.get(arg),
@@ -88,7 +88,7 @@ public class Build {
         testFolders.add(testFolder);
     }
 
-    public void addTestValidation(Validation validation) {
+    public void addTestValidation(IValidation validation) {
         testValidations.add(validation);
     }
 

@@ -16,15 +16,15 @@ import com.helger.asic.IAsicReader;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
-import no.difi.vefa.validator.api.DeclarationWithChildren;
-import no.difi.vefa.validator.api.DeclarationWithConverter;
-import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.api.IDeclarationWithChildren;
+import no.difi.vefa.validator.api.IDeclarationWithConverter;
+import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.lang.ValidatorException;
 
 @Type ("zip.asice")
 public class AsiceDeclaration extends AbstractXmlDeclaration implements
-                              DeclarationWithChildren,
-                              DeclarationWithConverter
+                              IDeclarationWithChildren,
+                              IDeclarationWithConverter
 {
 
   private static final String MIME = "application/vnd.etsi.asic-e+zip";
@@ -58,7 +58,7 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
   }
 
   @Override
-  public Expectation expectations (final byte [] content)
+  public IExpectation expectations (final byte [] content)
   {
     return null;
   }

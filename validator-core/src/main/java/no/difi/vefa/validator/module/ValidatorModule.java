@@ -11,11 +11,11 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
 
-import no.difi.vefa.validator.api.CheckerFactory;
-import no.difi.vefa.validator.api.ConfigurationProvider;
-import no.difi.vefa.validator.api.Declaration;
-import no.difi.vefa.validator.api.RendererFactory;
-import no.difi.vefa.validator.api.Trigger;
+import no.difi.vefa.validator.api.ICheckerFactory;
+import no.difi.vefa.validator.api.IConfigurationProvider;
+import no.difi.vefa.validator.api.IDeclaration;
+import no.difi.vefa.validator.api.IRendererFactory;
+import no.difi.vefa.validator.api.ITrigger;
 import no.difi.vefa.validator.checker.SchematronCheckerFactory;
 import no.difi.vefa.validator.checker.SchematronXsltCheckerFactory;
 import no.difi.vefa.validator.checker.XsdCheckerFactory;
@@ -50,18 +50,18 @@ public class ValidatorModule extends AbstractModule {
         install(new SourceModule());
         install(new SchematronModule());
 
-        Multibinder<CheckerFactory> checkers = Multibinder.newSetBinder(binder(), CheckerFactory.class);
+        Multibinder<ICheckerFactory> checkers = Multibinder.newSetBinder(binder(), ICheckerFactory.class);
         checkers.addBinding().to(SchematronCheckerFactory.class);
         checkers.addBinding().to(SchematronXsltCheckerFactory.class);
         checkers.addBinding().to(XsdCheckerFactory.class);
 
-        Multibinder<RendererFactory> renderers = Multibinder.newSetBinder(binder(), RendererFactory.class);
+        Multibinder<IRendererFactory> renderers = Multibinder.newSetBinder(binder(), IRendererFactory.class);
         renderers.addBinding().to(XsltRendererFactory.class);
 
-        Multibinder<Trigger> triggers = Multibinder.newSetBinder(binder(), Trigger.class);
+        Multibinder<ITrigger> triggers = Multibinder.newSetBinder(binder(), ITrigger.class);
         triggers.addBinding().to(AsiceTrigger.class);
 
-        Multibinder<Declaration> declarations = Multibinder.newSetBinder(binder(), Declaration.class);
+        Multibinder<IDeclaration> declarations = Multibinder.newSetBinder(binder(), IDeclaration.class);
         declarations.addBinding().to(AsiceDeclaration.class);
         declarations.addBinding().to(AsiceXmlDeclaration.class);
         declarations.addBinding().to(EspdDeclaration.class);
@@ -74,40 +74,40 @@ public class ValidatorModule extends AbstractModule {
         declarations.addBinding().to(XmlDeclaration.class);
         declarations.addBinding().to(ZipDeclaration.class);
 
-        Multibinder<ConfigurationProvider> configurations = Multibinder.newSetBinder(binder(), ConfigurationProvider.class);
+        Multibinder<IConfigurationProvider> configurations = Multibinder.newSetBinder(binder(), IConfigurationProvider.class);
         configurations.addBinding().to(AsiceConfigurationProvider.class);
         configurations.addBinding().to(ValidatorTestConfigurationProvider.class);
     }
 
     @Provides
     @Singleton
-    public List<CheckerFactory> getCheckerFactories(Set<CheckerFactory> factories) {
+    public List<ICheckerFactory> getCheckerFactories(Set<ICheckerFactory> factories) {
         return Collections.unmodifiableList(new ArrayList<>(factories));
     }
 
     @Provides
     @Singleton
-    public List<RendererFactory> getRendererFactories(Set<RendererFactory> factories) {
+    public List<IRendererFactory> getRendererFactories(Set<IRendererFactory> factories) {
         return Collections.unmodifiableList(new ArrayList<>(factories));
     }
 
     @Provides
     @Singleton
-    public List<Trigger> getTriggers(Set<Trigger> triggers) {
+    public List<ITrigger> getTriggers(Set<ITrigger> triggers) {
         return Collections.unmodifiableList(new ArrayList<>(triggers));
     }
 
     @Provides
     @Singleton
-    public List<Declaration> getDeclarations(Set<Declaration> declarations) {
+    public List<IDeclaration> getDeclarations(Set<IDeclaration> declarations) {
         return Collections.unmodifiableList(new ArrayList<>(declarations));
     }
 
     @Provides
     @Singleton
-    public List<Configurations> getConfigurations(Set<ConfigurationProvider> providers) {
+    public List<Configurations> getConfigurations(Set<IConfigurationProvider> providers) {
         return providers.stream()
-                .map(ConfigurationProvider::getConfigurations)
+                .map(IConfigurationProvider::getConfigurations)
                 .collect(Collectors.toList());
     }
 }

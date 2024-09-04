@@ -4,9 +4,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.api.Source;
-import no.difi.vefa.validator.api.SourceInstance;
+import no.difi.vefa.validator.api.IProperties;
+import no.difi.vefa.validator.api.ISource;
+import no.difi.vefa.validator.api.ISourceInstance;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.source.RepositorySource;
 
@@ -15,19 +15,19 @@ import no.difi.vefa.validator.source.RepositorySource;
  */
 public class SourceModule extends AbstractModule {
 
-    private final Source source;
+    private final ISource source;
 
     public SourceModule() {
         this(null);
     }
 
-    public SourceModule(Source source) {
+    public SourceModule(ISource source) {
         this.source = source;
     }
 
     @Provides
     @Singleton
-    public SourceInstance getSource(Properties properties) throws ValidatorException {
+    public ISourceInstance getSource(IProperties properties) throws ValidatorException {
         // Make sure to default to repository source if no source is set.
         return (source != null ? source : RepositorySource.forProduction())
                 .createInstance(properties);

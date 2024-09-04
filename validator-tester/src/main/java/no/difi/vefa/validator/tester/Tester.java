@@ -4,7 +4,7 @@ import com.google.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.Validator;
 import no.difi.vefa.validator.ValidatorBuilder;
-import no.difi.vefa.validator.api.Validation;
+import no.difi.vefa.validator.api.IValidation;
 import no.difi.vefa.validator.properties.SimpleProperties;
 import no.difi.vefa.validator.source.DirectorySource;
 import no.difi.vefa.validator.source.RepositorySource;
@@ -30,13 +30,13 @@ public class Tester implements Closeable {
 
     private Validator validator;
 
-    private final List<Validation> validations = new ArrayList<>();
+    private final List<IValidation> validations = new ArrayList<>();
 
     private int tests;
 
     private int failed;
 
-    public static List<Validation> perform(Path artifactsPath, List<Path> testPaths) {
+    public static List<IValidation> perform(Path artifactsPath, List<Path> testPaths) {
         try (Tester tester = new Tester(artifactsPath)) {
             for (Path path : testPaths)
                 tester.perform(path);
@@ -44,7 +44,7 @@ public class Tester implements Closeable {
         }
     }
 
-    public static List<Validation> perform(URI artifactsUri, List<Path> testPaths) {
+    public static List<IValidation> perform(URI artifactsUri, List<Path> testPaths) {
         try (Tester tester = new Tester(artifactsUri)) {
             for (Path path : testPaths)
                 tester.perform(path);
@@ -86,7 +86,7 @@ public class Tester implements Closeable {
                 validate(file);
     }
 
-    private List<Validation> finish() {
+    private List<IValidation> finish() {
         log.info("{} tests performed, {} tests failed", tests, failed);
 
         return validations;
@@ -94,7 +94,7 @@ public class Tester implements Closeable {
 
     private void validate(File file) {
         try {
-            Validation validation = validator.validate(file);
+            IValidation validation = validator.validate(file);
             validation.getReport().setFilename(file.toString());
 
             if (validation.getDocument().getDeclarations()
@@ -102,7 +102,7 @@ public class Tester implements Closeable {
                 log.info("TestSet '{}'", file);
 
                 for (int i = 0; i < validation.getChildren().size(); i++) {
-                    Validation v = validation.getChildren().get(i);
+                    IValidation v = validation.getChildren().get(i);
                     v.getReport().setFilename(String.format("%s (%s)", file, i + 1));
                     append(v.getDocument().getExpectation().getDescription(), v, i + 1);
                 }
@@ -116,7 +116,7 @@ public class Tester implements Closeable {
         }
     }
 
-    public void append(String description, Validation validation, Integer numberInSet) {
+    public void append(String description, IValidation validation, Integer numberInSet) {
         validations.add(validation);
         tests++;
 

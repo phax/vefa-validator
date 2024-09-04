@@ -7,7 +7,7 @@ import java.net.URI;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.lang.ValidatorException;
 
 public class RepositorySourceTest
@@ -25,6 +25,6 @@ public class RepositorySourceTest
   public void triggerException () throws ValidatorException
   {
     final RepositorySource source = new RepositorySource ((URI) null);
-    source.createInstance (Mockito.mock (Properties.class));
+    source.createInstance (Mockito.mock (IProperties.class));
   }
 }

@@ -10,7 +10,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
 
-import no.difi.vefa.validator.api.Preparer;
+import no.difi.vefa.validator.api.IPreparer;
 import no.difi.vefa.validator.build.preparer.DefaultPreparer;
 import no.difi.vefa.validator.build.preparer.SchematronPreparer;
 
@@ -21,14 +21,14 @@ public class BuildModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        Multibinder<Preparer> preparers = Multibinder.newSetBinder(binder(), Preparer.class);
+        Multibinder<IPreparer> preparers = Multibinder.newSetBinder(binder(), IPreparer.class);
         preparers.addBinding().to(DefaultPreparer.class);
         preparers.addBinding().to(SchematronPreparer.class);
     }
 
     @Provides
     @Singleton
-    public List<Preparer> getPreparers(Set<Preparer> preparers) {
+    public List<IPreparer> getPreparers(Set<IPreparer> preparers) {
         return Collections.unmodifiableList(new ArrayList<>(preparers));
     }
 }

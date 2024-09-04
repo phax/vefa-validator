@@ -10,9 +10,9 @@ import com.google.inject.Injector;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XsltCompiler;
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.ArtifactHolder;
-import no.difi.vefa.validator.api.Checker;
-import no.difi.vefa.validator.api.CheckerFactory;
+import no.difi.vefa.validator.api.IArtifactHolder;
+import no.difi.vefa.validator.api.IChecker;
+import no.difi.vefa.validator.api.ICheckerFactory;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.SaxonErrorListener;
 
@@ -20,7 +20,7 @@ import no.difi.vefa.validator.util.SaxonErrorListener;
  * @author erlend
  */
 @Type({".xsl", ".xslt", ".svrl.xsl", ".svrl.xslt", ".sch.xslt"})
-public class SchematronXsltCheckerFactory implements CheckerFactory {
+public class SchematronXsltCheckerFactory implements ICheckerFactory {
 
     @Inject
     private Processor processor;
@@ -29,12 +29,12 @@ public class SchematronXsltCheckerFactory implements CheckerFactory {
     private Injector injector;
 
     @Override
-    public Checker prepare(ArtifactHolder artifactHolder, String path) throws ValidatorException {
+    public IChecker prepare(IArtifactHolder artifactHolder, String path) throws ValidatorException {
         try (InputStream inputStream = artifactHolder.getInputStream(path)) {
             XsltCompiler xsltCompiler = processor.newXsltCompiler();
             xsltCompiler.setErrorListener(SaxonErrorListener.INSTANCE);
 
-            Checker checker = new SchematronXsltChecker(processor, xsltCompiler.compile(new StreamSource(inputStream)));
+            IChecker checker = new SchematronXsltChecker(processor, xsltCompiler.compile(new StreamSource(inputStream)));
             injector.injectMembers(checker);
             return checker;
 

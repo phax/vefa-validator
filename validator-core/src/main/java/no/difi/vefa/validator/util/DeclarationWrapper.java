@@ -7,26 +7,26 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.api.CachedFile;
-import no.difi.vefa.validator.api.Declaration;
-import no.difi.vefa.validator.api.DeclarationWithChildren;
-import no.difi.vefa.validator.api.DeclarationWithConverter;
-import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.api.IDeclaration;
+import no.difi.vefa.validator.api.IDeclarationWithChildren;
+import no.difi.vefa.validator.api.IDeclarationWithConverter;
+import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.lang.ValidatorException;
 
 @Slf4j
-public class DeclarationWrapper implements Declaration, DeclarationWithChildren, DeclarationWithConverter {
+public class DeclarationWrapper implements IDeclaration, IDeclarationWithChildren, IDeclarationWithConverter {
 
     private String type;
 
-    private Declaration declaration;
+    private IDeclaration declaration;
 
     private List<DeclarationWrapper> children = new ArrayList<>();
 
-    public static DeclarationWrapper of(String type, Declaration declaration) {
+    public static DeclarationWrapper of(String type, IDeclaration declaration) {
         return new DeclarationWrapper(type, declaration);
     }
 
-    private DeclarationWrapper(String type, Declaration declaration) {
+    private DeclarationWrapper(String type, IDeclaration declaration) {
         this.type = type;
         this.declaration = declaration;
     }
@@ -35,7 +35,7 @@ public class DeclarationWrapper implements Declaration, DeclarationWithChildren,
         return type;
     }
 
-    public Declaration getDeclaration() {
+    public IDeclaration getDeclaration() {
         return declaration;
     }
 
@@ -54,26 +54,26 @@ public class DeclarationWrapper implements Declaration, DeclarationWithChildren,
     }
 
     @Override
-    public Expectation expectations(byte[] content) throws ValidatorException {
+    public IExpectation expectations(byte[] content) throws ValidatorException {
         return declaration.expectations(content);
     }
 
     public boolean supportsChildren() {
-        return declaration instanceof DeclarationWithChildren;
+        return declaration instanceof IDeclarationWithChildren;
     }
 
     @Override
     public Iterable<CachedFile> children(InputStream inputStream) throws ValidatorException {
-        return ((DeclarationWithChildren) declaration).children(inputStream);
+        return ((IDeclarationWithChildren) declaration).children(inputStream);
     }
 
     public boolean supportsConverter() {
-        return declaration instanceof DeclarationWithConverter;
+        return declaration instanceof IDeclarationWithConverter;
     }
 
     @Override
     public void convert(InputStream inputStream, OutputStream outputStream) throws ValidatorException {
-        ((DeclarationWithConverter) declaration).convert(inputStream, outputStream);
+        ((IDeclarationWithConverter) declaration).convert(inputStream, outputStream);
     }
 
     @Override

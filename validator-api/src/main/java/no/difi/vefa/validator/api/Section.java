@@ -10,14 +10,14 @@ import no.difi.xsd.vefa.validator._1.SectionType;
 public class Section extends SectionType {
 
   @XmlTransient
-  private final FlagFilterer flagFilterer;
+  private final IFlagFilterer flagFilterer;
 
   /**
    * Initiate section.
    *
-   * @param flagFilterer
+   * @param flagFilterer flag filterer
    */
-  public Section(final FlagFilterer flagFilterer) {
+  public Section(final IFlagFilterer flagFilterer) {
     this.flagFilterer = flagFilterer;
 
     this.setFlag(FlagType.OK);

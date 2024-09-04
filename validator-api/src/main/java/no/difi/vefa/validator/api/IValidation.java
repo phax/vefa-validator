@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Result of a validation.
  */
-public interface Validation {
+public interface IValidation {
 
     /**
      * Render document to a stream.
@@ -28,7 +28,7 @@ public interface Validation {
      * @throws ValidatorException
      */
     @Deprecated
-    void render(OutputStream outputStream, Properties properties) throws ValidatorException;
+    void render(OutputStream outputStream, IProperties properties) throws ValidatorException;
 
     /**
      * Returns true if validated document is renderable based upon same criteria as may be provide
@@ -58,6 +58,6 @@ public interface Validation {
      *
      * @return List of validations or null if none available.
      */
-    List<Validation> getChildren();
+    List<IValidation> getChildren();
 
 }

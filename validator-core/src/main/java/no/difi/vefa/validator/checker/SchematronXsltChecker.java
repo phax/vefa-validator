@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
-import no.difi.vefa.validator.api.Checker;
+import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.Document;
 import no.difi.vefa.validator.api.Section;
 import no.difi.vefa.validator.lang.ValidatorException;
@@ -25,7 +25,7 @@ import no.difi.vefa.validator.util.SaxonMessageListener;
 import no.difi.xsd.vefa.validator._1.SectionType;
 
 @Slf4j
-public class SchematronXsltChecker implements Checker {
+public class SchematronXsltChecker implements IChecker {
 
     private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context(SectionType.class);
 

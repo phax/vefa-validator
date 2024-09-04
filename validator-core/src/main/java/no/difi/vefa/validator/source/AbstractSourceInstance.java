@@ -11,25 +11,25 @@ import com.helger.asic.IAsicReader;
 
 import jakarta.xml.bind.JAXBContext;
 import lombok.extern.slf4j.Slf4j;
-import no.difi.vefa.validator.api.ArtifactHolder;
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.api.SourceInstance;
+import no.difi.vefa.validator.api.IArtifactHolder;
+import no.difi.vefa.validator.api.IProperties;
+import no.difi.vefa.validator.api.ISourceInstance;
 import no.difi.vefa.validator.util.ArtifactHolderImpl;
 import no.difi.vefa.validator.util.JAXBHelper;
 import no.difi.xsd.vefa.validator._1.Artifacts;
 
 @Slf4j
-public abstract class AbstractSourceInstance implements SourceInstance, Closeable
+public abstract class AbstractSourceInstance implements ISourceInstance, Closeable
 {
   protected static final AsicReaderFactory ASIC_READER_FACTORY = AsicReaderFactory.newFactory ();
 
   protected static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (Artifacts.class);
 
-  protected Properties properties;
+  protected IProperties properties;
 
-  protected Map <String, ArtifactHolder> content = new HashMap <> ();
+  protected Map <String, IArtifactHolder> content = new HashMap <> ();
 
-  public AbstractSourceInstance (final Properties properties)
+  public AbstractSourceInstance (final IProperties properties)
   {
     this.properties = properties;
   }
@@ -40,13 +40,13 @@ public abstract class AbstractSourceInstance implements SourceInstance, Closeabl
   }
 
   @Override
-  public Map <String, ArtifactHolder> getContent ()
+  public Map <String, IArtifactHolder> getContent ()
   {
     return Collections.unmodifiableMap (content);
   }
 
   @Override
-  public ArtifactHolder getContent (final String path)
+  public IArtifactHolder getContent (final String path)
   {
     return content.get (path);
   }

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.properties.SimpleProperties;
 
 public class SimplePropertiesTest
@@ -15,7 +15,7 @@ public class SimplePropertiesTest
   @Test
   public void simple ()
   {
-    final Properties properties = new SimpleProperties ().set ("some.string", "Hello World!")
+    final IProperties properties = new SimpleProperties ().set ("some.string", "Hello World!")
                                                          .set ("some.number", 1)
                                                          .set ("some.boolean", true)
                                                          .set ("some.object", Long.valueOf (123));

@@ -2,7 +2,7 @@ package no.difi.vefa.validator;
 
 import java.util.concurrent.TimeUnit;
 
-import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.properties.SimpleProperties;
 
 /**
@@ -13,7 +13,7 @@ public class ValidatorDefaults {
     /**
      * Default configuration.
      */
-    public static final Properties PROPERTIES = new SimpleProperties()
+    public static final IProperties PROPERTIES = new SimpleProperties()
 
             // feature
             .set("feature.expectation", false)

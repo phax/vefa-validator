@@ -1,8 +1,8 @@
 package no.difi.vefa.validator.properties;
 
-import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.IProperties;
 
-abstract class AbstractProperties implements Properties {
+abstract class AbstractProperties implements IProperties {
 
     @Override
     public Object get(String key) {

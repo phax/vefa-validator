@@ -15,9 +15,9 @@ import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.ArtifactHolder;
-import no.difi.vefa.validator.api.Checker;
-import no.difi.vefa.validator.api.CheckerFactory;
+import no.difi.vefa.validator.api.IArtifactHolder;
+import no.difi.vefa.validator.api.IChecker;
+import no.difi.vefa.validator.api.ICheckerFactory;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.SaxonErrorListener;
 import no.difi.vefa.validator.util.SaxonMessageListener;
@@ -28,7 +28,7 @@ import no.difi.vefa.validator.util.SaxonMessageListener;
  * @author erlend
  */
 @Type(".sch")
-public class SchematronCheckerFactory implements CheckerFactory {
+public class SchematronCheckerFactory implements ICheckerFactory {
 
     @Inject
     @Named("schematron-step3")
@@ -41,7 +41,7 @@ public class SchematronCheckerFactory implements CheckerFactory {
     private Injector injector;
 
     @Override
-    public Checker prepare(ArtifactHolder artifactHolder, String path) throws ValidatorException {
+    public IChecker prepare(IArtifactHolder artifactHolder, String path) throws ValidatorException {
         try (InputStream inputStream = artifactHolder.getInputStream(path)) {
             XdmDestination destination = new XdmDestination();
 
@@ -55,7 +55,7 @@ public class SchematronCheckerFactory implements CheckerFactory {
             XsltCompiler xsltCompiler = processor.newXsltCompiler();
             xsltCompiler.setErrorListener(SaxonErrorListener.INSTANCE);
 
-            Checker checker = new SchematronXsltChecker(processor, xsltCompiler.compile(destination.getXdmNode().asSource()));
+            IChecker checker = new SchematronXsltChecker(processor, xsltCompiler.compile(destination.getXdmNode().asSource()));
             injector.injectMembers(checker);
             return checker;
         } catch (Exception e) {

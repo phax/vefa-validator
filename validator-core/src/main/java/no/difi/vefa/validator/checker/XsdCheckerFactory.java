@@ -7,9 +7,9 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.ArtifactHolder;
-import no.difi.vefa.validator.api.Checker;
-import no.difi.vefa.validator.api.CheckerFactory;
+import no.difi.vefa.validator.api.IArtifactHolder;
+import no.difi.vefa.validator.api.IChecker;
+import no.difi.vefa.validator.api.ICheckerFactory;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.HolderLSResolveResource;
 
@@ -17,10 +17,10 @@ import no.difi.vefa.validator.util.HolderLSResolveResource;
  * @author erlend
  */
 @Type(".xsd")
-public class XsdCheckerFactory implements CheckerFactory {
+public class XsdCheckerFactory implements ICheckerFactory {
 
     @Override
-    public Checker prepare(ArtifactHolder artifactHolder, String path) throws ValidatorException {
+    public IChecker prepare(IArtifactHolder artifactHolder, String path) throws ValidatorException {
         try (InputStream inputStream = artifactHolder.getInputStream(path)) {
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             schemaFactory.setResourceResolver(new HolderLSResolveResource(artifactHolder, path));

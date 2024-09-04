@@ -24,8 +24,8 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.DeclarationWithConverter;
-import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.api.IDeclarationWithConverter;
+import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.expectation.ValidatorTestExpectation;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.JAXBHelper;
@@ -34,7 +34,7 @@ import no.difi.xsd.vefa.validator._1.Test;
 
 @Slf4j
 @Type("xml.test")
-public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements DeclarationWithConverter {
+public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements IDeclarationWithConverter {
 
     private static final TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance();
 
@@ -64,7 +64,7 @@ public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements De
     }
 
     @Override
-    public Expectation expectations(byte[] content) {
+    public IExpectation expectations(byte[] content) {
         return new ValidatorTestExpectation(content);
     }
 

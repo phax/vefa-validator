@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.util.StreamUtils;
 import no.difi.vefa.validator.util.XmlUtils;
@@ -35,7 +35,7 @@ public class XmlDeclaration extends AbstractXmlDeclaration {
     }
 
     @Override
-    public Expectation expectations(byte[] content) throws ValidatorException {
+    public IExpectation expectations(byte[] content) throws ValidatorException {
         return null;
     }
 }

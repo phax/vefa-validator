@@ -6,15 +6,15 @@ import java.nio.file.Paths;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
-import no.difi.vefa.validator.api.ArtifactHolder;
+import no.difi.vefa.validator.api.IArtifactHolder;
 
 public class HolderLSResolveResource implements LSResourceResolver {
 
-    private ArtifactHolder artifactHolder;
+    private IArtifactHolder artifactHolder;
 
     private Path rootPath;
 
-    public HolderLSResolveResource(ArtifactHolder artifactHolder, String rootPath) {
+    public HolderLSResolveResource(IArtifactHolder artifactHolder, String rootPath) {
         this.artifactHolder = artifactHolder;
         this.rootPath = Paths.get(rootPath).getParent();
     }

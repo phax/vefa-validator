@@ -14,13 +14,13 @@ import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import no.difi.vefa.validator.api.Checker;
+import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.Document;
 import no.difi.vefa.validator.api.Section;
 import no.difi.xsd.vefa.validator._1.AssertionType;
 import no.difi.xsd.vefa.validator._1.FlagType;
 
-public class XsdChecker implements Checker {
+public class XsdChecker implements IChecker {
 
     private static final XMLInputFactory XML_INPUT_FACTORY = XMLInputFactory.newInstance();
 

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.api.SourceInstance;
+import no.difi.vefa.validator.api.IProperties;
+import no.difi.vefa.validator.api.ISourceInstance;
 import no.difi.vefa.validator.lang.ValidatorException;
 
 /**
@@ -57,7 +57,7 @@ public class RepositorySource extends AbstractSource {
     }
 
     @Override
-    public SourceInstance createInstance(Properties properties) throws ValidatorException {
+    public ISourceInstance createInstance(IProperties properties) throws ValidatorException {
         return new RepositorySourceInstance(properties, rootUri);
     }
 }

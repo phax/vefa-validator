@@ -12,17 +12,17 @@ import java.util.zip.ZipInputStream;
 import com.google.common.io.ByteStreams;
 import com.helger.asic.IAsicReader;
 
-import no.difi.vefa.validator.api.ArtifactHolder;
+import no.difi.vefa.validator.api.IArtifactHolder;
 
 /**
  * @author erlend
  */
-public class ArtifactHolderImpl implements ArtifactHolder
+public class ArtifactHolderImpl implements IArtifactHolder
 {
 
   private final Map <String, byte []> content;
 
-  public static ArtifactHolder load (final IAsicReader asicReader) throws IOException
+  public static IArtifactHolder load (final IAsicReader asicReader) throws IOException
   {
     final Map <String, byte []> content = new HashMap <> ();
 
@@ -38,7 +38,7 @@ public class ArtifactHolderImpl implements ArtifactHolder
     return new ArtifactHolderImpl (content);
   }
 
-  public static ArtifactHolder load (final InputStream inputStream) throws IOException
+  public static IArtifactHolder load (final InputStream inputStream) throws IOException
   {
     final Map <String, byte []> content = new HashMap <> ();
 

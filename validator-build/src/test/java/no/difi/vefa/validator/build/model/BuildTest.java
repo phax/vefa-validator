@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import no.difi.vefa.validator.api.Validation;
+import no.difi.vefa.validator.api.IValidation;
 
 public class BuildTest
 {
@@ -33,7 +33,7 @@ public class BuildTest
     assertEquals (build.getTestFolders ().get (0), path.resolve ("testFolder"));
 
     assertEquals (build.getTestValidations ().size (), 0);
-    build.addTestValidation (Mockito.mock (Validation.class));
+    build.addTestValidation (Mockito.mock (IValidation.class));
     assertEquals (build.getTestValidations ().size (), 1);
   }
 }

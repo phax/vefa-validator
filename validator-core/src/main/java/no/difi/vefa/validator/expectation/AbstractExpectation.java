@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.api.Section;
 import no.difi.xsd.vefa.validator._1.AssertionType;
 import no.difi.xsd.vefa.validator._1.FlagType;
 
-public abstract class AbstractExpectation implements Expectation {
+public abstract class AbstractExpectation implements IExpectation {
 
     protected String description;
 

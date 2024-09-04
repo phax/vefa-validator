@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
-import no.difi.vefa.validator.api.FlagFilterer;
+import no.difi.vefa.validator.api.IFlagFilterer;
 import no.difi.xsd.vefa.validator._1.AssertionType;
 import no.difi.xsd.vefa.validator._1.ConfigurationType;
 import no.difi.xsd.vefa.validator._1.FileType;
@@ -20,7 +20,7 @@ import no.difi.xsd.vefa.validator._1.TriggerType;
 /**
  * Configurations found in validation artifacts are updated to this kind of object.
  */
-class Configuration extends ConfigurationType implements FlagFilterer {
+class Configuration extends ConfigurationType implements IFlagFilterer {
 
     private Map<String, RuleActionType> ruleActions = new HashMap<>();
 

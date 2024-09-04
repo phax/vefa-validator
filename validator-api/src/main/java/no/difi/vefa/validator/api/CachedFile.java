@@ -1,38 +1,37 @@
 package no.difi.vefa.validator.api;
 
-import lombok.Getter;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+
+import lombok.Getter;
 
 /**
  * @author erlend
  */
 @Getter
 public class CachedFile {
+  private String filename;
 
-    private String filename;
+  private final byte[] content;
 
-    private byte[] content;
+  private CachedFile(final byte[] content) {
+    this.content = content;
+  }
 
-    public static CachedFile of(byte[] content) {
-        return new CachedFile(content);
-    }
+  private CachedFile(final String filename, final byte[] content) {
+    this(content);
+    this.filename = filename;
+  }
 
-    public static CachedFile of(String filename, byte[] content) {
-        return new CachedFile(filename, content);
-    }
+  public InputStream getContentStream() {
+    return new ByteArrayInputStream(content);
+  }
 
-    private CachedFile(byte[] content) {
-        this.content = content;
-    }
+  public static CachedFile of(final byte[] content) {
+    return new CachedFile(content);
+  }
 
-    private CachedFile(String filename, byte[] content) {
-        this(content);
-        this.filename = filename;
-    }
-
-    public InputStream getContentStream() {
-        return new ByteArrayInputStream(content);
-    }
+  public static CachedFile of(final String filename, final byte[] content) {
+    return new CachedFile(filename, content);
+  }
 }

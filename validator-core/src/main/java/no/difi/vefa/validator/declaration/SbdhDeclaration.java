@@ -19,12 +19,12 @@ import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
-import no.difi.vefa.validator.api.DeclarationWithChildren;
+import no.difi.vefa.validator.api.IDeclarationWithChildren;
 import no.difi.vefa.validator.lang.ValidatorException;
 
 @Slf4j
 @Type("xml.sbdh")
-public class SbdhDeclaration extends AbstractXmlDeclaration implements DeclarationWithChildren {
+public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarationWithChildren {
 
     private static final String NAMESPACE =
             "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader";

@@ -1,7 +1,7 @@
 package no.difi.vefa.validator.source;
 
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.api.SourceInstance;
+import no.difi.vefa.validator.api.IProperties;
+import no.difi.vefa.validator.api.ISourceInstance;
 import no.difi.vefa.validator.lang.ValidatorException;
 
 public class ClasspathSource extends AbstractSource {
@@ -13,7 +13,7 @@ public class ClasspathSource extends AbstractSource {
     }
 
     @Override
-    public SourceInstance createInstance(Properties properties) throws ValidatorException {
+    public ISourceInstance createInstance(IProperties properties) throws ValidatorException {
         return new ClasspathSourceInstance(properties, location);
     }
 }

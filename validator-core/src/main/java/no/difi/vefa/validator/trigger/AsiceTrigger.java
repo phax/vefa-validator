@@ -7,11 +7,11 @@ import com.helger.asic.jaxb.asic.Certificate;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.Document;
 import no.difi.vefa.validator.api.Section;
-import no.difi.vefa.validator.api.Trigger;
+import no.difi.vefa.validator.api.ITrigger;
 import no.difi.xsd.vefa.validator._1.FlagType;
 
 @Type ("asice")
-public class AsiceTrigger implements Trigger
+public class AsiceTrigger implements ITrigger
 {
 
   private final static AsicVerifierFactory factory = AsicVerifierFactory.newFactory ();

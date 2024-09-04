@@ -22,7 +22,7 @@ public class Document {
     /**
      * Expectations when performing validation of triggered rules.
      */
-    private Expectation expectation;
+    private IExpectation expectation;
 
     public Document(ByteArrayInputStream inputStream) {
         this(inputStream, (String) null, null);
@@ -33,7 +33,7 @@ public class Document {
      * @param declaration Declaration identifier used to recognize rules.
      * @param expectation Expectations when performing validation of triggered rules.
      */
-    public Document(ByteArrayInputStream inputStream, String declaration, Expectation expectation)  {
+    public Document(ByteArrayInputStream inputStream, String declaration, IExpectation expectation)  {
         this(inputStream, Collections.singletonList(declaration), expectation);
     }
 
@@ -42,7 +42,7 @@ public class Document {
      * @param declarations Declaration identifiers used to recognize rules.
      * @param expectation Expectations when performing validation of triggered rules.
      */
-    public Document(ByteArrayInputStream inputStream, List<String> declarations, Expectation expectation)  {
+    public Document(ByteArrayInputStream inputStream, List<String> declarations, IExpectation expectation)  {
         this.byteArrayInputStream = inputStream;
         this.declarations = declarations;
         this.expectation = expectation;
@@ -62,7 +62,7 @@ public class Document {
      *
      * @return Expectations
      */
-    public Expectation getExpectation() {
+    public IExpectation getExpectation() {
         return expectation;
     }
 

@@ -5,6 +5,6 @@ package no.difi.vefa.validator.api;
  * <p/>
  * The constructor must contain no parameters.
  */
-public interface Checker extends Trigger {
+public interface IChecker extends ITrigger {
 
 }

@@ -14,7 +14,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.Preparer;
+import no.difi.vefa.validator.api.IPreparer;
 
 /**
  * @author erlend
@@ -24,22 +24,22 @@ public class PreparerProvider {
 
     public static final String DEFAULT = "#DEFAULT";
 
-    private Map<String, Preparer> preparerMap = new HashMap<>();
+    private Map<String, IPreparer> preparerMap = new HashMap<>();
 
     @Inject
-    public PreparerProvider(List<Preparer> preparers) {
-        for (Preparer preparer : preparers)
+    public PreparerProvider(List<IPreparer> preparers) {
+        for (IPreparer preparer : preparers)
             for (String extension : preparer.getClass().getAnnotation(Type.class).value())
                 preparerMap.put(extension, preparer);
     }
 
-    public Preparer get(String extension) {
+    public IPreparer get(String extension) {
         return preparerMap.containsKey(extension) ?
                 preparerMap.get(extension) : preparerMap.get(DEFAULT);
     }
 
-    public void prepare(final Path source, final Path target, final Preparer.Type type) throws IOException {
-        if (Preparer.Type.INCLUDE.equals(type) && Files.isDirectory(source)) {
+    public void prepare(final Path source, final Path target, final IPreparer.EType type) throws IOException {
+        if (IPreparer.EType.INCLUDE.equals(type) && Files.isDirectory(source)) {
             Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path path, BasicFileAttributes basicFileAttributes) throws IOException {

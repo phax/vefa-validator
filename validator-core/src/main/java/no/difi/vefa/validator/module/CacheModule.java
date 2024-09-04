@@ -10,9 +10,9 @@ import com.google.inject.Singleton;
 
 import no.difi.vefa.validator.CheckerCacheLoader;
 import no.difi.vefa.validator.RendererCacheLoader;
-import no.difi.vefa.validator.api.Checker;
-import no.difi.vefa.validator.api.Properties;
-import no.difi.vefa.validator.api.Renderer;
+import no.difi.vefa.validator.api.IChecker;
+import no.difi.vefa.validator.api.IProperties;
+import no.difi.vefa.validator.api.IRenderer;
 
 /**
  * @author erlend
@@ -21,7 +21,7 @@ public class CacheModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public LoadingCache<String, Checker> getCheckerCache(Properties properties, CheckerCacheLoader loader) {
+    public LoadingCache<String, IChecker> getCheckerCache(IProperties properties, CheckerCacheLoader loader) {
         return CacheBuilder.newBuilder()
                 .softValues()
                 .maximumSize(properties.getInteger("pools.checker.size"))
@@ -31,7 +31,7 @@ public class CacheModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public LoadingCache<String, Renderer> getRendererCache(Properties properties, RendererCacheLoader loader) {
+    public LoadingCache<String, IRenderer> getRendererCache(IProperties properties, RendererCacheLoader loader) {
         return CacheBuilder.newBuilder()
                 .softValues()
                 .maximumSize(properties.getInteger("pools.presenter.size"))

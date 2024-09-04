@@ -15,13 +15,13 @@ import com.google.common.io.ByteStreams;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
-import no.difi.vefa.validator.api.Declaration;
-import no.difi.vefa.validator.api.DeclarationWithChildren;
-import no.difi.vefa.validator.api.Expectation;
+import no.difi.vefa.validator.api.IDeclaration;
+import no.difi.vefa.validator.api.IDeclarationWithChildren;
+import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.util.StreamUtils;
 
 @Type("zip")
-public class ZipDeclaration implements Declaration, DeclarationWithChildren {
+public class ZipDeclaration implements IDeclaration, IDeclarationWithChildren {
 
     private static final byte[] STARTS_WITH = new byte[]{0x50, 0x4B, 0x03, 0x04};
 
@@ -51,7 +51,7 @@ public class ZipDeclaration implements Declaration, DeclarationWithChildren {
     }
 
     @Override
-    public Expectation expectations(byte[] content) {
+    public IExpectation expectations(byte[] content) {
         return null;
     }
 

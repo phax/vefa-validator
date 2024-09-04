@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import no.difi.vefa.validator.api.Validation;
+import no.difi.vefa.validator.api.IValidation;
 import no.difi.xsd.vefa.validator._1.FlagType;
 
 public class ProfilingTest
@@ -33,7 +33,7 @@ public class ProfilingTest
       {
         final GZIPInputStream gzipInputStream = new GZIPInputStream (inputStream);
 
-        final Validation validation = validator.validate (gzipInputStream);
+        final IValidation validation = validator.validate (gzipInputStream);
         assertEquals (FlagType.ERROR, validation.getReport ().getFlag ());
 
         gzipInputStream.close ();

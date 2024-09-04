@@ -15,11 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.api.ConvertedDocument;
 import no.difi.vefa.validator.api.Document;
-import no.difi.vefa.validator.api.Expectation;
-import no.difi.vefa.validator.api.Properties;
+import no.difi.vefa.validator.api.IExpectation;
+import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.Section;
-import no.difi.vefa.validator.api.Validation;
-import no.difi.vefa.validator.api.ValidationSource;
+import no.difi.vefa.validator.api.IValidation;
+import no.difi.vefa.validator.api.IValidationSource;
 import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
 import no.difi.vefa.validator.lang.ValidatorException;
 import no.difi.vefa.validator.properties.CombinedProperties;
@@ -38,11 +38,11 @@ import no.difi.xsd.vefa.validator._1.TriggerType;
  * Result of a validation.
  */
 @Slf4j
-class ValidationInstance implements Validation {
+class ValidationInstance implements IValidation {
 
     private ValidatorInstance validatorInstance;
 
-    private Properties properties;
+    private IProperties properties;
 
     private Configuration configuration;
 
@@ -63,9 +63,9 @@ class ValidationInstance implements Validation {
 
     private DeclarationWrapper declaration;
 
-    private List<Validation> children;
+    private List<IValidation> children;
 
-    public static ValidationInstance of(ValidatorInstance validatorInstance, ValidationSource validationSource) {
+    public static ValidationInstance of(ValidatorInstance validatorInstance, IValidationSource validationSource) {
         return new ValidationInstance(validatorInstance, validationSource);
     }
 
@@ -75,7 +75,7 @@ class ValidationInstance implements Validation {
      * @param validatorInstance Instance of validator.
      * @param validationSource  Source to validate.
      */
-    private ValidationInstance(ValidatorInstance validatorInstance, ValidationSource validationSource) {
+    private ValidationInstance(ValidatorInstance validatorInstance, IValidationSource validationSource) {
         this.validatorInstance = validatorInstance;
         this.properties = new CombinedProperties(validationSource.getProperties(), validatorInstance.getProperties());
 
@@ -140,7 +140,7 @@ class ValidationInstance implements Validation {
             throw new UnknownDocumentTypeException("Unable to detect type of content.");
 
         // Detect expectation
-        Expectation expectation = null;
+        IExpectation expectation = null;
         if (properties.getBoolean("feature.expectation")) {
             byte[] bytes = StreamUtils.readAndReset(byteArrayInputStream, 10*1024);
             expectation = declaration.expectations(bytes);
@@ -237,7 +237,7 @@ class ValidationInstance implements Validation {
         }
     }
 
-    private void addChildValidation(Validation validation, String filename) {
+    private void addChildValidation(IValidation validation, String filename) {
         Report childReport = validation.getReport();
         childReport.setFilename(filename);
         report.getReport().add(childReport);
@@ -264,7 +264,7 @@ class ValidationInstance implements Validation {
      * @param properties   Extra configuration to use for this rendering.
      */
     @Override
-    public void render(OutputStream outputStream, Properties properties) throws ValidatorException {
+    public void render(OutputStream outputStream, IProperties properties) throws ValidatorException {
         if (getReport().getFlag().equals(FlagType.FATAL))
             throw new ValidatorException(String.format(
                     "Status '%s' is not supported for rendering.", getReport().getFlag()));
@@ -315,7 +315,7 @@ class ValidationInstance implements Validation {
      * @return List of validations or null if none available.
      */
     @Override
-    public List<Validation> getChildren() {
+    public List<IValidation> getChildren() {
         return children;
     }
 }

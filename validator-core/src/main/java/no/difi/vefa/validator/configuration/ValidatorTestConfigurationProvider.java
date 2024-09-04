@@ -1,11 +1,11 @@
 package no.difi.vefa.validator.configuration;
 
-import no.difi.vefa.validator.api.ConfigurationProvider;
+import no.difi.vefa.validator.api.IConfigurationProvider;
 import no.difi.vefa.validator.builder.ConfigurationBuilder;
 import no.difi.vefa.validator.builder.ConfigurationsBuilder;
 import no.difi.xsd.vefa.validator._1.Configurations;
 
-public class ValidatorTestConfigurationProvider implements ConfigurationProvider {
+public class ValidatorTestConfigurationProvider implements IConfigurationProvider {
 
     @Override
     public Configurations getConfigurations() {
