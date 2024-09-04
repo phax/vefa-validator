@@ -11,16 +11,16 @@ on:
 
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        jdk: [8,11,17]
+        jdk: [11,17, 21]
+    name: Java ${{ matrix.jdk }} build
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Prepare version labels
         uses: k15g/action-version-labels@edge
@@ -34,30 +34,37 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Set up JDK ${{ matrix.jdk }}
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.jdk }}
-
-      - name: Build with Maven
-        run: mvn -B --no-transfer-progress package
+          distribution: 'adopt'
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+              
+      - name: Build and deploy with Maven
+        run: mvn --batch-mode --update-snapshots --no-transfer-progress deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
       - name: Docker login
         uses: docker/login-action@v1
-        if: matrix.jdk == 8
+        if: matrix.jdk == 11
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Build Docker image
         run: make docker_build tag=dev
-        if: matrix.jdk == 8
+        if: matrix.jdk == 11
 
       - name: Push egde images
-        if: "matrix.jdk == 8 && !startsWith(github.ref, 'refs/tags/')"
+        if: "matrix.jdk == 11 && !startsWith(github.ref, 'refs/tags/')"
         run: make docker_push tag=edge
 
       - name: Push images
-        if: "matrix.jdk == 8 && startsWith(github.ref, 'refs/tags/')"
+        if: "matrix.jdk == 11 && startsWith(github.ref, 'refs/tags/')"
         run: |
           make docker_push tag=${{ env.PROJECT_VERSION }}
           make docker_push tag=latest

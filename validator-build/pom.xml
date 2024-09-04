@@ -1,52 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>validator-parent</artifactId>
-        <groupId>no.difi.vefa</groupId>
-        <version>2.3.1-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>com.helger.vefa</groupId>
+    <artifactId>validator-parent</artifactId>
+    <version>2.3.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>validator-build</artifactId>
+  <artifactId>validator-build</artifactId>
 
-    <name>VEFA Validator :: Build</name>
-    <description>Package for generation of validation artifacts.</description>
+  <name>VEFA Validator :: Build</name>
+  <description>Package for generation of validation artifacts.</description>
 
-    <organization>
-        <name>The Norwegian Agency for Public and Financial Management (DFØ)</name>
-        <url>http://www.dfo.no/</url>
-    </organization>
+  <organization>
+    <name>The Norwegian Agency for Public and Financial Management (DFØ)</name>
+    <url>http://www.dfo.no/</url>
+  </organization>
 
-    <developers>
-        <developer>
-            <name>Erlend Klakegg Bergheim</name>
-            <email>erlend.klakegg.bergheim@dfo.no</email>
-            <organization>DFØ</organization>
-            <roles>
-                <role>Author</role>
-            </roles>
-        </developer>
-    </developers>
+  <developers>
+    <developer>
+      <name>Erlend Klakegg Bergheim</name>
+      <email>erlend.klakegg.bergheim@dfo.no</email>
+      <organization>DFØ</organization>
+      <roles>
+        <role>Author</role>
+      </roles>
+    </developer>
+  </developers>
 
-    <dependencies>
-        <!-- VEFA Validator -->
-        <dependency>
-            <groupId>no.difi.vefa</groupId>
-            <artifactId>validator-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.difi.vefa</groupId>
-            <artifactId>validator-tester</artifactId>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
+  <dependencies>
+    <!-- VEFA Validator -->
+    <dependency>
+      <groupId>com.helger.vefa</groupId>
+      <artifactId>validator-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.helger.vefa</groupId>
+      <artifactId>validator-tester</artifactId>
+    </dependency>
+  </dependencies>
 </project>

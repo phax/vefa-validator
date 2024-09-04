@@ -1,98 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>validator-parent</artifactId>
-        <groupId>no.difi.vefa</groupId>
-        <version>2.3.1-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>com.helger.vefa</groupId>
+    <artifactId>validator-parent</artifactId>
+    <version>2.3.1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>validator-core</artifactId>
+  <artifactId>validator-core</artifactId>
 
-    <name>VEFA Validator :: Core</name>
-    <description>Complete validator for embedding in projects.</description>
+  <name>VEFA Validator :: Core</name>
+  <description>Complete validator for embedding in projects.</description>
 
-    <organization>
-        <name>The Norwegian Agency for Public and Financial Management (DFØ)</name>
-        <url>http://www.dfo.no/</url>
-    </organization>
+  <organization>
+    <name>The Norwegian Agency for Public and Financial Management (DFØ)</name>
+    <url>http://www.dfo.no/</url>
+  </organization>
 
-    <developers>
-        <developer>
-            <name>Erlend Klakegg Bergheim</name>
-            <email>erlend.klakegg.bergheim@dfo.no</email>
-            <organization>DFØ</organization>
-            <roles>
-                <role>Author</role>
-            </roles>
-        </developer>
-    </developers>
+  <developers>
+    <developer>
+      <name>Erlend Klakegg Bergheim</name>
+      <email>erlend.klakegg.bergheim@dfo.no</email>
+      <organization>DFØ</organization>
+      <roles>
+        <role>Author</role>
+      </roles>
+    </developer>
+  </developers>
 
-    <dependencies>
+  <dependencies>
+    <!-- VEFA Validator -->
+    <dependency>
+      <groupId>com.helger.vefa</groupId>
+      <artifactId>validator-api</artifactId>
+    </dependency>
 
-        <!-- VEFA Validator -->
-        <dependency>
-            <groupId>no.difi.vefa</groupId>
-            <artifactId>validator-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.helger</groupId>
-            <artifactId>ph-asic</artifactId>
-        </dependency>
-        <!--
+    <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>ph-asic</artifactId>
+    </dependency>
+    <!--
         <dependency>
             <groupId>no.difi.commons</groupId>
             <artifactId>commons-asic</artifactId>
             <version>0.12.0</version>
         </dependency>
         -->
-        <dependency>
-            <groupId>no.difi.commons</groupId>
-            <artifactId>commons-schematron</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>no.difi.commons</groupId>
+      <artifactId>commons-schematron</artifactId>
+    </dependency>
 
-        <!-- Saxon -->
-        <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-        </dependency>
+    <!-- Saxon -->
+    <dependency>
+      <groupId>net.sf.saxon</groupId>
+      <artifactId>Saxon-HE</artifactId>
+    </dependency>
 
-        <!-- Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <scope>test</scope>
-        </dependency>
+    <!-- Google -->
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
 
-        <!-- Google -->
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
+    <!-- JAXB -->
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+    </dependency>
 
-        <!-- JAXB -->
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

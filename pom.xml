@@ -1,339 +1,200 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.helger</groupId>
+    <artifactId>parent-pom</artifactId>
+    <version>2.0.6</version>
+  </parent>
 
-    <groupId>no.difi.vefa</groupId>
-    <artifactId>validator-parent</artifactId>
-    <packaging>pom</packaging>
-    <version>2.3.1-SNAPSHOT</version>
+  <groupId>com.helger.vefa</groupId>
+  <artifactId>validator-parent</artifactId>
+  <packaging>pom</packaging>
+  <version>2.3.1-SNAPSHOT</version>
 
-    <name>VEFA Validator :: Parent</name>
-    <description>Parent project for VEFA Validator Clone.</description>
+  <name>VEFA Validator :: Parent</name>
+  <description>Parent project for VEFA Validator Clone.</description>
+  <url>https://github.com/phax/vefa-validator</url>
+
+  <scm>
+    <tag>HEAD</tag>
     <url>https://github.com/phax/vefa-validator</url>
+    <connection>scm:git:https://github.com/phax/vefa-validator.git</connection>
+    <developerConnection>scm:git:https://github.com/phax/vefa-validator.git</developerConnection>
+  </scm>
 
-    <scm>
-        <tag>HEAD</tag>
-        <url>https://github.com/phax/vefa-validator</url>
-        <connection>scm:git:https://github.com/phax/vefa-validator.git</connection>
-        <developerConnection>scm:git:https://github.com/phax/vefa-validator.git</developerConnection>
-    </scm>
+  <issueManagement>
+    <url>https://github.com/phax/vefa-validator/issues</url>
+    <system>GitHub Issues</system>
+  </issueManagement>
 
-    <issueManagement>
-        <url>https://github.com/phax/vefa-validator/issues</url>
-        <system>GitHub Issues</system>
-    </issueManagement>
+  <organization>
+    <name>The Norwegian Agency for Public and Financial Management (DFØ)</name>
+    <url>http://www.dfo.no/</url>
+  </organization>
 
-    <organization>
-        <name>The Norwegian Agency for Public and Financial Management (DFØ)</name>
-        <url>http://www.dfo.no/</url>
-    </organization>
+  <developers>
+    <developer>
+      <name>Erlend Klakegg Bergheim</name>
+      <email>erlend.klakegg.bergheim@dfo.no</email>
+      <organization>DFØ</organization>
+      <roles>
+        <role>Author</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Philip Helger</name>
+      <email>philip@helger.com</email>
+    </developer>
+  </developers>
 
-    <developers>
-        <developer>
-            <name>Erlend Klakegg Bergheim</name>
-            <email>erlend.klakegg.bergheim@dfo.no</email>
-            <organization>DFØ</organization>
-            <roles>
-                <role>Author</role>
-            </roles>
-        </developer>
-        <developer>
-            <name>Philip Helger</name>
-            <email>philip@helger.com</email>
-        </developer>
-    </developers>
+  <licenses>
+    <license>
+      <name>Mozilla Public License, Version 2.0</name>
+      <url>https://www.mozilla.org/en-US/MPL/2.0/</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
-    <licenses>
-        <license>
-            <name>Mozilla Public License, Version 2.0</name>
-            <url>https://www.mozilla.org/en-US/MPL/2.0/</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+  <modules>
+    <module>validator-api</module>
+    <module>validator-core</module>
+    <module>validator-tester</module>
+    <module>validator-build</module>
+    <module>validator-dist</module>
+  </modules>
 
-    <modules>
-        <module>validator-api</module>
-        <module>validator-core</module>
-        <module>validator-tester</module>
-        <module>validator-build</module>
-        <module>validator-dist</module>
-    </modules>
+  <properties>
+    <jaxb-plugin.group>org.jvnet.jaxb</jaxb-plugin.group>
+    <jaxb-plugin.artifact>jaxb-maven-plugin</jaxb-plugin.artifact>
+    <jaxb-plugin.version>4.0.8</jaxb-plugin.version>
+  </properties>
 
-    <properties>
-        <java.encoding>UTF-8</java.encoding>
-        <java.version>11</java.version>
-        <slf4j.version>2.0.16</slf4j.version>
-        <jaxb-plugin.group>org.jvnet.jaxb</jaxb-plugin.group>
-        <jaxb-plugin.artifact>jaxb-maven-plugin</jaxb-plugin.artifact>
-        <jaxb-plugin.version>4.0.8</jaxb-plugin.version>
-    </properties>
-
+  <dependencyManagement>
     <dependencies>
-        <!-- Testing -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>5.13.0</version>
-            <scope>test</scope>
-        </dependency>
+      <!-- Validator -->
+      <dependency>
+        <groupId>com.helger.vefa</groupId>
+        <artifactId>validator-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.helger.vefa</groupId>
+        <artifactId>validator-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.helger.vefa</groupId>
+        <artifactId>validator-tester</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.helger.vefa</groupId>
+        <artifactId>validator-build</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
-        <!-- Utils -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
-            <scope>provided</scope>
-        </dependency>
+      <!-- Difi commons -->
+      <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>ph-asic</artifactId>
+        <version>3.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>no.difi.commons</groupId>
+        <artifactId>commons-schematron</artifactId>
+        <version>0.9.5</version>
+      </dependency>
+
+      <!-- Saxon -->
+      <dependency>
+        <groupId>net.sf.saxon</groupId>
+        <artifactId>Saxon-HE</artifactId>
+        <version>12.5</version>
+      </dependency>
+
+      <!-- Logging -->
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.5.7</version>
+      </dependency>
+
+      <!-- Commons -->
+      <dependency>
+        <groupId>commons-cli</groupId>
+        <artifactId>commons-cli</artifactId>
+        <version>1.9.0</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>2.16.1</version>
+      </dependency>
+
+      <!-- Google -->
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>33.3.0-jre</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.inject</groupId>
+        <artifactId>guice</artifactId>
+        <version>7.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.11.0</version>
+      </dependency>
+
+      <!-- Activation -->
+      <dependency>
+        <groupId>org.eclipse.angus</groupId>
+        <artifactId>angus-activation</artifactId>
+        <version>2.0.2</version>
+      </dependency>
+
+      <!-- JAXB -->
+      <dependency>
+        <groupId>jakarta.xml.bind</groupId>
+        <artifactId>jakarta.xml.bind-api</artifactId>
+        <version>4.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-bom-ext</artifactId>
+        <version>4.0.5</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
     </dependencies>
+  </dependencyManagement>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- Validator -->
-            <dependency>
-                <groupId>no.difi.vefa</groupId>
-                <artifactId>validator-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.difi.vefa</groupId>
-                <artifactId>validator-build</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.difi.vefa</groupId>
-                <artifactId>validator-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.difi.vefa</groupId>
-                <artifactId>validator-tester</artifactId>
-                <version>${project.version}</version>
-            </dependency>
 
-            <!-- Difi commons -->
-            <dependency>
-                <groupId>com.helger</groupId>
-                <artifactId>ph-asic</artifactId>
-                <version>3.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>no.difi.commons</groupId>
-                <artifactId>commons-schematron</artifactId>
-                <version>0.9.5</version>
-            </dependency>
+  <dependencies>
+    <!-- Utils -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.34</version>
+      <scope>provided</scope>
+    </dependency>
 
-            <!-- Saxon -->
-            <dependency>
-                <groupId>net.sf.saxon</groupId>
-                <artifactId>Saxon-HE</artifactId>
-                <version>12.5</version>
-            </dependency>
-
-            <!-- Logging -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-simple</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>1.5.7</version>
-            </dependency>
-
-            <!-- Commons -->
-            <dependency>
-                <groupId>commons-cli</groupId>
-                <artifactId>commons-cli</artifactId>
-                <version>1.9.0</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.16.1</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>1.17.1</version>
-            </dependency>
-
-            <!-- Google -->
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>33.3.0-jre</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.inject</groupId>
-                <artifactId>guice</artifactId>
-                <version>7.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.code.gson</groupId>
-                <artifactId>gson</artifactId>
-                <version>2.11.0</version>
-            </dependency>
-
-            <!-- Activation -->
-            <dependency>
-                <groupId>org.eclipse.angus</groupId>
-                <artifactId>angus-activation</artifactId>
-                <version>2.0.2</version>
-            </dependency>
-
-            <!-- JAXB -->
-            <dependency>
-                <groupId>jakarta.xml.bind</groupId>
-                <artifactId>jakarta.xml.bind-api</artifactId>
-                <version>4.0.2</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-bom-ext</artifactId>
-                <version>4.0.5</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
-                <configuration>
-                    <encoding>${java.encoding}</encoding>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <encoding>${java.encoding}</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>3.4.0</version>
-                </plugin>
-                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.8.0</version>
-                    <executions>
-                        <execution>
-                            <id>package-javadoc</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <excludePackageNames>org.oclc.*</excludePackageNames>
-                        <encoding>${java.encoding}</encoding>
-                        <failOnError>false</failOnError>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.12</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>prepare-agent</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>report</id>
-                            <phase>test</phase>
-                            <goals>
-                                <goal>report</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <excludes>
-                            <exclude>org/oclc/**</exclude>
-                            <exclude>no/difi/xsd/**</exclude>
-                        </excludes>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-
-    <profiles>
-        <profile>
-            <id>release-sign-artifacts</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <version>2.5.2</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin> -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.1</version>
-                        <executions>
-                            <execution>
-                                <id>package-sources</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
+    <!-- Testing -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.13.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
