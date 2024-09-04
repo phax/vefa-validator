@@ -23,7 +23,7 @@ import no.difi.xsd.vefa.validator._1.PackageType;
 /**
  * Validator containing an instance of validation configuration and validation
  * artifacts.
- * <p/>
+ * <p>
  * Validator is thread safe and should normally be created only once in a
  * program.
  */

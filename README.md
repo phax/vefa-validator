@@ -19,6 +19,8 @@ v2.3.1
 * Get rid of Lombok
 * Read sample of 50K instead of 10K to allow for real-world instances as well
 * Default output to "info" level
+* Changed Maven group ID to `com.helger.vefa`
+* Changed Docker group to `phelger`
 
 
 ## Features

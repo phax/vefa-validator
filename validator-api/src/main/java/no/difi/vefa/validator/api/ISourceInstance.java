@@ -4,13 +4,14 @@ import java.util.Map;
 
 /**
  * An instance representing a source.
- * <p/>
+ * <p>
  * Implementations in need of close() method should implement java.io.Closeable.
  */
-public interface ISourceInstance {
+public interface ISourceInstance
+{
 
-    Map<String, IArtifactHolder> getContent();
+  Map <String, IArtifactHolder> getContent ();
 
-    IArtifactHolder getContent(String path);
+  IArtifactHolder getContent (String path);
 
 }

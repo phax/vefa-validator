@@ -2,9 +2,10 @@ package no.difi.vefa.validator.api;
 
 /**
  * Interface for classes performing validation of business documents.
- * <p/>
+ * <p>
  * The constructor must contain no parameters.
  */
-public interface IChecker extends ITrigger {
+public interface IChecker extends ITrigger
+{
 
 }

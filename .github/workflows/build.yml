@@ -59,11 +59,11 @@ jobs:
         run: make docker_build tag=dev
         if: matrix.jdk == 11
 
-      - name: Push egde images
+      - name: Push Snapshot images
         if: "matrix.jdk == 11 && !startsWith(github.ref, 'refs/tags/')"
         run: make docker_push tag=edge
 
-      - name: Push images
+      - name: Push Release images
         if: "matrix.jdk == 11 && startsWith(github.ref, 'refs/tags/')"
         run: |
           make docker_push tag=${{ env.PROJECT_VERSION }}
