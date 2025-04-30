@@ -5,6 +5,9 @@ import java.io.ByteArrayOutputStream;
 
 import javax.xml.transform.stream.StreamSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
@@ -26,10 +29,11 @@ import no.difi.xsd.vefa.validator._1.SectionType;
 
 public class SchematronXsltChecker implements IChecker
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (SchematronXsltChecker.class);
   private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (SectionType.class);
 
-  private final Processor processor;
-  private final XsltExecutable xsltExecutable;
+  private final Processor m_aProcessor;
+  private final XsltExecutable m_aXsltExecutable;
 
   @Inject
   @Named ("schematron-svrl-parser")
@@ -37,20 +41,21 @@ public class SchematronXsltChecker implements IChecker
 
   public SchematronXsltChecker (final Processor processor, final XsltExecutable xsltExecutable)
   {
-    this.processor = processor;
-    this.xsltExecutable = xsltExecutable;
+    this.m_aProcessor = processor;
+    this.m_aXsltExecutable = xsltExecutable;
   }
 
   @Override
   public void check (final VefaDocument document, final Section section) throws VefaValidatorException
   {
+    LOGGER.info ("Running Schematron validation");
     final StopWatch aSW = StopWatch.createdStarted ();
     try
     {
       final ByteArrayOutputStream baos = new ByteArrayOutputStream ();
       {
         final XsltTransformer parser = this.parser.get ().load ();
-        final XsltTransformer schematron = xsltExecutable.load ();
+        final XsltTransformer schematron = m_aXsltExecutable.load ();
 
         schematron.setErrorListener (VefaSaxonErrorListener.INSTANCE);
         schematron.setMessageListener (VefaSaxonMessageListener.INSTANCE);
@@ -59,7 +64,7 @@ public class SchematronXsltChecker implements IChecker
 
         parser.setErrorListener (VefaSaxonErrorListener.INSTANCE);
         parser.setMessageListener (VefaSaxonMessageListener.INSTANCE);
-        parser.setDestination (processor.newSerializer (baos));
+        parser.setDestination (m_aProcessor.newSerializer (baos));
 
         schematron.transform ();
 

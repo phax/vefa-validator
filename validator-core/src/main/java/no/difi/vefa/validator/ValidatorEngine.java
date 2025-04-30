@@ -73,11 +73,11 @@ class ValidatorEngine implements Closeable
    */
   @Inject
   public ValidatorEngine (final IArtifactsSourceInstance sourceInstance, final List <Configurations> configurations)
-                                                                                                            throws VefaValidatorException
+                                                                                                                     throws VefaValidatorException
   {
     // Load configurations from ValidatorBuilder.
     for (final Configurations c : configurations)
-      loadConfigurations ("", c);
+      _loadConfigurations ("", c);
 
     try
     {
@@ -91,7 +91,7 @@ class ValidatorEngine implements Closeable
             try (InputStream inputStream = entry.getValue ().getInputStream (filename))
             {
               content.put (entry.getKey (), entry.getValue ());
-              loadConfigurations (entry.getKey (), inputStream);
+              _loadConfigurations (entry.getKey (), inputStream);
             }
             catch (final VefaValidatorException e)
             {
@@ -119,14 +119,14 @@ class ValidatorEngine implements Closeable
    * @param inputStream
    *        Stream of config.xml.
    */
-  private void loadConfigurations (final String configurationSource, final InputStream inputStream)
+  private void _loadConfigurations (final String configurationSource, final InputStream inputStream)
                                                                                                     throws VefaValidatorException
   {
     try
     {
       final Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller ();
-      loadConfigurations (configurationSource,
-                          unmarshaller.unmarshal (new StreamSource (inputStream), Configurations.class).getValue ());
+      _loadConfigurations (configurationSource,
+                           unmarshaller.unmarshal (new StreamSource (inputStream), Configurations.class).getValue ());
     }
     catch (final JAXBException e)
     {
@@ -142,7 +142,7 @@ class ValidatorEngine implements Closeable
    * @param configurations
    *        Configurations found in config.xml
    */
-  private void loadConfigurations (final String configurationSource, final Configurations configurations)
+  private void _loadConfigurations (final String configurationSource, final Configurations configurations)
   {
     // Add all declared packages to list of detected packages.
     packages.addAll (configurations.getPackage ());

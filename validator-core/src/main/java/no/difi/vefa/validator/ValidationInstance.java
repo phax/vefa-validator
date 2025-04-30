@@ -91,7 +91,7 @@ class ValidationInstance implements IValidation
     {
       _loadDocument (validationSource.getInputStream ());
       _loadConfiguration ();
-      nestedValidation ();
+      _nestedValidation ();
 
       if (m_aConfiguration != null)
         _validate ();
@@ -217,7 +217,7 @@ class ValidationInstance implements IValidation
 
     for (final FileType fileType : m_aConfiguration.getFile ())
     {
-      log.info ("Validating '" + fileType.getPath () + "'");
+      log.info ("Validating '" + fileType.getPath () + "' with " + m_aValidatorInstance.getEngineName ());
 
       try
       {
@@ -266,7 +266,7 @@ class ValidationInstance implements IValidation
   /**
    * Handling nested validation.
    */
-  private void nestedValidation () throws VefaValidatorException
+  private void _nestedValidation () throws VefaValidatorException
   {
     if (m_aReport.getFlag ().compareTo (FlagType.FATAL) < 0)
     {
@@ -275,15 +275,15 @@ class ValidationInstance implements IValidation
         final Iterable <CachedFile> iterable = m_aDeclaration.children (m_aDocument.getInputStream ());
         for (final CachedFile cachedFile : iterable)
         {
-          addChildValidation (ValidationInstance.of (m_aValidatorInstance,
-                                                     new ValidationSourceImpl (cachedFile.getContentStream (), null)),
-                              cachedFile.getFilename ());
+          _addChildValidation (ValidationInstance.of (m_aValidatorInstance,
+                                                      new ValidationSourceImpl (cachedFile.getContentStream (), null)),
+                               cachedFile.getFilename ());
         }
       }
     }
   }
 
-  private void addChildValidation (final IValidation validation, final String filename)
+  private void _addChildValidation (final IValidation validation, final String filename)
   {
     final Report childReport = validation.getReport ();
     childReport.setFilename (filename);

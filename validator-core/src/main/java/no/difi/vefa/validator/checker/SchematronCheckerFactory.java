@@ -30,7 +30,6 @@ import no.difi.vefa.validator.util.VefaSaxonMessageListener;
 @Type (".sch")
 public class SchematronCheckerFactory implements ICheckerFactory
 {
-
   @Inject
   @Named ("schematron-step3")
   private Provider <XsltExecutable> schematronCompiler;

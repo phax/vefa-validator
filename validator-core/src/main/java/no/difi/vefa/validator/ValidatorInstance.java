@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.helger.commons.string.StringHelper;
 
 import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.IProperties;
@@ -93,6 +94,16 @@ class ValidatorInstance implements Closeable
     return properties;
   }
 
+  public String getEngineName ()
+  {
+    return "Engine [" +
+           StringHelper.imploder ()
+                       .source (validatorEngine.getPackages (), PackageType::getValue)
+                       .separator (", ")
+                       .build () +
+           "]";
+  }
+
   /**
    * Return validation configuration.
    *
@@ -146,16 +157,18 @@ class ValidatorInstance implements Closeable
   protected Section check (final FileType fileType, final VefaDocument document, final Configuration configuration)
                                                                                                                     throws VefaValidatorException
   {
-    IChecker checker;
+    final IChecker checker;
     try
     {
       checker = checkerCache.get (fileType.getPath ());
     }
     catch (final Exception e)
     {
-      log.warn (e.getMessage (), e);
-      throw new VefaValidatorException (String.format ("Unable to get checker object from pool for '%s'.",
-                                                       configuration.getIdentifier ()), e);
+      log.error (e.getMessage (), e);
+      throw new VefaValidatorException ("Unable to get checker object from pool for '" +
+                                        configuration.getIdentifier () +
+                                        "'.",
+                                        e);
     }
 
     final Section section = new Section (new CombinedFlagFilterer (configuration, document.getExpectation ()));

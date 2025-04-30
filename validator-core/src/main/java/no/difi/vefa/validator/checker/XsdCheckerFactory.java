@@ -16,17 +16,21 @@ import no.difi.vefa.validator.util.HolderLSResolveResource;
 /**
  * @author erlend
  */
-@Type(".xsd")
-public class XsdCheckerFactory implements ICheckerFactory {
-
-    @Override
-    public IChecker prepare(IArtifactHolder artifactHolder, String path) throws VefaValidatorException {
-        try (InputStream inputStream = artifactHolder.getInputStream(path)) {
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            schemaFactory.setResourceResolver(new HolderLSResolveResource(artifactHolder, path));
-            return new XsdChecker(schemaFactory.newSchema(new StreamSource(inputStream)));
-        } catch (Exception e) {
-            throw new VefaValidatorException(e.getMessage(), e);
-        }
+@Type (".xsd")
+public class XsdCheckerFactory implements ICheckerFactory
+{
+  @Override
+  public IChecker prepare (final IArtifactHolder artifactHolder, final String path) throws VefaValidatorException
+  {
+    try (final InputStream inputStream = artifactHolder.getInputStream (path))
+    {
+      final SchemaFactory schemaFactory = SchemaFactory.newInstance (XMLConstants.W3C_XML_SCHEMA_NS_URI);
+      schemaFactory.setResourceResolver (new HolderLSResolveResource (artifactHolder, path));
+      return new XsdChecker (schemaFactory.newSchema (new StreamSource (inputStream)));
     }
+    catch (final Exception e)
+    {
+      throw new VefaValidatorException (e.getMessage (), e);
+    }
+  }
 }
