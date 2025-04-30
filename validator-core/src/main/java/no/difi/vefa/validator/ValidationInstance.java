@@ -1,10 +1,7 @@
 package no.difi.vefa.validator;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -12,16 +9,18 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.io.ByteStreams;
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
+import com.helger.commons.io.stream.StreamHelper;
 
 import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.api.ConvertedVefaDocument;
-import no.difi.vefa.validator.api.VefaDocument;
 import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IValidation;
 import no.difi.vefa.validator.api.IValidationSource;
 import no.difi.vefa.validator.api.Section;
+import no.difi.vefa.validator.api.VefaDocument;
 import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.properties.CombinedProperties;
@@ -73,8 +72,8 @@ class ValidationInstance implements IValidation
   }
 
   /**
-   * Constructing new validator using validator instance and validation source
-   * containing document to validate.
+   * Constructing new validator using validator instance and validation source containing document
+   * to validate.
    *
    * @param validatorInstance
    *        Instance of validator.
@@ -134,18 +133,18 @@ class ValidationInstance implements IValidation
 
   private void loadDocument (final InputStream inputStream) throws VefaValidatorException, IOException
   {
-    ByteArrayInputStream byteArrayInputStream;
-    if (inputStream instanceof ByteArrayInputStream)
+    final NonBlockingByteArrayInputStream byteArrayInputStream;
+    if (inputStream instanceof NonBlockingByteArrayInputStream)
     {
       // Use stream as-is.
-      byteArrayInputStream = (ByteArrayInputStream) inputStream;
+      byteArrayInputStream = (NonBlockingByteArrayInputStream) inputStream;
     }
     else
     {
       // Convert stream to ByteArrayOutputStream
-      final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ();
-      ByteStreams.copy (inputStream, byteArrayOutputStream);
-      byteArrayInputStream = new ByteArrayInputStream (byteArrayOutputStream.toByteArray ());
+      final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
+      StreamHelper.copyInputStreamToOutputStream (inputStream, byteArrayOutputStream);
+      byteArrayInputStream = byteArrayOutputStream.getAsInputStream ();
     }
 
     // To be able to reuse the stream later on.
@@ -172,14 +171,14 @@ class ValidationInstance implements IValidation
 
     if (declaration.supportsConverter ())
     {
-      final ByteArrayOutputStream convertedOutputStream = new ByteArrayOutputStream ();
+      final NonBlockingByteArrayOutputStream convertedOutputStream = new NonBlockingByteArrayOutputStream ();
       byteArrayInputStream.reset ();
       declaration.convert (byteArrayInputStream, convertedOutputStream);
 
-      document = new ConvertedVefaDocument (new ByteArrayInputStream (convertedOutputStream.toByteArray ()),
-                                        byteArrayInputStream,
-                                        declarationIdentifier.getFullIdentifier (),
-                                        expectation);
+      document = new ConvertedVefaDocument (convertedOutputStream.getAsInputStream (),
+                                            byteArrayInputStream,
+                                            declarationIdentifier.getFullIdentifier (),
+                                            expectation);
     }
     else
     {
@@ -271,7 +270,7 @@ class ValidationInstance implements IValidation
         for (final CachedFile cachedFile : iterable)
         {
           addChildValidation (ValidationInstance.of (validatorInstance,
-                                                     new ValidationSourceImpl (cachedFile.getContentStream ())),
+                                                     new ValidationSourceImpl (cachedFile.getContentStream (), null)),
                               cachedFile.getFilename ());
         }
       }
@@ -287,54 +286,6 @@ class ValidationInstance implements IValidation
     if (children == null)
       children = new ArrayList <> ();
     children.add (validation);
-  }
-
-  /**
-   * Render document to a stream.
-   *
-   * @param outputStream
-   *        Stream to use.
-   */
-  @Override
-  public void render (final OutputStream outputStream) throws VefaValidatorException
-  {
-    render (outputStream, null);
-  }
-
-  /**
-   * Render document to a stream, allows for extra configuration.
-   *
-   * @param outputStream
-   *        Stream to use.
-   * @param properties
-   *        Extra configuration to use for this rendering.
-   */
-  @Override
-  public void render (final OutputStream outputStream, final IProperties properties) throws VefaValidatorException
-  {
-    if (getReport ().getFlag ().equals (FlagType.FATAL))
-      throw new VefaValidatorException (String.format ("Status '%s' is not supported for rendering.",
-                                                   getReport ().getFlag ()));
-    if (configuration == null)
-      throw new VefaValidatorException ("Configuration was not detected, configuration is need for rendering.");
-    if (configuration.getStylesheet () == null)
-      throw new VefaValidatorException ("No stylesheet is defined for document type.");
-
-    validatorInstance.render (configuration.getStylesheet (), document, properties, outputStream);
-  }
-
-  /**
-   * Returns true if validated document is renderable based upon same criteria
-   * as may be provide exception when using #render(...).
-   *
-   * @return 'true' if validated document is renderable.
-   */
-  @Override
-  public boolean isRenderable ()
-  {
-    return configuration != null &&
-           configuration.getStylesheet () != null &&
-           !getReport ().getFlag ().equals (FlagType.FATAL);
   }
 
   /**

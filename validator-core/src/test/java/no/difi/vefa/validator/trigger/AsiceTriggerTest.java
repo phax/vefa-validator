@@ -3,12 +3,13 @@ package no.difi.vefa.validator.trigger;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import com.helger.commons.io.resource.ClassPathResource;
 
 import no.difi.vefa.validator.Validator;
 import no.difi.vefa.validator.ValidatorBuilder;
@@ -35,19 +36,16 @@ public class AsiceTriggerTest
 
   @Test
   @Ignore
-  public void simpleInvalidAsice ()
+  public void simpleInvalidAsice () throws IOException
   {
-    final IValidation validation = validator.validate (getClass ().getResourceAsStream ("/documents/asic-cades-test-invalid-signature.asice"));
+    final IValidation validation = validator.validate (new ClassPathResource ("/documents/asic-cades-test-invalid-signature.asice"));
     assertEquals (validation.getReport ().getFlag (), FlagType.FATAL);
   }
 
   @Test
   public void simpleValidAsice () throws IOException
   {
-    try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/asic-cades-test-valid.asice"))
-    {
-      final IValidation validation = validator.validate (inputStream);
-      assertEquals (validation.getReport ().getFlag (), FlagType.OK);
-    }
+    final IValidation validation = validator.validate (new ClassPathResource ("/documents/asic-cades-test-valid.asice"));
+    assertEquals (validation.getReport ().getFlag (), FlagType.OK);
   }
 }

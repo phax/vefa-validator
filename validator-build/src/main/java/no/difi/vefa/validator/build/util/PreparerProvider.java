@@ -38,8 +38,8 @@ public class PreparerProvider {
                 preparerMap.get(extension) : preparerMap.get(DEFAULT);
     }
 
-    public void prepare(final Path source, final Path target, final IPreparer.EType type) throws IOException {
-        if (IPreparer.EType.INCLUDE.equals(type) && Files.isDirectory(source)) {
+    public void prepare(final Path source, final Path target, final IPreparer.EPreparerType type) throws IOException {
+        if (IPreparer.EPreparerType.INCLUDE.equals(type) && Files.isDirectory(source)) {
             Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path path, BasicFileAttributes basicFileAttributes) throws IOException {

@@ -56,7 +56,6 @@ public class BuildTask
 
     for (final Path sourcePath : build.getSourcePath ())
     {
-
       final File workFolder = sourcePath.toFile ();
 
       log.info ("Source '{}'", workFolder.getAbsolutePath ());
@@ -80,7 +79,7 @@ public class BuildTask
 
               preparerProvider.prepare (configFolder.toPath ().resolve (fileType.getSource ()),
                                         contentsPath.resolve (fileType.getPath ()),
-                                        IPreparer.EType.FILE);
+                                        IPreparer.EPreparerType.FILE);
 
               fileType.setSource (null);
             }
@@ -92,7 +91,7 @@ public class BuildTask
 
               preparerProvider.prepare (configFolder.toPath ().resolve (stylesheet.getSource ()),
                                         contentsPath.resolve (stylesheet.getPath ()),
-                                        IPreparer.EType.STYLESHEET);
+                                        IPreparer.EPreparerType.STYLESHEET);
 
               stylesheet.setSource (null);
             }
@@ -112,7 +111,7 @@ public class BuildTask
 
             preparerProvider.prepare (configFolder.toPath ().resolve (fileType.getSource ()),
                                       contentsPath.resolve (fileType.getPath ()),
-                                      IPreparer.EType.INCLUDE);
+                                      IPreparer.EPreparerType.INCLUDE);
           }
 
           configurations.getPackage ().addAll (config.getPackage ());

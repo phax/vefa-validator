@@ -1,8 +1,9 @@
 package no.difi.vefa.validator.api;
 
-import java.io.ByteArrayInputStream;
 import java.util.Collections;
 import java.util.List;
+
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
 
 /**
  * Representation of validation document.
@@ -12,7 +13,7 @@ public class VefaDocument
   /**
    * Document as #ByteArrayInputStream.
    */
-  private final ByteArrayInputStream m_aBAIS;
+  private final NonBlockingByteArrayInputStream m_aBAIS;
 
   /**
    * Declaration identifier used to recognize rules.
@@ -24,7 +25,7 @@ public class VefaDocument
    */
   private final IExpectation m_aExpectation;
 
-  public VefaDocument (final ByteArrayInputStream inputStream)
+  public VefaDocument (final NonBlockingByteArrayInputStream inputStream)
   {
     this (inputStream, (String) null, null);
   }
@@ -37,7 +38,9 @@ public class VefaDocument
    * @param expectation
    *        Expectations when performing validation of triggered rules.
    */
-  public VefaDocument (final ByteArrayInputStream inputStream, final String declaration, final IExpectation expectation)
+  public VefaDocument (final NonBlockingByteArrayInputStream inputStream,
+                       final String declaration,
+                       final IExpectation expectation)
   {
     this (inputStream, Collections.singletonList (declaration), expectation);
   }
@@ -50,7 +53,7 @@ public class VefaDocument
    * @param expectation
    *        Expectations when performing validation of triggered rules.
    */
-  public VefaDocument (final ByteArrayInputStream inputStream,
+  public VefaDocument (final NonBlockingByteArrayInputStream inputStream,
                        final List <String> declarations,
                        final IExpectation expectation)
   {
@@ -84,7 +87,7 @@ public class VefaDocument
    *
    * @return Validated document
    */
-  public ByteArrayInputStream getInputStream ()
+  public NonBlockingByteArrayInputStream getInputStream ()
   {
     m_aBAIS.reset ();
     return m_aBAIS;

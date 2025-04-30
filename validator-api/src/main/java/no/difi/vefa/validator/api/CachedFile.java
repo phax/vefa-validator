@@ -1,7 +1,8 @@
 package no.difi.vefa.validator.api;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
 
 /**
  * @author erlend
@@ -29,7 +30,7 @@ public final class CachedFile
 
   public InputStream getContentStream ()
   {
-    return new ByteArrayInputStream (m_aContent);
+    return new NonBlockingByteArrayInputStream (m_aContent);
   }
 
   public static CachedFile of (final byte [] content)

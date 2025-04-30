@@ -1,9 +1,8 @@
 package no.difi.vefa.validator.api;
 
-public interface IExpectation extends IFlagFilter {
+public interface IExpectation extends IFlagFilter
+{
+  String getDescription ();
 
-    String getDescription();
-
-    void verify(Section section);
-
+  void verify (Section section);
 }

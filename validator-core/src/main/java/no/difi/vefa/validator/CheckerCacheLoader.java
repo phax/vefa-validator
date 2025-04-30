@@ -18,7 +18,6 @@ import no.difi.vefa.validator.lang.VefaValidatorException;
 @Singleton
 public class CheckerCacheLoader extends CacheLoader <String, IChecker>
 {
-
   public static final int DEFAULT_SIZE = 250;
 
   @Inject

@@ -13,7 +13,7 @@ import no.difi.vefa.validator.build.util.PreparerProvider;
 public class DefaultPreparer implements IPreparer
 {
   @Override
-  public void prepare (final Path source, final Path target, final EType type) throws IOException
+  public void prepare (final Path source, final Path target, final EPreparerType type) throws IOException
   {
     Files.copy (source.toFile (), target.toFile ());
   }

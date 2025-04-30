@@ -12,52 +12,63 @@ import no.difi.vefa.validator.lang.VefaValidatorException;
 /**
  * Defines a repository as source for validation artifacts.
  */
-public class RepositorySource extends AbstractSource {
+public class RepositorySource extends AbstractSource
+{
 
-    private List<URI> rootUri;
+  private final List <URI> rootUri;
 
-    public static RepositorySource forTest() {
-        return create("https://anskaffelser.dev/repo/validator/draft/");
-    }
+  /**
+   * Helper method to allow using string when initiating the new source.
+   *
+   * @param uris
+   *        Uri used to fetch validation artifacts.
+   */
+  public RepositorySource (final String... uris)
+  {
+    rootUri = new ArrayList <> (uris.length);
+    for (final String uri : uris)
+      rootUri.add (URI.create (uri));
+  }
 
-    public static RepositorySource forProduction() {
-        return create("https://anskaffelser.dev/repo/validator/current/");
-    }
+  /**
+   * Initiate the new source.
+   *
+   * @param uri
+   *        Uri used to fetch validation artifacts.
+   */
+  public RepositorySource (final URI... uri)
+  {
+    this.rootUri = Arrays.asList (uri);
+  }
 
-    public static RepositorySource of(String... uris) {
-        return new RepositorySource(uris);
-    }
+  public RepositorySource (final List <URI> uris)
+  {
+    this.rootUri = uris;
+  }
 
-    static RepositorySource create(String uri) {
-        return new RepositorySource(uri);
-    }
+  @Override
+  public ISourceInstance createInstance (final IProperties properties) throws VefaValidatorException
+  {
+    return new RepositorySourceInstance (properties, rootUri);
+  }
 
-    /**
-     * Helper method to allow using string when initiating the new source.
-     *
-     * @param uris Uri used to fetch validation artifacts.
-     */
-    public RepositorySource(String... uris) {
-        rootUri = new ArrayList<>();
-        for (String uri : uris)
-            rootUri.add(URI.create(uri));
-    }
+  public static RepositorySource forTest ()
+  {
+    return create ("https://anskaffelser.dev/repo/validator/draft/");
+  }
 
-    /**
-     * Initiate the new source.
-     *
-     * @param uri Uri used to fetch validation artifacts.
-     */
-    public RepositorySource(URI... uri) {
-        this.rootUri = Arrays.asList(uri);
-    }
+  public static RepositorySource forProduction ()
+  {
+    return create ("https://anskaffelser.dev/repo/validator/current/");
+  }
 
-    public RepositorySource(List<URI> uris) {
-        this.rootUri = uris;
-    }
+  public static RepositorySource of (final String... uris)
+  {
+    return new RepositorySource (uris);
+  }
 
-    @Override
-    public ISourceInstance createInstance(IProperties properties) throws VefaValidatorException {
-        return new RepositorySourceInstance(properties, rootUri);
-    }
+  static RepositorySource create (final String uri)
+  {
+    return new RepositorySource (uri);
+  }
 }

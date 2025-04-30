@@ -42,7 +42,6 @@ public class StreamUtils
    */
   public static byte [] readAndReset (final InputStream inputStream, final int length) throws IOException
   {
-
     byte [] bytes = new byte [length];
 
     inputStream.mark (length);

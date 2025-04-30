@@ -6,14 +6,14 @@ import java.util.Set;
 /**
  * @author erlend
  */
-public interface IArtifactHolder {
+public interface IArtifactHolder
+{
 
-  boolean exists(String path);
+  boolean exists (String path);
 
-  byte[] get(String path);
+  byte [] get (String path);
 
-  InputStream getInputStream(String path);
+  InputStream getInputStream (String path);
 
-  Set<String> getFilenames();
-
+  Set <String> getFilenames ();
 }

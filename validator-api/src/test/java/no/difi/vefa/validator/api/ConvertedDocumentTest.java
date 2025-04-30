@@ -4,21 +4,25 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.io.ByteArrayInputStream;
-
 import org.junit.Test;
 
-public class ConvertedDocumentTest {
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
+
+public class ConvertedDocumentTest
+{
 
   @Test
-  public void simple() {
-    final ConvertedVefaDocument document = new ConvertedVefaDocument(new ByteArrayInputStream(new byte[] {}),
-                                                             new ByteArrayInputStream(new byte[] {}), "identifier", null);
+  public void simple ()
+  {
+    final ConvertedVefaDocument document = new ConvertedVefaDocument (new NonBlockingByteArrayInputStream (new byte [] {}),
+                                                                      new NonBlockingByteArrayInputStream (new byte [] {}),
+                                                                      "identifier",
+                                                                      null);
 
-    assertNotNull(document.getInputStream());
-    assertNotNull(document.getSource());
-    assertEquals(document.getDeclarations().get(0), "identifier");
-    assertNull(document.getExpectation());
+    assertNotNull (document.getInputStream ());
+    assertNotNull (document.getSource ());
+    assertEquals (document.getDeclarations ().get (0), "identifier");
+    assertNull (document.getExpectation ());
   }
 
 }

@@ -5,24 +5,29 @@ import java.util.List;
 
 import no.difi.vefa.validator.lang.VefaValidatorException;
 
-public interface IDeclaration {
+public interface IDeclaration
+{
   /**
    * Verify content to be of a given type.
-   * @param content Start of content
-   * @param parent  Parent identifier
+   *
+   * @param content
+   *        Start of content
+   * @param parent
+   *        Parent identifier
    * @return Returns true if content is of given type.
    */
-  boolean verify(byte[] content, List<String> parent) throws VefaValidatorException;
+  boolean verify (byte [] content, List <String> parent) throws VefaValidatorException;
 
   /**
    * Detect identifier representing standardId to be used for validation.
    *
-   * @param contentStream Content stream
-   * @param parent  Parent identifier
+   * @param contentStream
+   *        Content stream
+   * @param parent
+   *        Parent identifier
    * @return Returns standardId
    */
-  List<String> detect(InputStream contentStream, List<String> parent) throws VefaValidatorException;
+  List <String> detect (InputStream contentStream, List <String> parent) throws VefaValidatorException;
 
-  IExpectation expectations(byte[] content) throws VefaValidatorException;
-
+  IExpectation expectations (byte [] content) throws VefaValidatorException;
 }

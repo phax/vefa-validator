@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.helger.commons.io.resource.IReadableResource;
 
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IValidation;
@@ -21,11 +22,9 @@ import no.difi.vefa.validator.api.IValidationSource;
 import no.difi.xsd.vefa.validator._1.PackageType;
 
 /**
- * Validator containing an instance of validation configuration and validation
- * artifacts.
+ * Validator containing an instance of validation configuration and validation artifacts.
  * <p>
- * Validator is thread safe and should normally be created only once in a
- * program.
+ * Validator is thread safe and should normally be created only once in a program.
  */
 @Singleton
 public class Validator implements Closeable
@@ -61,9 +60,17 @@ public class Validator implements Closeable
    */
   public IValidation validate (final Path file) throws IOException
   {
-    try (InputStream inputStream = Files.newInputStream (file))
+    try (final InputStream inputStream = Files.newInputStream (file))
     {
-      return validate (inputStream);
+      return _validate (inputStream, null);
+    }
+  }
+
+  public IValidation validate (final IReadableResource aRes) throws IOException
+  {
+    try (final InputStream inputStream = aRes.getInputStream ())
+    {
+      return _validate (inputStream, null);
     }
   }
 
@@ -76,7 +83,15 @@ public class Validator implements Closeable
    */
   public IValidation validate (final InputStream inputStream)
   {
-    return validate (new ValidationSourceImpl (inputStream));
+    return _validate (inputStream, null);
+  }
+
+  public IValidation validate (final IReadableResource aRes, final IProperties properties) throws IOException
+  {
+    try (final InputStream inputStream = aRes.getInputStream ())
+    {
+      return _validate (inputStream, properties);
+    }
   }
 
   /**
@@ -88,7 +103,7 @@ public class Validator implements Closeable
    *        Properties used for individual validation.
    * @return Validation result.
    */
-  public IValidation validate (final InputStream inputStream, final IProperties properties)
+  private IValidation _validate (final InputStream inputStream, final IProperties properties)
   {
     return validate (new ValidationSourceImpl (inputStream, properties));
   }

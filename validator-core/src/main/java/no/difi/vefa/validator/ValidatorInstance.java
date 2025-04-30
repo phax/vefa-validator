@@ -3,7 +3,6 @@ package no.difi.vefa.validator;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,14 +14,12 @@ import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import no.difi.vefa.validator.api.VefaDocument;
 import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.IProperties;
-import no.difi.vefa.validator.api.IRenderer;
 import no.difi.vefa.validator.api.Section;
+import no.difi.vefa.validator.api.VefaDocument;
 import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
 import no.difi.vefa.validator.lang.VefaValidatorException;
-import no.difi.vefa.validator.properties.CombinedProperties;
 import no.difi.vefa.validator.trigger.TriggerFactory;
 import no.difi.vefa.validator.util.CombinedFlagFilterer;
 import no.difi.vefa.validator.util.DeclarationDetector;
@@ -31,7 +28,6 @@ import no.difi.xsd.vefa.validator._1.ConfigurationType;
 import no.difi.xsd.vefa.validator._1.FileType;
 import no.difi.xsd.vefa.validator._1.FlagType;
 import no.difi.xsd.vefa.validator._1.PackageType;
-import no.difi.xsd.vefa.validator._1.StylesheetType;
 import no.difi.xsd.vefa.validator._1.TriggerType;
 
 /**
@@ -43,8 +39,7 @@ class ValidatorInstance implements Closeable
   private static final Logger log = LoggerFactory.getLogger (ValidatorInstance.class);
 
   /**
-   * Instance of ValidatorEngine containing all raw content needed for
-   * validation.
+   * Instance of ValidatorEngine containing all raw content needed for validation.
    */
   @Inject
   private ValidatorEngine validatorEngine;
@@ -66,13 +61,6 @@ class ValidatorInstance implements Closeable
    */
   @Inject
   private LoadingCache <String, IChecker> checkerCache;
-
-  /**
-   * Pool of presenters.
-   */
-  @Deprecated
-  @Inject
-  private LoadingCache <String, IRenderer> rendererCache;
 
   /**
    * Trigger factory.
@@ -145,38 +133,6 @@ class ValidatorInstance implements Closeable
   }
 
   /**
-   * Render document using stylesheet
-   *
-   * @param stylesheet
-   *        Stylesheet identifier from configuration.
-   * @param document
-   *        Document used for styling.
-   * @param outputStream
-   *        Stream for dumping of result.
-   */
-  @Deprecated
-  protected void render (final StylesheetType stylesheet,
-                         final VefaDocument document,
-                         final IProperties properties,
-                         final OutputStream outputStream) throws VefaValidatorException
-  {
-    IRenderer renderer;
-    try
-    {
-      renderer = rendererCache.get (stylesheet.getIdentifier ());
-    }
-    catch (final Exception e)
-    {
-      log.warn (e.getMessage (), e);
-      throw new VefaValidatorException (String.format ("Unable to borrow presenter object from pool for '%s'.",
-                                                   stylesheet.getIdentifier ()),
-                                    e);
-    }
-
-    renderer.render (document, new CombinedProperties (properties, this.properties), outputStream);
-  }
-
-  /**
    * Validate document using a file definition.
    *
    * @param fileType
@@ -187,9 +143,8 @@ class ValidatorInstance implements Closeable
    *        Complete configuration
    * @return Result of validation.
    */
-  protected Section check (final FileType fileType,
-                           final VefaDocument document,
-                           final Configuration configuration) throws VefaValidatorException
+  protected Section check (final FileType fileType, final VefaDocument document, final Configuration configuration)
+                                                                                                                    throws VefaValidatorException
   {
     IChecker checker;
     try
@@ -200,8 +155,7 @@ class ValidatorInstance implements Closeable
     {
       log.warn (e.getMessage (), e);
       throw new VefaValidatorException (String.format ("Unable to get checker object from pool for '%s'.",
-                                                   configuration.getIdentifier ()),
-                                    e);
+                                                       configuration.getIdentifier ()), e);
     }
 
     final Section section = new Section (new CombinedFlagFilterer (configuration, document.getExpectation ()));
@@ -242,9 +196,6 @@ class ValidatorInstance implements Closeable
   {
     checkerCache.invalidateAll ();
     checkerCache.cleanUp ();
-
-    rendererCache.invalidateAll ();
-    rendererCache.cleanUp ();
 
     // This is last statement, allow to propagate.
     validatorEngine.close ();

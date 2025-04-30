@@ -72,6 +72,26 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.helger.commons</groupId>
+        <artifactId>ph-commons-parent-pom</artifactId>
+        <version>11.2.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.helger.schematron</groupId>
+        <artifactId>ph-schematron-parent-pom</artifactId>
+        <version>8.0.6</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>ph-asic</artifactId>
+        <version>3.0.1</version>
+      </dependency>
+
       <!-- Validator -->
       <dependency>
         <groupId>com.helger.vefa</groupId>
@@ -94,17 +114,6 @@
         <version>${project.version}</version>
       </dependency>
 
-      <!-- Difi commons -->
-      <dependency>
-        <groupId>com.helger</groupId>
-        <artifactId>ph-asic</artifactId>
-        <version>3.0.1</version>
-      </dependency>
-      <dependency>
-        <groupId>no.difi.commons</groupId>
-        <artifactId>commons-schematron</artifactId>
-        <version>0.9.5</version>
-      </dependency>
 
       <!-- Saxon -->
       <dependency>

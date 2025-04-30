@@ -1,8 +1,9 @@
 package no.difi.vefa.validator.api;
 
-import java.io.ByteArrayInputStream;
 import java.util.Collections;
 import java.util.List;
+
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
 
 /**
  * Representation of validation document where the document is converted before performing
@@ -13,7 +14,7 @@ public class ConvertedVefaDocument extends VefaDocument
   /**
    * Holding the original document.
    */
-  private final ByteArrayInputStream m_aSource;
+  private final NonBlockingByteArrayInputStream m_aSource;
 
   /**
    * @param inputStream
@@ -25,8 +26,8 @@ public class ConvertedVefaDocument extends VefaDocument
    * @param expectation
    *        Expectations when performing validation of triggered rules.
    */
-  public ConvertedVefaDocument (final ByteArrayInputStream inputStream,
-                                final ByteArrayInputStream source,
+  public ConvertedVefaDocument (final NonBlockingByteArrayInputStream inputStream,
+                                final NonBlockingByteArrayInputStream source,
                                 final String declaration,
                                 final IExpectation expectation)
   {
@@ -43,13 +44,13 @@ public class ConvertedVefaDocument extends VefaDocument
    * @param expectation
    *        Expectations when performing validation of triggered rules.
    */
-  public ConvertedVefaDocument (final ByteArrayInputStream inputStream,
-                                final ByteArrayInputStream source,
+  public ConvertedVefaDocument (final NonBlockingByteArrayInputStream inputStream,
+                                final NonBlockingByteArrayInputStream source,
                                 final List <String> declarations,
                                 final IExpectation expectation)
   {
     super (inputStream, declarations, expectation);
-    this.m_aSource = source;
+    m_aSource = source;
   }
 
   /**
@@ -57,7 +58,7 @@ public class ConvertedVefaDocument extends VefaDocument
    *
    * @return Original document.
    */
-  public ByteArrayInputStream getSource ()
+  public NonBlockingByteArrayInputStream getSource ()
   {
     return m_aSource;
   }

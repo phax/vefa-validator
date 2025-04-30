@@ -5,28 +5,26 @@ import java.io.InputStream;
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IValidationSource;
 
-class ValidationSourceImpl implements IValidationSource {
+class ValidationSourceImpl implements IValidationSource
+{
+  private final InputStream inputStream;
+  private final IProperties properties;
 
-    private InputStream inputStream;
+  public ValidationSourceImpl (final InputStream inputStream, final IProperties properties)
+  {
+    this.inputStream = inputStream;
+    this.properties = properties;
+  }
 
-    private IProperties properties;
+  @Override
+  public InputStream getInputStream ()
+  {
+    return inputStream;
+  }
 
-    public ValidationSourceImpl(InputStream inputStream) {
-        this.inputStream = inputStream;
-    }
-
-    public ValidationSourceImpl(InputStream inputStream, IProperties properties) {
-        this(inputStream);
-        this.properties = properties;
-    }
-
-    @Override
-    public InputStream getInputStream() {
-        return inputStream;
-    }
-
-    @Override
-    public IProperties getProperties() {
-        return properties;
-    }
+  @Override
+  public IProperties getProperties ()
+  {
+    return properties;
+  }
 }

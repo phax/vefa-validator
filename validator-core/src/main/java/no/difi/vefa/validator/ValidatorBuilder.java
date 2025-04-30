@@ -16,60 +16,67 @@ import no.difi.vefa.validator.module.ValidatorModule;
 /**
  * Builder supporting creation of validator.
  */
-public class ValidatorBuilder {
+public class ValidatorBuilder
+{
+  private ISource m_aSource;
+  private IProperties m_aProperties;
 
-    private ISource source;
+  /**
+   * Initiate creation of a new validator. Loads default plugins.
+   *
+   * @return Builder object
+   */
+  public static ValidatorBuilder newValidator ()
+  {
+    return new ValidatorBuilder ();
+  }
 
-    private IProperties properties;
+  /**
+   * Internal constructor, no action needed.
+   */
+  private ValidatorBuilder ()
+  {
+    // No action
+  }
 
-    /**
-     * Initiate creation of a new validator. Loads default plugins.
-     *
-     * @return Builder object
-     */
-    public static ValidatorBuilder newValidator() {
-        return new ValidatorBuilder();
-    }
+  /**
+   * Defines configuration to use for validator.
+   *
+   * @param properties
+   *        Configuration
+   * @return Builder object
+   */
+  public ValidatorBuilder setProperties (final IProperties properties)
+  {
+    m_aProperties = properties;
+    return this;
+  }
 
-    /**
-     * Internal constructor, no action needed.
-     */
-    private ValidatorBuilder() {
-        // No action
-    }
+  /**
+   * Define source to use if other source then production repository to be used.
+   *
+   * @param source
+   *        Source giving access to validation rules.
+   * @return Builder object
+   */
+  public ValidatorBuilder setSource (final ISource source)
+  {
+    m_aSource = source;
+    return this;
+  }
 
-    /**
-     * Defines configuration to use for validator.
-     *
-     * @param properties Configuration
-     * @return Builder object
-     */
-    public ValidatorBuilder setProperties(IProperties properties) {
-        this.properties = properties;
-        return this;
-    }
+  /**
+   * Initiate validator and return validator ready for use.
+   *
+   * @return Validator ready for use.
+   */
+  public Validator build ()
+  {
+    final List <Module> modules = new ArrayList <> ();
+    modules.add (new PropertiesModule (m_aProperties));
+    modules.add (new SourceModule (m_aSource));
 
-    /**
-     * Define source to use if other source then production repository to be used.
-     *
-     * @param source Source giving access to validation rules.
-     * @return Builder object
-     */
-    public ValidatorBuilder setSource(ISource source) {
-        this.source = source;
-        return this;
-    }
-
-    /**
-     * Initiate validator and return validator ready for use.
-     *
-     * @return Validator ready for use.
-     */
-    public Validator build() {
-        List<Module> modules = new ArrayList<>();
-        modules.add(new PropertiesModule(properties));
-        modules.add(new SourceModule(source));
-
-        return Guice.createInjector(Modules.override(new ValidatorModule()).with(modules)).getInstance(Validator.class);
-    }
+    return Guice.createInjector (Modules.override (new ValidatorModule ()).with (modules))
+                .getInstance (Validator.class);
+  }
 }

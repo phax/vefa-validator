@@ -9,9 +9,7 @@ import java.util.Map;
  */
 public interface ISourceInstance
 {
-
   Map <String, IArtifactHolder> getContent ();
 
   IArtifactHolder getContent (String path);
-
 }

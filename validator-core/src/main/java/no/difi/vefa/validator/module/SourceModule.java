@@ -13,23 +13,25 @@ import no.difi.vefa.validator.source.RepositorySource;
 /**
  * @author erlend
  */
-public class SourceModule extends AbstractModule {
+public class SourceModule extends AbstractModule
+{
+  private final ISource m_aSource;
 
-    private final ISource source;
+  public SourceModule ()
+  {
+    this (null);
+  }
 
-    public SourceModule() {
-        this(null);
-    }
+  public SourceModule (final ISource source)
+  {
+    m_aSource = source;
+  }
 
-    public SourceModule(ISource source) {
-        this.source = source;
-    }
-
-    @Provides
-    @Singleton
-    public ISourceInstance getSource(IProperties properties) throws VefaValidatorException {
-        // Make sure to default to repository source if no source is set.
-        return (source != null ? source : RepositorySource.forProduction())
-                .createInstance(properties);
-    }
+  @Provides
+  @Singleton
+  public ISourceInstance getSource (final IProperties properties) throws VefaValidatorException
+  {
+    // Make sure to default to repository source if no source is set.
+    return (m_aSource != null ? m_aSource : RepositorySource.forProduction ()).createInstance (properties);
+  }
 }

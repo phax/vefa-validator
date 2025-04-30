@@ -6,10 +6,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import no.difi.vefa.validator.api.IProperties;
+
 /**
  * Simple implementation of Properties using a HashMap to store values.
  */
-public class SimpleProperties extends AbstractProperties
+public class SimpleProperties implements IProperties
 {
   private static final Logger log = LoggerFactory.getLogger (SimpleProperties.class);
 
