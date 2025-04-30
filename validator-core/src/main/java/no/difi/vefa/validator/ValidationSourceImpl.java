@@ -5,7 +5,7 @@ import java.io.InputStream;
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IValidationSource;
 
-class ValidationSourceImpl implements IValidationSource
+final class ValidationSourceImpl implements IValidationSource
 {
   private final InputStream inputStream;
   private final IProperties properties;

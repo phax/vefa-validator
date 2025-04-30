@@ -1,19 +1,21 @@
 package no.difi.vefa.validator.source;
 
 import no.difi.vefa.validator.api.IProperties;
-import no.difi.vefa.validator.api.ISourceInstance;
+import no.difi.vefa.validator.api.IArtifactsSourceInstance;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 
-public class ClasspathSource extends AbstractSource {
+public class ClasspathSource extends AbstractArtifactsSource
+{
+  private final String m_sFolder;
 
-    private String location;
+  public ClasspathSource (final String sFolder)
+  {
+    this.m_sFolder = sFolder;
+  }
 
-    public ClasspathSource(String location) {
-        this.location = location;
-    }
-
-    @Override
-    public ISourceInstance createInstance(IProperties properties) throws VefaValidatorException {
-        return new ClasspathSourceInstance(properties, location);
-    }
+  @Override
+  public IArtifactsSourceInstance createInstance (final IProperties properties) throws VefaValidatorException
+  {
+    return new ClasspathSourceInstance (properties, m_sFolder);
+  }
 }

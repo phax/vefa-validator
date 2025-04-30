@@ -6,13 +6,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import no.difi.vefa.validator.api.IProperties;
-import no.difi.vefa.validator.api.ISourceInstance;
+import no.difi.vefa.validator.api.IArtifactsSourceInstance;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 
 /**
  * Defines a repository as source for validation artifacts.
  */
-public class RepositorySource extends AbstractSource
+public class RepositorySource extends AbstractArtifactsSource
 {
 
   private final List <URI> rootUri;
@@ -47,7 +47,7 @@ public class RepositorySource extends AbstractSource
   }
 
   @Override
-  public ISourceInstance createInstance (final IProperties properties) throws VefaValidatorException
+  public IArtifactsSourceInstance createInstance (final IProperties properties) throws VefaValidatorException
   {
     return new RepositorySourceInstance (properties, rootUri);
   }

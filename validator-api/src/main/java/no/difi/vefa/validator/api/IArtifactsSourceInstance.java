@@ -7,7 +7,7 @@ import java.util.Map;
  * <p>
  * Implementations in need of close() method should implement java.io.Closeable.
  */
-public interface ISourceInstance
+public interface IArtifactsSourceInstance
 {
   Map <String, IArtifactHolder> getContent ();
 

@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+
+import javax.annotation.WillClose;
 
 import com.google.common.io.ByteStreams;
 import com.helger.asic.IAsicReader;
@@ -19,41 +19,7 @@ import no.difi.vefa.validator.api.IArtifactHolder;
  */
 public class ArtifactHolderImpl implements IArtifactHolder
 {
-
   private final Map <String, byte []> content;
-
-  public static IArtifactHolder load (final IAsicReader asicReader) throws IOException
-  {
-    final Map <String, byte []> content = new HashMap <> ();
-
-    String filename;
-    while ((filename = asicReader.getNextFile ()) != null)
-    {
-      content.put (filename, ByteStreams.toByteArray (asicReader.inputStream ()));
-    }
-
-    // Close asice-file
-    asicReader.close ();
-
-    return new ArtifactHolderImpl (content);
-  }
-
-  public static IArtifactHolder load (final InputStream inputStream) throws IOException
-  {
-    final Map <String, byte []> content = new HashMap <> ();
-
-    try (ZipInputStream zipInputStream = new ZipInputStream (inputStream))
-    {
-      ZipEntry zipEntry;
-      while ((zipEntry = zipInputStream.getNextEntry ()) != null)
-      {
-        content.put (zipEntry.getName (), ByteStreams.toByteArray (zipInputStream));
-        zipInputStream.closeEntry ();
-      }
-    }
-
-    return new ArtifactHolderImpl (content);
-  }
 
   private ArtifactHolderImpl (final Map <String, byte []> content)
   {
@@ -82,5 +48,22 @@ public class ArtifactHolderImpl implements IArtifactHolder
   public Set <String> getFilenames ()
   {
     return content.keySet ();
+  }
+
+  public static IArtifactHolder loadAsic (@WillClose final IAsicReader asicReader) throws IOException
+  {
+    final Map <String, byte []> content = new HashMap <> ();
+
+    String filename;
+    while ((filename = asicReader.getNextFile ()) != null)
+    {
+      // Keep source stream open
+      content.put (filename, ByteStreams.toByteArray (asicReader.inputStream ()));
+    }
+
+    // Close asice-file
+    asicReader.close ();
+
+    return new ArtifactHolderImpl (content);
   }
 }

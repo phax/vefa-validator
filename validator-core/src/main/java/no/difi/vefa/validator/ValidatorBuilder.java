@@ -8,7 +8,7 @@ import com.google.inject.Module;
 import com.google.inject.util.Modules;
 
 import no.difi.vefa.validator.api.IProperties;
-import no.difi.vefa.validator.api.ISource;
+import no.difi.vefa.validator.api.IArtifactsSource;
 import no.difi.vefa.validator.module.PropertiesModule;
 import no.difi.vefa.validator.module.SourceModule;
 import no.difi.vefa.validator.module.ValidatorModule;
@@ -18,7 +18,7 @@ import no.difi.vefa.validator.module.ValidatorModule;
  */
 public class ValidatorBuilder
 {
-  private ISource m_aSource;
+  private IArtifactsSource m_aSource;
   private IProperties m_aProperties;
 
   /**
@@ -59,7 +59,7 @@ public class ValidatorBuilder
    *        Source giving access to validation rules.
    * @return Builder object
    */
-  public ValidatorBuilder setSource (final ISource source)
+  public ValidatorBuilder setSource (final IArtifactsSource source)
   {
     m_aSource = source;
     return this;

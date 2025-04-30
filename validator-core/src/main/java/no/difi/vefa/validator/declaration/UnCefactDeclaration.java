@@ -5,13 +5,14 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import com.helger.commons.regex.RegExHelper;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.util.StreamUtils;
@@ -26,12 +27,10 @@ public class UnCefactDeclaration extends AbstractXmlDeclaration
   private final static List <String> informationElements = Arrays.asList ("BusinessProcessSpecifiedDocumentContextParameter",
                                                                           "GuidelineSpecifiedDocumentContextParameter");
 
-  private static Pattern pattern = Pattern.compile ("urn:un:unece:uncefact:data:standard:(.+)::(.+)");
-
   @Override
   public boolean verify (final byte [] content, final List <String> parent)
   {
-    return pattern.matcher (parent.get (0)).matches ();
+    return RegExHelper.stringMatchesPattern ("urn:un:unece:uncefact:data:standard:(.+)::(.+)", parent.get (0));
   }
 
   @Override

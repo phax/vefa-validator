@@ -25,6 +25,7 @@ public class DeclarationDetector
                                                                                  null,
                                                                                  Collections.singletonList ("unknown"));
   private static final Logger log = LoggerFactory.getLogger (DeclarationDetector.class);
+
   private final List <DeclarationWrapper> rootDeclarationWrappers = new ArrayList <> ();
 
   @Inject
@@ -67,7 +68,6 @@ public class DeclarationDetector
                                         final InputStream contentStream,
                                         final DeclarationIdentifier parent) throws IOException
   {
-
     if (content == null)
     {
       content = StreamUtils.read50KAndReset (contentStream);
@@ -85,7 +85,8 @@ public class DeclarationDetector
 
           if (identifier == null)
             break;
-          log.debug ("Found: {} - {}", wrapper.getType (), identifier);
+          if (log.isDebugEnabled ())
+            log.debug ("Found: " + wrapper.getType () + " - " + identifier);
 
           return detect (wrapper.getChildren (),
                          content,

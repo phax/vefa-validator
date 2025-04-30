@@ -1,11 +1,11 @@
 package no.difi.vefa.validator.expectation;
 
-import java.io.ByteArrayInputStream;
-
 import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -17,21 +17,22 @@ import no.difi.xsd.vefa.validator._1.Test;
 public class ValidatorTestExpectation extends AbstractExpectation
 {
   private static final Logger log = LoggerFactory.getLogger (ValidatorTestExpectation.class);
-  private static JAXBContext jaxbContext = JAXBHelper.context (Test.class);
+  private static JAXBContext JAXB_CONTEXT = JAXBHelper.context (Test.class);
 
   public ValidatorTestExpectation (final byte [] bytes)
   {
     try
     {
-      final Test test = jaxbContext.createUnmarshaller ()
-                                   .unmarshal (new StreamSource (new ByteArrayInputStream (bytes)), Test.class)
-                                   .getValue ();
+      final Test test = JAXB_CONTEXT.createUnmarshaller ()
+                                    .unmarshal (new StreamSource (new NonBlockingByteArrayInputStream (bytes)),
+                                                Test.class)
+                                    .getValue ();
       final AssertType assertType = test.getAssert ();
-
       if (assertType != null)
       {
-        description = test.getId () == null ? assertType.getDescription ()
-                                            : String.format ("%s) %s", test.getId (), assertType.getDescription ());
+        description = test.getId () == null ? assertType.getDescription () : test.getId () +
+                                                                             ") " +
+                                                                             assertType.getDescription ();
         scopes.addAll (assertType.getScope ());
 
         for (final AssertElementType a : assertType.getFatal ())
@@ -43,7 +44,10 @@ public class ValidatorTestExpectation extends AbstractExpectation
         for (final String s : assertType.getSuccess ())
           successes.put (s, 1);
       }
-
+      else
+      {
+        description = "Validator Test Expectation with invalid 'Test' element";
+      }
     }
     catch (final JAXBException e)
     {

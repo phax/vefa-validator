@@ -1,6 +1,5 @@
 package no.difi.vefa.validator.declaration;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +10,8 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.util.StreamUtils;
@@ -42,7 +43,7 @@ public class NoblDeclaration extends AbstractXmlDeclaration
     try
     {
       final byte [] content = StreamUtils.read50KAndReset (contentStream);
-      final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new ByteArrayInputStream (content));
+      final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new NonBlockingByteArrayInputStream (content));
       while (xmlEventReader.hasNext ())
       {
         XMLEvent xmlEvent = xmlEventReader.nextEvent ();
@@ -57,8 +58,7 @@ public class NoblDeclaration extends AbstractXmlDeclaration
             if (xmlEvent instanceof Characters)
             {
               stringBuilder.append ("::").append (((Characters) xmlEvent).getData ());
-
-              results.add (String.format ("%s::%s", type, ((Characters) xmlEvent).getData ()));
+              results.add (type + "::" + ((Characters) xmlEvent).getData ());
             }
           }
         }

@@ -18,7 +18,6 @@ import no.difi.vefa.validator.util.StreamUtils;
 @Type ("xml.espd")
 public class EspdDeclaration extends AbstractXmlDeclaration
 {
-
   private final static List <String> validParents = Arrays.asList ("urn:grow:names:specification:ubl:schema:xsd:ESPDRequest-1::ESPDRequest",
                                                                    "urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1::ESPDResponse");
 
@@ -29,7 +28,8 @@ public class EspdDeclaration extends AbstractXmlDeclaration
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent) throws VefaValidatorException
+  public List <String> detect (final InputStream contentStream, final List <String> parent)
+                                                                                            throws VefaValidatorException
   {
     final List <String> results = new ArrayList <> ();
 
@@ -47,13 +47,13 @@ public class EspdDeclaration extends AbstractXmlDeclaration
           {
             xmlEvent = xmlEventReader.nextEvent ();
             if (xmlEvent instanceof Characters)
-              results.add (String.format ("%s::%s", parent.get (0), ((Characters) xmlEvent).getData ()));
+              results.add (parent.get (0) + "::" + ((Characters) xmlEvent).getData ());
           }
           if ("VersionID".equals (((StartElement) xmlEvent).getName ().getLocalPart ()))
           {
             xmlEvent = xmlEventReader.nextEvent ();
             if (xmlEvent instanceof Characters)
-              results.add (String.format ("%s::%s", parent.get (0), ((Characters) xmlEvent).getData ()));
+              results.add (parent.get (0) + "::" + ((Characters) xmlEvent).getData ());
           }
         }
       }

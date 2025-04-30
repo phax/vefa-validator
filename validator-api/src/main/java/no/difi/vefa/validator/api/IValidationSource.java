@@ -5,20 +5,20 @@ import java.io.InputStream;
 /**
  * Interface defining a representation of resources provided for an individual validation.
  */
-public interface IValidationSource {
+public interface IValidationSource
+{
 
   /**
    * InputStream providing access to business document.
    *
    * @return Business document.
    */
-  InputStream getInputStream();
+  InputStream getInputStream ();
 
   /**
    * Properties overriding existing properties may be provided.
    *
    * @return Overriding properties.
    */
-  IProperties getProperties();
-
+  IProperties getProperties ();
 }

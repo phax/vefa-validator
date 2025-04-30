@@ -12,10 +12,13 @@ public class XmlExpectation extends AbstractExpectation
 
   public XmlExpectation (final byte [] bytes)
   {
+    description = "XML expectation [" + bytes.length + " bytes]";
+
     String content = new String (bytes);
     if (!content.contains ("<!--") || !content.contains ("-->"))
       return;
 
+    // Get the content of the XML comment
     content = content.substring (content.indexOf ("<!--") + 4, content.indexOf ("-->"));
 
     for (final String section : content.replaceAll ("\\r", "")

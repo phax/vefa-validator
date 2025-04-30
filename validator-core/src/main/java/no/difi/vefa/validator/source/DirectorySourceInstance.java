@@ -21,7 +21,7 @@ import no.difi.xsd.vefa.validator._1.Artifacts;
 /**
  * Defines a directory as source for validation artifacts.
  */
-class DirectorySourceInstance extends AbstractSourceInstance
+class DirectorySourceInstance extends AbstractArtifactsSourceInstance
 {
   private static final Logger log = LoggerFactory.getLogger (DirectorySourceInstance.class);
 
@@ -40,7 +40,7 @@ class DirectorySourceInstance extends AbstractSourceInstance
     {
       for (final Path directory : directories)
       {
-        log.info ("Directory: {}", directory);
+        log.info ("Directory: " + directory);
 
         // Directories containing artifacts.xml results in lower memory
         // footprint.
@@ -51,7 +51,7 @@ class DirectorySourceInstance extends AbstractSourceInstance
 
           // Read artifacts.xml
           final Path artifactsPath = directory.resolve ("artifacts.xml");
-          log.info ("Loading {}", artifactsPath);
+          log.info ("  Loading " + artifactsPath);
           Artifacts artifactsType;
 
           try (InputStream inputStream = Files.newInputStream (artifactsPath))
@@ -64,10 +64,10 @@ class DirectorySourceInstance extends AbstractSourceInstance
           {
             // Load validation artifact to memory.
             final Path artifactPath = directory.resolve (artifact.getFilename ());
-            log.info ("Loading {}", artifactPath);
+            log.info ("    Unpacking " + artifactPath);
             try (IAsicReader asicReader = ASIC_READER_FACTORY.open (artifactPath))
             {
-              unpackContainer (asicReader, artifact.getFilename ());
+              unpackAsic (asicReader, artifact.getFilename ());
             }
           }
         }
@@ -83,7 +83,7 @@ class DirectorySourceInstance extends AbstractSourceInstance
                 log.info ("Loading: {}", path);
                 try (IAsicReader asicReader = ASIC_READER_FACTORY.open (path))
                 {
-                  unpackContainer (asicReader, path.getFileName ().toString ());
+                  unpackAsic (asicReader, path.getFileName ().toString ());
                 }
               }
             }

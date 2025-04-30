@@ -22,16 +22,14 @@ public class XmlDeclaration extends AbstractXmlDeclaration
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent) throws VefaValidatorException
+  public List <String> detect (final InputStream contentStream, final List <String> parent)
+                                                                                            throws VefaValidatorException
   {
-
     try
     {
       final byte [] content = StreamUtils.read50KAndReset (contentStream);
       final String c = new String (content);
-      return Collections.singletonList (String.format ("%s::%s",
-                                                       XmlUtils.extractRootNamespace (c),
-                                                       XmlUtils.extractLocalName (c)));
+      return Collections.singletonList (XmlUtils.extractRootNamespace (c) + "::" + XmlUtils.extractLocalName (c));
     }
     catch (final IOException e)
     {

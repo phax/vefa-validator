@@ -1,9 +1,9 @@
 package no.difi.vefa.validator.declaration;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +13,8 @@ import java.util.zip.ZipInputStream;
 import com.google.common.io.ByteStreams;
 import com.helger.asic.AsicReaderFactory;
 import com.helger.asic.IAsicReader;
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
+import com.helger.commons.io.stream.StreamHelper;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
@@ -26,22 +28,20 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
                               IDeclarationWithChildren,
                               IDeclarationWithConverter
 {
-
   private static final String MIME = "application/vnd.etsi.asic-e+zip";
 
   @Override
   public boolean verify (final byte [] content, final List <String> parent)
   {
-    if (content[28] != 0)
+    if (content.length < 29 || content[28] != 0)
       return false;
 
-    try
+    try (final ZipInputStream zipInputStream = new ZipInputStream (new NonBlockingByteArrayInputStream (content)))
     {
-      final ZipInputStream zipInputStream = new ZipInputStream (new ByteArrayInputStream (content));
       final ZipEntry entry = zipInputStream.getNextEntry ();
 
       if ("mimetype".equals (entry.getName ()))
-        return MIME.equals (new String (ByteStreams.toByteArray (zipInputStream)));
+        return MIME.equals (StreamHelper.getAllBytesAsString (zipInputStream, StandardCharsets.ISO_8859_1));
     }
     catch (final IOException e)
     {

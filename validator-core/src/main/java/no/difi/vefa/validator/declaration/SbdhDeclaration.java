@@ -1,6 +1,5 @@
 package no.difi.vefa.validator.declaration;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,6 +10,7 @@ import javax.xml.transform.stream.StreamSource;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -51,7 +51,7 @@ public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarat
   {
     try
     {
-      final ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+      final NonBlockingByteArrayOutputStream baos = new NonBlockingByteArrayOutputStream ();
 
       final XsltTransformer xsltTransformer = extractor.get ().load ();
       xsltTransformer.setSource (new StreamSource (inputStream));

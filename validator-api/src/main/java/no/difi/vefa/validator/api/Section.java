@@ -87,7 +87,7 @@ public class Section extends SectionType
 
     if (aAssertion.getFlag () != null)
     {
-
+      // Set highest flag
       if (aAssertion.getFlag ().compareTo (getFlag ()) > 0)
         setFlag (aAssertion.getFlag ());
 

@@ -54,7 +54,7 @@ public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements ID
       final XMLStreamReader source = XML_INPUT_FACTORY.createXMLStreamReader (new ByteArrayInputStream (content));
       do
       {
-        if (source.getEventType () == XMLStreamConstants.START_ELEMENT && source.getNamespaceURI ().equals (namespace))
+        if (source.getEventType () == XMLStreamConstants.START_ELEMENT && source.getNamespaceURI ().equals (m_sNamespace))
           for (int i = 0; i < source.getAttributeCount (); i++)
             if (source.getAttributeName (i).toString ().equals ("configuration"))
               return Collections.singletonList (String.format ("configuration::%s", source.getAttributeValue (i)));

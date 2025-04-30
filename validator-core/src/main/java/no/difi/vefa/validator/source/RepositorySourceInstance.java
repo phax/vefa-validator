@@ -14,11 +14,12 @@ import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.xsd.vefa.validator._1.ArtifactType;
 import no.difi.xsd.vefa.validator._1.Artifacts;
 
-class RepositorySourceInstance extends AbstractSourceInstance
+class RepositorySourceInstance extends AbstractArtifactsSourceInstance
 {
   private static final Logger log = LoggerFactory.getLogger (RepositorySourceInstance.class);
 
-  public RepositorySourceInstance (final IProperties properties, final List <URI> rootUris) throws VefaValidatorException
+  public RepositorySourceInstance (final IProperties properties, final List <URI> rootUris)
+                                                                                            throws VefaValidatorException
   {
     super (properties);
 
@@ -28,16 +29,16 @@ class RepositorySourceInstance extends AbstractSourceInstance
       {
         final Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller ();
         final URI artifactsUri = rootUri.resolve ("artifacts.xml");
-        log.info (String.format ("Fetching %s", artifactsUri));
+        log.info ("Fetching repo " + artifactsUri);
         final Artifacts artifactsType = (Artifacts) unmarshaller.unmarshal (artifactsUri.toURL ());
 
         for (final ArtifactType artifact : artifactsType.getArtifact ())
         {
           final URI artifactUri = rootUri.resolve (artifact.getFilename ());
-          log.info (String.format ("Fetching %s", artifactUri));
+          log.info ("  Unpacking " + artifactUri);
           try (IAsicReader asicReader = ASIC_READER_FACTORY.open (artifactUri.toURL ().openStream ()))
           {
-            unpackContainer (asicReader, artifact.getFilename ());
+            unpackAsic (asicReader, artifact.getFilename ());
           }
         }
       }

@@ -1,9 +1,9 @@
 package no.difi.vefa.validator.declaration;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,18 +12,17 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import com.google.common.io.ByteStreams;
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
-import no.difi.vefa.validator.api.IDeclaration;
 import no.difi.vefa.validator.api.IDeclarationWithChildren;
 import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.util.StreamUtils;
 
 @Type ("zip")
-public class ZipDeclaration implements IDeclaration, IDeclarationWithChildren
+public class ZipDeclaration implements IDeclarationWithChildren
 {
-
   private static final byte [] STARTS_WITH = { 0x50, 0x4B, 0x03, 0x04 };
 
   @Override
@@ -37,16 +36,15 @@ public class ZipDeclaration implements IDeclaration, IDeclarationWithChildren
   {
     try
     {
-
       final byte [] content = StreamUtils.read50KAndReset (contentStream);
       final ZipInputStream zipInputStream = new ZipInputStream (new ByteArrayInputStream (content));
       final ZipEntry entry = zipInputStream.getNextEntry ();
 
       if ("mimetype".equals (entry.getName ()))
       {
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ();
+        final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
         ByteStreams.copy (zipInputStream, byteArrayOutputStream);
-        return Collections.singletonList (byteArrayOutputStream.toString ());
+        return Collections.singletonList (byteArrayOutputStream.getAsString (StandardCharsets.ISO_8859_1));
       }
     }
     catch (final IOException e)

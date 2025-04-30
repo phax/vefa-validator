@@ -1,9 +1,9 @@
 package no.difi.vefa.validator.declaration;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +17,7 @@ import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import com.helger.asic.AsicReaderFactory;
 import com.helger.asic.IAsicReader;
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
@@ -30,9 +31,7 @@ public class AsiceXmlDeclaration extends AbstractXmlDeclaration implements
                                  IDeclarationWithConverter,
                                  IDeclarationWithChildren
 {
-
   private static final String NAMESPACE = "urn:etsi.org:specification:02918:v1.2.1::asic";
-
   private static final String MIME = "application/vnd.etsi.asic-e+zip";
 
   @Override
@@ -59,17 +58,18 @@ public class AsiceXmlDeclaration extends AbstractXmlDeclaration implements
     try
     {
       final XMLStreamReader source = XML_INPUT_FACTORY.createXMLStreamReader (inputStream);
-      final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ();
-
-      do
+      try (final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ())
       {
-        if (source.getEventType () == XMLStreamConstants.CHARACTERS)
-          byteArrayOutputStream.write (source.getText ().getBytes ());
-      } while (source.hasNext () && source.next () > 0);
+        do
+        {
+          if (source.getEventType () == XMLStreamConstants.CHARACTERS)
+            byteArrayOutputStream.write (source.getText ().getBytes ());
+        } while (source.hasNext () && source.next () > 0);
 
-      outputStream.write (BaseEncoding.base64 ()
-                                      .decode (CharMatcher.whitespace ()
-                                                          .removeFrom (byteArrayOutputStream.toString ())));
+        outputStream.write (BaseEncoding.base64 ()
+                                        .decode (CharMatcher.whitespace ()
+                                                            .removeFrom (byteArrayOutputStream.getAsString (StandardCharsets.ISO_8859_1))));
+      }
     }
     catch (IOException | XMLStreamException e)
     {

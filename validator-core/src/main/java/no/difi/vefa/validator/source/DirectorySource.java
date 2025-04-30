@@ -3,16 +3,15 @@ package no.difi.vefa.validator.source;
 import java.nio.file.Path;
 
 import no.difi.vefa.validator.api.IProperties;
-import no.difi.vefa.validator.api.ISourceInstance;
+import no.difi.vefa.validator.api.IArtifactsSourceInstance;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 
 /**
  * Defines a directories as source for validation artifacts.
  */
-public class DirectorySource extends AbstractSource
+public class DirectorySource extends AbstractArtifactsSource
 {
-
-  private final Path [] directories;
+  private final Path [] m_aDirectories;
 
   /**
    * Initiate the new source.
@@ -22,12 +21,12 @@ public class DirectorySource extends AbstractSource
    */
   public DirectorySource (final Path... directories)
   {
-    this.directories = directories;
+    this.m_aDirectories = directories;
   }
 
   @Override
-  public ISourceInstance createInstance (final IProperties properties) throws VefaValidatorException
+  public IArtifactsSourceInstance createInstance (final IProperties properties) throws VefaValidatorException
   {
-    return new DirectorySourceInstance (properties, directories);
+    return new DirectorySourceInstance (properties, m_aDirectories);
   }
 }

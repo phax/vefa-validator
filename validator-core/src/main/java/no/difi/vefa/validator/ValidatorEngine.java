@@ -21,7 +21,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import no.difi.vefa.validator.api.IArtifactHolder;
-import no.difi.vefa.validator.api.ISourceInstance;
+import no.difi.vefa.validator.api.IArtifactsSourceInstance;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.JAXBHelper;
 import no.difi.xsd.vefa.validator._1.ConfigurationType;
@@ -33,8 +33,8 @@ import no.difi.xsd.vefa.validator._1.StylesheetType;
 import no.difi.xsd.vefa.validator._1.TriggerType;
 
 /**
- * This class handles all raw configurations detected in source of validation
- * artifacts and preserves links between source and configurations.
+ * This class handles all raw configurations detected in source of validation artifacts and
+ * preserves links between source and configurations.
  */
 @Singleton
 class ValidatorEngine implements Closeable
@@ -46,8 +46,7 @@ class ValidatorEngine implements Closeable
   private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (Configurations.class);
 
   /**
-   * Map containing raw configurations indexed by both 'identifier' and
-   * 'identifier#build'.
+   * Map containing raw configurations indexed by both 'identifier' and 'identifier#build'.
    */
   private final Map <String, ConfigurationType> identifierMap = new HashMap <> ();
 
@@ -57,8 +56,8 @@ class ValidatorEngine implements Closeable
   private final Map <String, ConfigurationType> declarationMap = new HashMap <> ();
 
   /**
-   * Stylesheet declarations found in configurations indexed by identifier of
-   * stylesheet declaration.
+   * Stylesheet declarations found in configurations indexed by identifier of stylesheet
+   * declaration.
    */
   private final Map <String, StylesheetType> stylesheetMap = new HashMap <> ();
 
@@ -73,8 +72,8 @@ class ValidatorEngine implements Closeable
    * Loading a new validator engine loading configurations from current source.
    */
   @Inject
-  public ValidatorEngine (final ISourceInstance sourceInstance,
-                          final List <Configurations> configurations) throws VefaValidatorException
+  public ValidatorEngine (final IArtifactsSourceInstance sourceInstance, final List <Configurations> configurations)
+                                                                                                            throws VefaValidatorException
   {
     // Load configurations from ValidatorBuilder.
     for (final Configurations c : configurations)
@@ -88,6 +87,7 @@ class ValidatorEngine implements Closeable
         {
           if (filename.startsWith ("config") && filename.endsWith (".xml"))
           {
+            log.info ("Loading configurations from '" + filename + "'");
             try (InputStream inputStream = entry.getValue ().getInputStream (filename))
             {
               content.put (entry.getKey (), entry.getValue ());
@@ -119,8 +119,8 @@ class ValidatorEngine implements Closeable
    * @param inputStream
    *        Stream of config.xml.
    */
-  private void loadConfigurations (final String configurationSource,
-                                   final InputStream inputStream) throws VefaValidatorException
+  private void loadConfigurations (final String configurationSource, final InputStream inputStream)
+                                                                                                    throws VefaValidatorException
   {
     try
     {
@@ -149,7 +149,7 @@ class ValidatorEngine implements Closeable
 
     // Write to log when loading new packages.
     for (final PackageType pkg : configurations.getPackage ())
-      log.info ("Loaded '{}'", pkg.getValue ());
+      log.info ("  Loaded '" + pkg.getValue () + "' and '" + pkg.getUrl () + "'");
 
     for (final ConfigurationType configuration : configurations.getConfiguration ())
     {
@@ -157,7 +157,7 @@ class ValidatorEngine implements Closeable
       {
         if (fileType.getType () == null)
           fileType.setType (fileType.getPath ().endsWith (".xsd") ? "xml.xsd" : "xml.schematron.xslt");
-        fileType.setPath (String.format ("%s#%s", configurationSource, fileType.getPath ()));
+        fileType.setPath (configurationSource + "#" + fileType.getPath ());
         fileType.setConfiguration (configuration.getIdentifier ().getValue ());
         fileType.setBuild (configuration.getBuild ());
       }
@@ -171,7 +171,7 @@ class ValidatorEngine implements Closeable
       if (configuration.getStylesheet () != null)
       {
         final StylesheetType stylesheet = configuration.getStylesheet ();
-        stylesheet.setPath (String.format ("%s#%s", configurationSource, configuration.getStylesheet ().getPath ()));
+        stylesheet.setPath (configurationSource + "#" + configuration.getStylesheet ().getPath ());
         if (stylesheet.getType () == null)
           stylesheet.setType ("xml.xslt");
 
@@ -185,9 +185,7 @@ class ValidatorEngine implements Closeable
 
       if (configuration.getBuild () != null)
       {
-        final String identifierBuild = String.format ("%s#%s",
-                                                      configuration.getIdentifier (),
-                                                      configuration.getBuild ());
+        final String identifierBuild = configuration.getIdentifier () + "#" + configuration.getBuild ();
         if (!identifierMap.containsKey (identifierBuild) ||
             identifierMap.get (identifierBuild).getWeight () < configuration.getWeight ())
           identifierMap.put (identifierBuild, configuration);
@@ -225,14 +223,13 @@ class ValidatorEngine implements Closeable
 
       for (final DeclarationType declaration : configuration.getDeclaration ())
       {
-        final String identifier = String.format ("%s::%s", declaration.getType (), declaration.getValue ());
+        final String identifier = declaration.getType () + "::" + declaration.getValue ();
         if (!declarationMap.containsKey (identifier) ||
             declarationMap.get (identifier).getWeight () < configuration.getWeight ())
           declarationMap.put (identifier, configuration);
       }
 
-      declarationMap.put (String.format ("configuration::%s", configuration.getIdentifier ().getValue ()),
-                          configuration);
+      declarationMap.put ("configuration::" + configuration.getIdentifier ().getValue (), configuration);
     }
   }
 
@@ -264,8 +261,8 @@ class ValidatorEngine implements Closeable
   }
 
   /**
-   * Fetch stylesheet declaration using stylesheet identifier (not necessarily
-   * the same as configuration identifier containing stylesheet declaration).
+   * Fetch stylesheet declaration using stylesheet identifier (not necessarily the same as
+   * configuration identifier containing stylesheet declaration).
    *
    * @param identifier
    *        Stylesheet identifier.
@@ -276,7 +273,7 @@ class ValidatorEngine implements Closeable
   public StylesheetType getStylesheet (final String identifier) throws VefaValidatorException
   {
     if (!stylesheetMap.containsKey (identifier))
-      throw new VefaValidatorException (String.format ("Stylesheet for identifier '%s' not found.", identifier));
+      throw new VefaValidatorException ("Stylesheet for identifier '" + identifier + "' not found.");
 
     return stylesheetMap.get (identifier);
   }

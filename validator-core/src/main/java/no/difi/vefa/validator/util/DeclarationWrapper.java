@@ -12,19 +12,11 @@ import no.difi.vefa.validator.api.IDeclarationWithConverter;
 import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 
-public class DeclarationWrapper implements IDeclaration, IDeclarationWithChildren, IDeclarationWithConverter
+public class DeclarationWrapper implements IDeclarationWithChildren, IDeclarationWithConverter
 {
-
   private final String type;
-
   private final IDeclaration declaration;
-
   private final List <DeclarationWrapper> children = new ArrayList <> ();
-
-  public static DeclarationWrapper of (final String type, final IDeclaration declaration)
-  {
-    return new DeclarationWrapper (type, declaration);
-  }
 
   private DeclarationWrapper (final String type, final IDeclaration declaration)
   {
@@ -54,7 +46,8 @@ public class DeclarationWrapper implements IDeclaration, IDeclarationWithChildre
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent) throws VefaValidatorException
+  public List <String> detect (final InputStream contentStream, final List <String> parent)
+                                                                                            throws VefaValidatorException
   {
     return declaration.detect (contentStream, parent);
   }
@@ -91,5 +84,10 @@ public class DeclarationWrapper implements IDeclaration, IDeclarationWithChildre
   public String toString ()
   {
     return type + " // " + declaration.getClass ().getName ();
+  }
+
+  public static DeclarationWrapper of (final String type, final IDeclaration declaration)
+  {
+    return new DeclarationWrapper (type, declaration);
   }
 }

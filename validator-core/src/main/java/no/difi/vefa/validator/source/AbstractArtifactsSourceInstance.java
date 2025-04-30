@@ -11,41 +11,40 @@ import com.helger.asic.IAsicReader;
 
 import jakarta.xml.bind.JAXBContext;
 import no.difi.vefa.validator.api.IArtifactHolder;
+import no.difi.vefa.validator.api.IArtifactsSourceInstance;
 import no.difi.vefa.validator.api.IProperties;
-import no.difi.vefa.validator.api.ISourceInstance;
 import no.difi.vefa.validator.util.ArtifactHolderImpl;
 import no.difi.vefa.validator.util.JAXBHelper;
 import no.difi.xsd.vefa.validator._1.Artifacts;
 
-public abstract class AbstractSourceInstance implements ISourceInstance, Closeable
+public abstract class AbstractArtifactsSourceInstance implements IArtifactsSourceInstance, Closeable
 {
   protected static final AsicReaderFactory ASIC_READER_FACTORY = AsicReaderFactory.newFactory ();
   protected static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (Artifacts.class);
 
-  protected IProperties properties;
+  protected IProperties m_aProperties;
+  protected Map <String, IArtifactHolder> m_aContent = new HashMap <> ();
 
-  protected Map <String, IArtifactHolder> content = new HashMap <> ();
-
-  public AbstractSourceInstance (final IProperties properties)
+  public AbstractArtifactsSourceInstance (final IProperties properties)
   {
-    this.properties = properties;
+    m_aProperties = properties;
   }
 
-  protected void unpackContainer (final IAsicReader asicReader, final String targetName) throws IOException
+  protected void unpackAsic (final IAsicReader asicReader, final String targetName) throws IOException
   {
-    content.put (targetName, ArtifactHolderImpl.load (asicReader));
+    m_aContent.put (targetName, ArtifactHolderImpl.loadAsic (asicReader));
   }
 
   @Override
   public Map <String, IArtifactHolder> getContent ()
   {
-    return Collections.unmodifiableMap (content);
+    return Collections.unmodifiableMap (m_aContent);
   }
 
   @Override
   public IArtifactHolder getContent (final String path)
   {
-    return content.get (path);
+    return m_aContent.get (path);
   }
 
   @Override

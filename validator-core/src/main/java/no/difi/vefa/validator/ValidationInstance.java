@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
 import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 import com.helger.commons.io.stream.StreamHelper;
+import com.helger.commons.timing.StopWatch;
 
 import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.api.ConvertedVefaDocument;
@@ -42,34 +43,28 @@ class ValidationInstance implements IValidation
 {
   private static final Logger log = LoggerFactory.getLogger (ValidationInstance.class);
 
-  private final ValidatorInstance validatorInstance;
-  private final IProperties properties;
-  private Configuration configuration;
+  private final ValidatorInstance m_aValidatorInstance;
+  private final IProperties m_aProperties;
+  private Configuration m_aConfiguration;
 
   /**
    * Final report.
    */
-  private final Report report;
+  private final Report m_aReport;
 
   /**
    * Section used to gather problems during validation.
    */
-  private final Section section = new Section (new CombinedFlagFilterer ());
+  private final Section m_aSection = new Section (new CombinedFlagFilterer ());
 
   /**
    * Document subject to validation.
    */
-  private VefaDocument document;
+  private VefaDocument m_aDocument;
 
-  private DeclarationWrapper declaration;
+  private DeclarationWrapper m_aDeclaration;
 
-  private List <IValidation> children;
-
-  public static ValidationInstance of (final ValidatorInstance validatorInstance,
-                                       final IValidationSource validationSource)
-  {
-    return new ValidationInstance (validatorInstance, validationSource);
-  }
+  private List <IValidation> m_aChildren;
 
   /**
    * Constructing new validator using validator instance and validation source containing document
@@ -82,24 +77,24 @@ class ValidationInstance implements IValidation
    */
   private ValidationInstance (final ValidatorInstance validatorInstance, final IValidationSource validationSource)
   {
-    this.validatorInstance = validatorInstance;
-    this.properties = new CombinedProperties (validationSource.getProperties (), validatorInstance.getProperties ());
+    this.m_aValidatorInstance = validatorInstance;
+    this.m_aProperties = new CombinedProperties (validationSource.getProperties (), validatorInstance.getProperties ());
 
-    this.report = new Report ();
-    this.report.setUuid (UUID.randomUUID ().toString ());
-    this.report.setFlag (FlagType.OK);
+    this.m_aReport = new Report ();
+    this.m_aReport.setUuid (UUID.randomUUID ().toString ());
+    this.m_aReport.setFlag (FlagType.OK);
 
-    this.section.setTitle ("Validator");
-    this.section.setFlag (FlagType.OK);
+    this.m_aSection.setTitle ("Validator");
+    this.m_aSection.setFlag (FlagType.OK);
 
     try
     {
-      loadDocument (validationSource.getInputStream ());
-      loadConfiguration ();
+      _loadDocument (validationSource.getInputStream ());
+      _loadConfiguration ();
       nestedValidation ();
 
-      if (configuration != null)
-        validate ();
+      if (m_aConfiguration != null)
+        _validate ();
     }
     catch (final IOException e)
     {
@@ -107,154 +102,165 @@ class ValidationInstance implements IValidation
     }
     catch (final UnknownDocumentTypeException e)
     {
-      section.add ("SYSTEM-003", e.getMessage (), FlagType.UNKNOWN);
+      m_aSection.add ("SYSTEM-003", e.getMessage (), FlagType.UNKNOWN);
     }
     catch (final VefaValidatorException e)
     {
-      section.add ("SYSTEM-001", e.getMessage (), FlagType.FATAL);
+      m_aSection.add ("SYSTEM-001", e.getMessage (), FlagType.FATAL);
     }
 
-    if (report.getTitle () == null)
-      report.setTitle ("Unknown document type");
+    if (m_aReport.getTitle () == null)
+      m_aReport.setTitle ("Unknown document type");
 
-    if (section.getAssertion ().size () > 0)
+    if (m_aSection.getAssertion ().size () > 0)
     {
-      for (final AssertionType assertionType : section.getAssertion ())
+      for (final AssertionType assertionType : m_aSection.getAssertion ())
       {
-        if (assertionType.getFlag ().compareTo (section.getFlag ()) > 0)
-          section.setFlag (assertionType.getFlag ());
+        if (assertionType.getFlag ().compareTo (m_aSection.getFlag ()) > 0)
+          m_aSection.setFlag (assertionType.getFlag ());
       }
-      report.getSection ().add (0, section);
+      m_aReport.getSection ().add (0, m_aSection);
 
-      if (section.getFlag ().compareTo (getReport ().getFlag ()) > 0)
-        getReport ().setFlag (section.getFlag ());
+      if (m_aSection.getFlag ().compareTo (getReport ().getFlag ()) > 0)
+        getReport ().setFlag (m_aSection.getFlag ());
     }
   }
 
-  private void loadDocument (final InputStream inputStream) throws VefaValidatorException, IOException
+  private void _loadDocument (final InputStream inputStream) throws VefaValidatorException, IOException
   {
-    final NonBlockingByteArrayInputStream byteArrayInputStream;
+    final NonBlockingByteArrayInputStream aBAIS;
     if (inputStream instanceof NonBlockingByteArrayInputStream)
     {
       // Use stream as-is.
-      byteArrayInputStream = (NonBlockingByteArrayInputStream) inputStream;
+      aBAIS = (NonBlockingByteArrayInputStream) inputStream;
     }
     else
     {
       // Convert stream to ByteArrayOutputStream
       final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
       StreamHelper.copyInputStreamToOutputStream (inputStream, byteArrayOutputStream);
-      byteArrayInputStream = byteArrayOutputStream.getAsInputStream ();
+      aBAIS = byteArrayOutputStream.getAsInputStream ();
+    }
+    log.info ("Loading document from stream");
+
+    if (false)
+    {
+      // To be able to reuse the stream later on.
+      m_aDocument = new VefaDocument (aBAIS);
+      aBAIS.reset ();
     }
 
-    // To be able to reuse the stream later on.
-    document = new VefaDocument (byteArrayInputStream);
-    byteArrayInputStream.reset ();
-
     // Use declaration implementations to detect declaration to use.
-    final DeclarationIdentifier declarationIdentifier = validatorInstance.detect (byteArrayInputStream);
-    declaration = declarationIdentifier.getDeclaration ();
-
+    final DeclarationIdentifier declarationIdentifier = m_aValidatorInstance.detect (aBAIS);
+    m_aDeclaration = declarationIdentifier.getDeclaration ();
     if (declarationIdentifier.equals (DeclarationDetector.UNKNOWN))
       throw new UnknownDocumentTypeException ("Unable to detect type of content.");
+    log.info ("  Detected declaration: " +
+              m_aDeclaration.getType () +
+              (m_aDeclaration.supportsConverter () ? " (with converter)" : "") +
+              (m_aDeclaration.supportsChildren () ? " (with children)" : ""));
 
     // Detect expectation
     IExpectation expectation = null;
-    if (properties.getBoolean ("feature.expectation"))
+    if (m_aProperties.getBoolean ("feature.expectation"))
     {
       // TODO this is buggy - reads only a limit amount of the file for test
-      final byte [] bytes = StreamUtils.read50KAndReset (byteArrayInputStream);
-      expectation = declaration.expectations (bytes);
+      final byte [] bytes = StreamUtils.read50KAndReset (aBAIS);
+      expectation = m_aDeclaration.expectations (bytes);
       if (expectation != null)
-        report.setDescription (expectation.getDescription ());
+      {
+        m_aReport.setDescription (expectation.getDescription ());
+        log.info ("  Detected expectation: " + expectation.getDescription ());
+      }
     }
 
-    if (declaration.supportsConverter ())
+    if (m_aDeclaration.supportsConverter ())
     {
       final NonBlockingByteArrayOutputStream convertedOutputStream = new NonBlockingByteArrayOutputStream ();
-      byteArrayInputStream.reset ();
-      declaration.convert (byteArrayInputStream, convertedOutputStream);
+      aBAIS.reset ();
+      m_aDeclaration.convert (aBAIS, convertedOutputStream);
 
-      document = new ConvertedVefaDocument (convertedOutputStream.getAsInputStream (),
-                                            byteArrayInputStream,
-                                            declarationIdentifier.getFullIdentifier (),
-                                            expectation);
+      m_aDocument = new ConvertedVefaDocument (convertedOutputStream.getAsInputStream (),
+                                               aBAIS,
+                                               declarationIdentifier.getFullIdentifier (),
+                                               expectation);
     }
     else
     {
-      document = new VefaDocument (byteArrayInputStream, declarationIdentifier.getFullIdentifier (), expectation);
+      m_aDocument = new VefaDocument (aBAIS, declarationIdentifier.getFullIdentifier (), expectation);
     }
   }
 
-  private void loadConfiguration () throws UnknownDocumentTypeException
+  private void _loadConfiguration () throws UnknownDocumentTypeException
   {
     // Default values for report
-    report.setTitle ("Unknown document type");
-    report.setFlag (FlagType.FATAL);
+    m_aReport.setTitle ("Unknown document type");
+    m_aReport.setFlag (FlagType.FATAL);
 
     // Get configuration using declaration
-    this.configuration = validatorInstance.getConfiguration (document.getDeclarations ());
+    m_aConfiguration = m_aValidatorInstance.getConfiguration (m_aDocument.getDeclarations ());
 
-    if (!properties.getBoolean ("feature.suppress_notloaded"))
-      for (final String notLoaded : configuration.getNotLoaded ())
-        section.add ("SYSTEM-007", String.format ("Validation artifact '%s' not loaded.", notLoaded), FlagType.WARNING);
+    if (!m_aProperties.getBoolean ("feature.suppress_notloaded"))
+      for (final String notLoaded : m_aConfiguration.getNotLoaded ())
+        m_aSection.add ("SYSTEM-007", "Validation artifact '" + notLoaded + "' not loaded.", FlagType.WARNING);
 
     // Update report using configuration for declaration
-    report.setTitle (configuration.getTitle ());
-    report.setConfiguration (configuration.getIdentifier ().getValue ());
-    report.setBuild (configuration.getBuild ());
-    report.setFlag (FlagType.OK);
+    m_aReport.setTitle (m_aConfiguration.getTitle ());
+    m_aReport.setConfiguration (m_aConfiguration.getIdentifier ().getValue ());
+    m_aReport.setBuild (m_aConfiguration.getBuild ());
+    m_aReport.setFlag (FlagType.OK);
   }
 
-  private void validate ()
+  private void _validate ()
   {
-    final long start = System.currentTimeMillis ();
+    final StopWatch aSW = StopWatch.createdStarted ();
 
-    for (final FileType fileType : configuration.getFile ())
+    for (final FileType fileType : m_aConfiguration.getFile ())
     {
-      log.debug ("Validate: {}", fileType.getPath ());
+      log.info ("Validating '" + fileType.getPath () + "'");
 
       try
       {
-        final Section section = validatorInstance.check (fileType, document, configuration);
+        final Section section = m_aValidatorInstance.check (fileType, m_aDocument, m_aConfiguration);
         section.setConfiguration (fileType.getConfiguration ());
         section.setBuild (fileType.getBuild ());
-        report.getSection ().add (section);
+        m_aReport.getSection ().add (section);
 
         if (section.getFlag ().compareTo (getReport ().getFlag ()) > 0)
           getReport ().setFlag (section.getFlag ());
       }
       catch (final VefaValidatorException e)
       {
-        this.section.add ("SYSTEM-008", e.getMessage (), FlagType.ERROR);
+        this.m_aSection.add ("SYSTEM-008", e.getMessage (), FlagType.ERROR);
       }
 
-      if (getReport ().getFlag ().equals (FlagType.FATAL) || this.section.getFlag ().equals (FlagType.FATAL))
+      if (getReport ().getFlag ().equals (FlagType.FATAL) || m_aSection.getFlag ().equals (FlagType.FATAL))
         break;
     }
 
-    for (final TriggerType triggerType : configuration.getTrigger ())
+    for (final TriggerType triggerType : m_aConfiguration.getTrigger ())
     {
       try
       {
-        final Section section = validatorInstance.trigger (triggerType, document, configuration);
+        final Section section = m_aValidatorInstance.trigger (triggerType, m_aDocument, m_aConfiguration);
         section.setConfiguration (triggerType.getConfiguration ());
         section.setBuild (triggerType.getBuild ());
-        report.getSection ().add (section);
+        m_aReport.getSection ().add (section);
 
         if (section.getFlag ().compareTo (getReport ().getFlag ()) > 0)
           getReport ().setFlag (section.getFlag ());
       }
       catch (final VefaValidatorException e)
       {
-        this.section.add ("SYSTEM-010", e.getMessage (), FlagType.ERROR);
+        this.m_aSection.add ("SYSTEM-010", e.getMessage (), FlagType.ERROR);
       }
     }
 
-    if (document.getExpectation () != null)
-      document.getExpectation ().verify (section);
+    if (m_aDocument.getExpectation () != null)
+      m_aDocument.getExpectation ().verify (m_aSection);
 
-    report.setRuntime ((System.currentTimeMillis () - start) + "ms");
+    aSW.stop ();
+    m_aReport.setRuntime (aSW.getMillis () + "ms");
   }
 
   /**
@@ -262,14 +268,14 @@ class ValidationInstance implements IValidation
    */
   private void nestedValidation () throws VefaValidatorException
   {
-    if (report.getFlag ().compareTo (FlagType.FATAL) < 0)
+    if (m_aReport.getFlag ().compareTo (FlagType.FATAL) < 0)
     {
-      if (declaration.supportsChildren () && properties.getBoolean ("feature.nesting"))
+      if (m_aDeclaration.supportsChildren () && m_aProperties.getBoolean ("feature.nesting"))
       {
-        final Iterable <CachedFile> iterable = declaration.children (document.getInputStream ());
+        final Iterable <CachedFile> iterable = m_aDeclaration.children (m_aDocument.getInputStream ());
         for (final CachedFile cachedFile : iterable)
         {
-          addChildValidation (ValidationInstance.of (validatorInstance,
+          addChildValidation (ValidationInstance.of (m_aValidatorInstance,
                                                      new ValidationSourceImpl (cachedFile.getContentStream (), null)),
                               cachedFile.getFilename ());
         }
@@ -281,11 +287,11 @@ class ValidationInstance implements IValidation
   {
     final Report childReport = validation.getReport ();
     childReport.setFilename (filename);
-    report.getReport ().add (childReport);
+    m_aReport.getReport ().add (childReport);
 
-    if (children == null)
-      children = new ArrayList <> ();
-    children.add (validation);
+    if (m_aChildren == null)
+      m_aChildren = new ArrayList <> ();
+    m_aChildren.add (validation);
   }
 
   /**
@@ -296,7 +302,7 @@ class ValidationInstance implements IValidation
   @Override
   public VefaDocument getDocument ()
   {
-    return document;
+    return m_aDocument;
   }
 
   /**
@@ -307,7 +313,7 @@ class ValidationInstance implements IValidation
   @Override
   public Report getReport ()
   {
-    return report;
+    return m_aReport;
   }
 
   /**
@@ -318,6 +324,12 @@ class ValidationInstance implements IValidation
   @Override
   public List <IValidation> getChildren ()
   {
-    return children;
+    return m_aChildren;
+  }
+
+  public static ValidationInstance of (final ValidatorInstance validatorInstance,
+                                       final IValidationSource validationSource)
+  {
+    return new ValidationInstance (validatorInstance, validationSource);
   }
 }
