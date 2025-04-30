@@ -34,7 +34,6 @@ public class DeclarationDetector
     final Map <String, DeclarationWrapper> wrapperMap = new HashMap <> ();
 
     for (final IDeclaration declaration : declarations)
-    {
       if (declaration.getClass ().isAnnotationPresent (Type.class))
       {
         for (final String type : declaration.getClass ().getAnnotation (Type.class).value ())
@@ -42,7 +41,6 @@ public class DeclarationDetector
           wrapperMap.put (type, DeclarationWrapper.of (type, declaration));
         }
       }
-    }
 
     for (final String key : wrapperMap.keySet ())
     {

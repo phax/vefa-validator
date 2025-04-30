@@ -1,15 +1,16 @@
 package no.difi.vefa.validator.declaration;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.xml.transform.stream.StreamSource;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 import com.helger.commons.regex.RegExHelper;
 
 import net.sf.saxon.s9api.Processor;
@@ -54,21 +55,20 @@ public class UblDeclaration extends AbstractXmlDeclaration
   public List <String> detect (final InputStream streamContent, final List <String> parent)
                                                                                             throws VefaValidatorException
   {
-    final ByteArrayOutputStream baos = new ByteArrayOutputStream ();
-
-    try (InputStream is = new ByteArrayInputStream (StreamUtils.readAllAndReset (streamContent)))
+    final NonBlockingByteArrayOutputStream baos = new NonBlockingByteArrayOutputStream ();
+    try (final InputStream is = new NonBlockingByteArrayInputStream (StreamUtils.readAllAndReset (streamContent)))
     {
       final XsltTransformer xsltTransformer = xsltExecutable.load ();
       xsltTransformer.setSource (new StreamSource (is));
       xsltTransformer.setDestination (xsltExecutable.getProcessor ().newSerializer (baos));
       xsltTransformer.transform ();
     }
-    catch (SaxonApiException | IOException e)
+    catch (final Exception e)
     {
       throw new VefaValidatorException ("Unable to detect UBL information.", e);
     }
 
     // noinspection unchecked
-    return gson.fromJson (baos.toString (), List.class);
+    return gson.fromJson (baos.getAsString (StandardCharsets.UTF_8), List.class);
   }
 }

@@ -8,7 +8,6 @@ import com.google.common.io.ByteStreams;
 
 public class StreamUtils
 {
-
   /**
    * Will read all from stream and reset it.
    *
@@ -39,6 +38,7 @@ public class StreamUtils
    *        Read bytes
    * @return ready bytes
    * @throws IOException
+   *         in case of IO error
    */
   public static byte [] readAndReset (final InputStream inputStream, final int length) throws IOException
   {
