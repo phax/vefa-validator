@@ -107,18 +107,19 @@ public class Tester implements Closeable
                     .getDeclarations ()
                     .contains ("xml.testset::http://difi.no/xsd/vefa/validator/1.0::testSet"))
       {
-        log.info ("TestSet '{}'", file);
+        log.info ("TestSet '" + file + "'");
 
-        for (int i = 0; i < validation.getChildren ().size (); i++)
+        int i = 0;
+        for (final IValidation v : validation.getChildren ())
         {
-          final IValidation v = validation.getChildren ().get (i);
-          v.getReport ().setFilename (String.format ("%s (%s)", file, i + 1));
+          v.getReport ().setFilename (file.toString () + " (" + (i + 1) + ")");
           append (v.getDocument ().getExpectation ().getDescription (), v, i + 1);
+          i++;
         }
       }
       else
       {
-        append (file.toString (), validation, null);
+        append (file.toString (), validation, -1);
       }
     }
     catch (final NullPointerException e)
@@ -131,18 +132,18 @@ public class Tester implements Closeable
     }
   }
 
-  public void append (String description, final IValidation validation, final Integer numberInSet)
+  public void append (String description, final IValidation validation, final int numberInSet)
   {
     validations.add (validation);
     tests++;
 
     description = description.replaceAll ("[ \\t\\r\\n]+", " ");
 
-    final String prefix = numberInSet == null ? "" : "  ";
+    final String prefix = numberInSet < 0 ? "" : "  ";
 
     if (validation.getReport ().getFlag ().compareTo (FlagType.EXPECTED) > 0)
     {
-      log.warn ("{}Test '{}' ({})", prefix, description, validation.getReport ().getFlag ());
+      log.warn (prefix + "Test '" + description + "' (" + validation.getReport ().getFlag () + ")");
       failed++;
 
       for (final SectionType sectionType : validation.getReport ().getSection ())
@@ -155,9 +156,9 @@ public class Tester implements Closeable
                       assertionType.getFlag ());
     }
     else
-      if (numberInSet == null)
+      if (numberInSet <= 0)
       {
-        log.info ("Test '{}'", description);
+        log.info ("Test '" + description + "'");
       }
   }
 
