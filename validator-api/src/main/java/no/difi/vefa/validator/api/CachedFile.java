@@ -6,41 +6,35 @@ import java.io.InputStream;
 /**
  * @author erlend
  */
-public class CachedFile
+public final class CachedFile
 {
-  private String filename;
-
-  private final byte [] content;
-
-  private CachedFile (final byte [] content)
-  {
-    this.content = content;
-  }
+  private final byte [] m_aContent;
+  private final String m_sFilename;
 
   private CachedFile (final String filename, final byte [] content)
   {
-    this (content);
-    this.filename = filename;
+    m_aContent = content;
+    m_sFilename = filename;
   }
 
   public String getFilename ()
   {
-    return filename;
+    return m_sFilename;
   }
 
   public byte [] getContent ()
   {
-    return content;
+    return m_aContent;
   }
 
   public InputStream getContentStream ()
   {
-    return new ByteArrayInputStream (content);
+    return new ByteArrayInputStream (m_aContent);
   }
 
   public static CachedFile of (final byte [] content)
   {
-    return new CachedFile (content);
+    return new CachedFile (null, content);
   }
 
   public static CachedFile of (final String filename, final byte [] content)

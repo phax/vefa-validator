@@ -12,7 +12,7 @@ import com.google.inject.Singleton;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IRenderer;
 import no.difi.vefa.validator.api.IRendererFactory;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.xsd.vefa.validator._1.StylesheetType;
 
 /**
@@ -50,9 +50,9 @@ public class RendererCacheLoader extends CacheLoader <String, IRenderer>
     }
     catch (final Exception e)
     {
-      throw new ValidatorException (String.format ("Unable to load presenter for '%s'.", key), e);
+      throw new VefaValidatorException (String.format ("Unable to load presenter for '%s'.", key), e);
     }
 
-    throw new ValidatorException (String.format ("No presenter found for '%s'", key));
+    throw new VefaValidatorException (String.format ("No presenter found for '%s'", key));
   }
 }

@@ -16,7 +16,7 @@ import com.google.inject.Singleton;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IDeclaration;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 @Singleton
 public class DeclarationDetector
@@ -93,7 +93,7 @@ public class DeclarationDetector
                          new DeclarationIdentifier (parent, wrapper, identifier));
         }
       }
-      catch (final ValidatorException e)
+      catch (final VefaValidatorException e)
       {
         log.warn (e.getMessage (), e);
       }

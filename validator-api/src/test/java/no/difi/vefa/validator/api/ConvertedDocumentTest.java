@@ -12,7 +12,7 @@ public class ConvertedDocumentTest {
 
   @Test
   public void simple() {
-    final ConvertedDocument document = new ConvertedDocument(new ByteArrayInputStream(new byte[] {}),
+    final ConvertedVefaDocument document = new ConvertedVefaDocument(new ByteArrayInputStream(new byte[] {}),
                                                              new ByteArrayInputStream(new byte[] {}), "identifier", null);
 
     assertNotNull(document.getInputStream());

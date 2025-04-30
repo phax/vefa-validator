@@ -16,36 +16,15 @@ import no.difi.xsd.vefa.validator._1.Configurations;
 
 public class Build
 {
-  private final Map <String, String> setting = new HashMap <> ();
-
+  private final Map <String, String> m_aSettings = new HashMap <> ();
   private final Path projectPath;
   private final Path [] sourcePath;
   private final Path targetFolder;
-
-  private Configurations configurations;
-
   private final List <Path> testFolders = new ArrayList <> ();
   private final List <IValidation> testValidations = new ArrayList <> ();
 
-  public static Build of (final String arg, final CommandLine cmd)
-  {
-    final Build build = new Build (Paths.get (arg),
-                                   cmd.getOptionValue ("source", ""),
-                                   cmd.getOptionValue ("target",
-                                                       cmd.hasOption ("profile") ? String.format ("target-%s",
-                                                                                                  cmd.getOptionValue ("profile"))
-                                                                                 : "target"));
-    build.setSetting ("config",
-                      cmd.getOptionValue ("config",
-                                          cmd.hasOption ("profile") ? String.format ("buildconfig-%s.xml",
-                                                                                     cmd.getOptionValue ("profile"))
-                                                                    : "buildconfig.xml"));
-    build.setSetting ("name", cmd.getOptionValue ("name", "rules"));
-    build.setSetting ("build", cmd.getOptionValue ("build", UUID.randomUUID ().toString ()));
-    build.setSetting ("weight", cmd.getOptionValue ("weight", "0"));
-
-    return build;
-  }
+  // Status vars
+  private Configurations configurations;
 
   public Build (final Path projectPath)
   {
@@ -85,12 +64,12 @@ public class Build
 
   public void setSetting (final String key, final String value)
   {
-    setting.put (key, value);
+    m_aSettings.put (key, value);
   }
 
   public String getSetting (final String key)
   {
-    return setting.get (key);
+    return m_aSettings.get (key);
   }
 
   public void addTestFolder (final File testFolder)
@@ -131,5 +110,25 @@ public class Build
   public List <IValidation> getTestValidations ()
   {
     return testValidations;
+  }
+
+  public static Build of (final String arg, final CommandLine cmd)
+  {
+    final Build build = new Build (Paths.get (arg),
+                                   cmd.getOptionValue ("source", ""),
+                                   cmd.getOptionValue ("target",
+                                                       cmd.hasOption ("profile") ? "target-" +
+                                                                                   cmd.getOptionValue ("profile")
+                                                                                 : "target"));
+    build.setSetting ("config",
+                      cmd.getOptionValue ("config",
+                                          cmd.hasOption ("profile") ? "buildconfig-" +
+                                                                      cmd.getOptionValue ("profile") +
+                                                                      ".xml" : "buildconfig.xml"));
+    build.setSetting ("name", cmd.getOptionValue ("name", "rules"));
+    build.setSetting ("build", cmd.getOptionValue ("build", UUID.randomUUID ().toString ()));
+    build.setSetting ("weight", cmd.getOptionValue ("weight", "0"));
+
+    return build;
   }
 }

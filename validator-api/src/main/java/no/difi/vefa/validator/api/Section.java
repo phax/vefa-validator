@@ -7,78 +7,91 @@ import no.difi.xsd.vefa.validator._1.AssertionType;
 import no.difi.xsd.vefa.validator._1.FlagType;
 import no.difi.xsd.vefa.validator._1.SectionType;
 
-public class Section extends SectionType {
+public class Section extends SectionType
+{
 
   @XmlTransient
-  private final IFlagFilterer flagFilterer;
+  private final IFlagFilter m_aFlagFilter;
 
   /**
    * Initiate section.
    *
-   * @param flagFilterer flag filterer
+   * @param flagFilter
+   *        flag filterer
    */
-  public Section(final IFlagFilterer flagFilterer) {
-    this.flagFilterer = flagFilterer;
+  public Section (final IFlagFilter flagFilter)
+  {
+    m_aFlagFilter = flagFilter;
 
-    this.setFlag(FlagType.OK);
+    this.setFlag (FlagType.OK);
   }
 
   /**
    * Add assertion to section using identifier, description and flag.
    *
-   * @param identifier Identifier used for matching.
-   * @param text Description of identifier.
-   * @param flagType Flag associated with identifier.
+   * @param identifier
+   *        Identifier used for matching.
+   * @param text
+   *        Description of identifier.
+   * @param flagType
+   *        Flag associated with identifier.
    */
-  public void add(final String identifier, final String text, final String textFriendly, final FlagType flagType) {
-    final AssertionType assertionType = new AssertionType();
-    assertionType.setIdentifier(identifier);
-    assertionType.setText(text);
-    assertionType.setTextFriendly(textFriendly);
-    assertionType.setFlag(flagType);
+  public void add (final String identifier, final String text, final String textFriendly, final FlagType flagType)
+  {
+    final AssertionType assertionType = new AssertionType ();
+    assertionType.setIdentifier (identifier);
+    assertionType.setText (text);
+    assertionType.setTextFriendly (textFriendly);
+    assertionType.setFlag (flagType);
 
-    add(assertionType);
+    add (assertionType);
   }
 
   /**
    * Add assertion to section using identifier, description and flag.
    *
-   * @param identifier Identifier used for matching.
-   * @param text Description of identifier.
-   * @param flagType Flag associated with identifier.
+   * @param identifier
+   *        Identifier used for matching.
+   * @param text
+   *        Description of identifier.
+   * @param flagType
+   *        Flag associated with identifier.
    */
-  public void add(final String identifier, final String text, final FlagType flagType) {
-    final AssertionType assertionType = new AssertionType();
-    assertionType.setIdentifier(identifier);
-    assertionType.setText(text);
-    assertionType.setFlag(flagType);
+  public void add (final String identifier, final String text, final FlagType flagType)
+  {
+    final AssertionType assertionType = new AssertionType ();
+    assertionType.setIdentifier (identifier);
+    assertionType.setText (text);
+    assertionType.setFlag (flagType);
 
-    add(assertionType);
+    add (assertionType);
   }
 
-  public void add(final List<AssertionType> assertions) {
-    for (final AssertionType assertion : assertions)
-      add(assertion);
+  public void add (final List <AssertionType> assertions)
+  {
+    for (final AssertionType a : assertions)
+      add (a);
   }
 
-  public void add(final AssertionType assertion) {
-    flagFilterer.filterFlag(assertion);
+  public void add (final AssertionType aAssertion)
+  {
+    m_aFlagFilter.filterFlag (aAssertion);
 
-    if (assertion.getTextFriendly() == null)
-      assertion.setTextFriendly(assertion.getText());
-    if (assertion.getLocationFriendly() == null)
-      assertion.setLocationFriendly(assertion.getLocation());
+    if (aAssertion.getTextFriendly () == null)
+      aAssertion.setTextFriendly (aAssertion.getText ());
+    if (aAssertion.getLocationFriendly () == null)
+      aAssertion.setLocationFriendly (aAssertion.getLocation ());
 
+    if (getInfoUrl () != null)
+      aAssertion.setInfoUrl (getInfoUrl ().replace ("{}", aAssertion.getIdentifier ()));
 
-    if (getInfoUrl() != null)
-      assertion.setInfoUrl(getInfoUrl().replace("{}", assertion.getIdentifier()));
+    if (aAssertion.getFlag () != null)
+    {
 
-    if (assertion.getFlag() != null) {
+      if (aAssertion.getFlag ().compareTo (getFlag ()) > 0)
+        setFlag (aAssertion.getFlag ());
 
-      if (assertion.getFlag().compareTo(getFlag()) > 0)
-        setFlag(assertion.getFlag());
-
-      this.getAssertion().add(assertion);
+      this.getAssertion ().add (aAssertion);
     }
   }
 }

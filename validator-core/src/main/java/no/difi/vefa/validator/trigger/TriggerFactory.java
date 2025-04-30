@@ -9,7 +9,7 @@ import com.google.inject.Singleton;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.ITrigger;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 @Singleton
 public class TriggerFactory
@@ -26,11 +26,11 @@ public class TriggerFactory
     }
   }
 
-  public ITrigger get (final String identifier) throws ValidatorException
+  public ITrigger get (final String identifier) throws VefaValidatorException
   {
     if (triggers.containsKey (identifier))
       return triggers.get (identifier);
 
-    throw new ValidatorException (String.format ("Trigger '%s' not found.", identifier));
+    throw new VefaValidatorException (String.format ("Trigger '%s' not found.", identifier));
   }
 }

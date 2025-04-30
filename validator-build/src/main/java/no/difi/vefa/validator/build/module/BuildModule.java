@@ -17,18 +17,21 @@ import no.difi.vefa.validator.build.preparer.SchematronPreparer;
 /**
  * @author erlend
  */
-public class BuildModule extends AbstractModule {
+public class BuildModule extends AbstractModule
+{
 
-    @Override
-    protected void configure() {
-        Multibinder<IPreparer> preparers = Multibinder.newSetBinder(binder(), IPreparer.class);
-        preparers.addBinding().to(DefaultPreparer.class);
-        preparers.addBinding().to(SchematronPreparer.class);
-    }
+  @Override
+  protected void configure ()
+  {
+    final Multibinder <IPreparer> preparers = Multibinder.newSetBinder (binder (), IPreparer.class);
+    preparers.addBinding ().to (DefaultPreparer.class);
+    preparers.addBinding ().to (SchematronPreparer.class);
+  }
 
-    @Provides
-    @Singleton
-    public List<IPreparer> getPreparers(Set<IPreparer> preparers) {
-        return Collections.unmodifiableList(new ArrayList<>(preparers));
-    }
+  @Provides
+  @Singleton
+  public List <IPreparer> getPreparers (final Set <IPreparer> preparers)
+  {
+    return Collections.unmodifiableList (new ArrayList <> (preparers));
+  }
 }

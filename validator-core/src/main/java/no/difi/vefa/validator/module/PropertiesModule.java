@@ -13,20 +13,20 @@ import no.difi.vefa.validator.properties.CombinedProperties;
  */
 public class PropertiesModule extends AbstractModule {
 
-    private final IProperties properties;
+    private final IProperties m_aProps;
 
     public PropertiesModule() {
         this(null);
     }
 
     public PropertiesModule(IProperties properties) {
-        this.properties = properties;
+        this.m_aProps = properties;
     }
 
     @Provides
     @Singleton
     public IProperties getProperties() {
         // Create config combined with default values.
-        return new CombinedProperties(properties, ValidatorDefaults.PROPERTIES);
+        return new CombinedProperties(m_aProps, ValidatorDefaults.PROPERTIES);
     }
 }

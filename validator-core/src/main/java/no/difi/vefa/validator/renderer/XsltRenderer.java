@@ -10,10 +10,10 @@ import net.sf.saxon.s9api.XdmAtomicValue;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import no.difi.vefa.validator.api.IArtifactHolder;
-import no.difi.vefa.validator.api.Document;
+import no.difi.vefa.validator.api.VefaDocument;
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IRenderer;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.HolderURIResolver;
 import no.difi.xsd.vefa.validator._1.SettingType;
 import no.difi.xsd.vefa.validator._1.StylesheetType;
@@ -49,7 +49,7 @@ public class XsltRenderer implements IRenderer {
      * {@inheritDoc}
      */
     @Override
-    public void render(Document document, IProperties properties, OutputStream outputStream) throws ValidatorException {
+    public void render(VefaDocument document, IProperties properties, OutputStream outputStream) throws VefaValidatorException {
         try {
             XsltTransformer xsltTransformer = xsltExecutable.load();
             xsltTransformer.setURIResolver(new HolderURIResolver(artifactHolder, path));
@@ -68,7 +68,7 @@ public class XsltRenderer implements IRenderer {
             xsltTransformer.transform();
             xsltTransformer.close();
         } catch (Exception e) {
-            throw new ValidatorException("Unable to render document.", e);
+            throw new VefaValidatorException("Unable to render document.", e);
         }
     }
 

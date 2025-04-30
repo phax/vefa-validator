@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.ISourceInstance;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 /**
  * Defines a directories as source for validation artifacts.
@@ -26,7 +26,7 @@ public class DirectorySource extends AbstractSource
   }
 
   @Override
-  public ISourceInstance createInstance (final IProperties properties) throws ValidatorException
+  public ISourceInstance createInstance (final IProperties properties) throws VefaValidatorException
   {
     return new DirectorySourceInstance (properties, directories);
   }

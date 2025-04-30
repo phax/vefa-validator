@@ -5,7 +5,7 @@ import com.helger.asic.AsicVerifierFactory;
 import com.helger.asic.jaxb.asic.Certificate;
 
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.api.Document;
+import no.difi.vefa.validator.api.VefaDocument;
 import no.difi.vefa.validator.api.Section;
 import no.difi.vefa.validator.api.ITrigger;
 import no.difi.xsd.vefa.validator._1.FlagType;
@@ -17,7 +17,7 @@ public class AsiceTrigger implements ITrigger
   private final static AsicVerifierFactory factory = AsicVerifierFactory.newFactory ();
 
   @Override
-  public void check (final Document document, final Section section)
+  public void check (final VefaDocument document, final Section section)
   {
     try
     {

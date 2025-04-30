@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import jakarta.xml.bind.ValidationException;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.StreamUtils;
 import no.difi.vefa.validator.util.XmlUtils;
 
@@ -24,7 +24,7 @@ public class SimpleXmlDeclaration extends AbstractXmlDeclaration
   }
 
   @Override
-  public boolean verify (final byte [] content, final List <String> parent) throws ValidatorException
+  public boolean verify (final byte [] content, final List <String> parent) throws VefaValidatorException
   {
     final String c = new String (content);
     return namespace.equals (XmlUtils.extractRootNamespace (c)) &&
@@ -32,7 +32,7 @@ public class SimpleXmlDeclaration extends AbstractXmlDeclaration
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent) throws ValidatorException
+  public List <String> detect (final InputStream contentStream, final List <String> parent) throws VefaValidatorException
   {
 
     try

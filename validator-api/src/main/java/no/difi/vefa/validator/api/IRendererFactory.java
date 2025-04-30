@@ -1,6 +1,6 @@
 package no.difi.vefa.validator.api;
 
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.xsd.vefa.validator._1.StylesheetType;
 
 /**
@@ -15,6 +15,6 @@ public interface IRendererFactory {
    * @param stylesheetType Definition of the stylesheet defining the presenter.
    * @param path           Path of file used for presentation.
    */
-  IRenderer prepare(StylesheetType stylesheetType, IArtifactHolder artifactHolder, String path) throws ValidatorException;
+  IRenderer prepare(StylesheetType stylesheetType, IArtifactHolder artifactHolder, String path) throws VefaValidatorException;
 
 }

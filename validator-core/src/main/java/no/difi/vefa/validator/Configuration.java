@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
-import no.difi.vefa.validator.api.IFlagFilterer;
+import no.difi.vefa.validator.api.IFlagFilter;
 import no.difi.xsd.vefa.validator._1.AssertionType;
 import no.difi.xsd.vefa.validator._1.ConfigurationType;
 import no.difi.xsd.vefa.validator._1.FileType;
@@ -20,9 +20,9 @@ import no.difi.xsd.vefa.validator._1.TriggerType;
 /**
  * Configurations found in validation artifacts are updated to this kind of object.
  */
-class Configuration extends ConfigurationType implements IFlagFilterer {
+class Configuration extends ConfigurationType implements IFlagFilter {
 
-    private Map<String, RuleActionType> ruleActions = new HashMap<>();
+    private Map<String, RuleActionType> m_aRuleActions = new HashMap<>();
 
     /**
      * List of resources not found during normalization of object.
@@ -91,7 +91,7 @@ class Configuration extends ConfigurationType implements IFlagFilterer {
         }
 
         for (RuleType ruleType : this.getRule())
-            ruleActions.put(ruleType.getIdentifier(), ruleType.getAction());
+            m_aRuleActions.put(ruleType.getIdentifier(), ruleType.getAction());
     }
 
     /**
@@ -104,8 +104,8 @@ class Configuration extends ConfigurationType implements IFlagFilterer {
     }
 
     public void filterFlag(AssertionType assertionType) {
-        if (ruleActions.containsKey(assertionType.getIdentifier())) {
-            switch (ruleActions.get(assertionType.getIdentifier())) {
+        if (m_aRuleActions.containsKey(assertionType.getIdentifier())) {
+            switch (m_aRuleActions.get(assertionType.getIdentifier())) {
                 case SET_FUTURE_ERROR:
                     assertionType.setFlag(FlagType.FUTURE_ERROR);
                     break;

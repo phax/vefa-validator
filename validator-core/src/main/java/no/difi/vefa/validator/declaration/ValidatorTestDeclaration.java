@@ -28,7 +28,7 @@ import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IDeclarationWithConverter;
 import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.expectation.ValidatorTestExpectation;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.JAXBHelper;
 import no.difi.vefa.validator.util.StreamUtils;
 import no.difi.xsd.vefa.validator._1.Test;
@@ -46,7 +46,7 @@ public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements ID
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent) throws ValidatorException
+  public List <String> detect (final InputStream contentStream, final List <String> parent) throws VefaValidatorException
   {
     try
     {
@@ -62,7 +62,7 @@ public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements ID
     }
     catch (IOException | XMLStreamException e)
     {
-      throw new ValidatorException (e.getMessage (), e);
+      throw new VefaValidatorException (e.getMessage (), e);
     }
     return null;
   }

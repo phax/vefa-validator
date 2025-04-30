@@ -13,12 +13,10 @@ public class SimpleProperties extends AbstractProperties
 {
   private static final Logger log = LoggerFactory.getLogger (SimpleProperties.class);
 
-  private final Map <String, Object> values;
+  private final Map <String, Object> values = new HashMap <> ();
 
   public SimpleProperties ()
-  {
-    values = new HashMap <> ();
-  }
+  {}
 
   public SimpleProperties set (final String key, final Object value)
   {
@@ -54,7 +52,7 @@ public class SimpleProperties extends AbstractProperties
     }
     catch (final NumberFormatException e)
     {
-      log.error (String.format ("Error while casting '%s' to integer for key '%s'.", values.get (key), key));
+      log.error ("Error while casting '" + values.get (key) + "' to integer for key '" + key + "'.");
     }
     return defaultValue;
   }

@@ -7,7 +7,7 @@ import java.util.List;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IExpectation;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.StreamUtils;
 import no.difi.vefa.validator.util.XmlUtils;
 
@@ -16,13 +16,13 @@ public class XmlDeclaration extends AbstractXmlDeclaration
 {
 
   @Override
-  public boolean verify (final byte [] content, final List <String> parent) throws ValidatorException
+  public boolean verify (final byte [] content, final List <String> parent) throws VefaValidatorException
   {
     return XmlUtils.extractRootNamespace (new String (content)) != null;
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent) throws ValidatorException
+  public List <String> detect (final InputStream contentStream, final List <String> parent) throws VefaValidatorException
   {
 
     try
@@ -42,7 +42,7 @@ public class XmlDeclaration extends AbstractXmlDeclaration
   }
 
   @Override
-  public IExpectation expectations (final byte [] content) throws ValidatorException
+  public IExpectation expectations (final byte [] content) throws VefaValidatorException
   {
     return null;
   }

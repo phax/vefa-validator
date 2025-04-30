@@ -22,7 +22,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import no.difi.vefa.validator.api.IArtifactHolder;
 import no.difi.vefa.validator.api.ISourceInstance;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.JAXBHelper;
 import no.difi.xsd.vefa.validator._1.ConfigurationType;
 import no.difi.xsd.vefa.validator._1.Configurations;
@@ -74,7 +74,7 @@ class ValidatorEngine implements Closeable
    */
   @Inject
   public ValidatorEngine (final ISourceInstance sourceInstance,
-                          final List <Configurations> configurations) throws ValidatorException
+                          final List <Configurations> configurations) throws VefaValidatorException
   {
     // Load configurations from ValidatorBuilder.
     for (final Configurations c : configurations)
@@ -93,7 +93,7 @@ class ValidatorEngine implements Closeable
               content.put (entry.getKey (), entry.getValue ());
               loadConfigurations (entry.getKey (), inputStream);
             }
-            catch (final ValidatorException e)
+            catch (final VefaValidatorException e)
             {
               throw new IOException (e.getMessage (), e);
             }
@@ -104,7 +104,7 @@ class ValidatorEngine implements Closeable
     catch (final IOException e)
     {
       log.warn (e.getMessage (), e);
-      throw new ValidatorException ("Unable to read all configurations from virtual disk.", e);
+      throw new VefaValidatorException ("Unable to read all configurations from virtual disk.", e);
     }
 
     // Simply sort packages by value.
@@ -120,7 +120,7 @@ class ValidatorEngine implements Closeable
    *        Stream of config.xml.
    */
   private void loadConfigurations (final String configurationSource,
-                                   final InputStream inputStream) throws ValidatorException
+                                   final InputStream inputStream) throws VefaValidatorException
   {
     try
     {
@@ -130,7 +130,7 @@ class ValidatorEngine implements Closeable
     }
     catch (final JAXBException e)
     {
-      throw new ValidatorException ("Unable to read configurations.", e);
+      throw new VefaValidatorException ("Unable to read configurations.", e);
     }
   }
 
@@ -270,13 +270,13 @@ class ValidatorEngine implements Closeable
    * @param identifier
    *        Stylesheet identifier.
    * @return Stylesheet declaration.
-   * @throws ValidatorException
+   * @throws VefaValidatorException
    *         Thrown if no stylesheet declaration is found for the identifier.
    */
-  public StylesheetType getStylesheet (final String identifier) throws ValidatorException
+  public StylesheetType getStylesheet (final String identifier) throws VefaValidatorException
   {
     if (!stylesheetMap.containsKey (identifier))
-      throw new ValidatorException (String.format ("Stylesheet for identifier '%s' not found.", identifier));
+      throw new VefaValidatorException (String.format ("Stylesheet for identifier '%s' not found.", identifier));
 
     return stylesheetMap.get (identifier);
   }

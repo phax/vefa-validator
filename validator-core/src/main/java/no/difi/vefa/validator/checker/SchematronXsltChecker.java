@@ -14,10 +14,10 @@ import jakarta.xml.bind.Unmarshaller;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
-import no.difi.vefa.validator.api.Document;
+import no.difi.vefa.validator.api.VefaDocument;
 import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.Section;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.JAXBHelper;
 import no.difi.vefa.validator.util.SaxonErrorListener;
 import no.difi.vefa.validator.util.SaxonMessageListener;
@@ -42,7 +42,7 @@ public class SchematronXsltChecker implements IChecker
   }
 
   @Override
-  public void check (final Document document, final Section section) throws ValidatorException
+  public void check (final VefaDocument document, final Section section) throws VefaValidatorException
   {
     final long tsStart = System.currentTimeMillis ();
     try
@@ -79,7 +79,7 @@ public class SchematronXsltChecker implements IChecker
     }
     catch (final Exception e)
     {
-      throw new ValidatorException (String.format ("Unable to perform check: %s", e.getMessage ()), e);
+      throw new VefaValidatorException (String.format ("Unable to perform check: %s", e.getMessage ()), e);
     }
   }
 }

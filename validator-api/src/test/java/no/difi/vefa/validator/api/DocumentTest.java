@@ -12,7 +12,7 @@ public class DocumentTest {
 
   @Test
   public void simple() {
-    final Document document = new Document(new ByteArrayInputStream(new byte[] {}), "identifier", null);
+    final VefaDocument document = new VefaDocument(new ByteArrayInputStream(new byte[] {}), "identifier", null);
 
     assertNotNull(document.getInputStream());
     assertEquals(document.getDeclarations().get(0), "identifier");

@@ -19,7 +19,7 @@ import net.sf.saxon.s9api.XsltTransformer;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.api.IDeclarationWithChildren;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 @Type ("xml.sbdh")
 public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarationWithChildren
@@ -47,7 +47,7 @@ public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarat
   }
 
   @Override
-  public Iterable <CachedFile> children (final InputStream inputStream) throws ValidatorException
+  public Iterable <CachedFile> children (final InputStream inputStream) throws VefaValidatorException
   {
     try
     {
@@ -66,7 +66,7 @@ public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarat
     }
     catch (final SaxonApiException e)
     {
-      throw new ValidatorException ("Unable to extract SBDH content.", e);
+      throw new VefaValidatorException ("Unable to extract SBDH content.", e);
     }
   }
 }

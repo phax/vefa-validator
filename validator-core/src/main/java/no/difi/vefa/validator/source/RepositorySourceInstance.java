@@ -10,7 +10,7 @@ import com.helger.asic.IAsicReader;
 
 import jakarta.xml.bind.Unmarshaller;
 import no.difi.vefa.validator.api.IProperties;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.xsd.vefa.validator._1.ArtifactType;
 import no.difi.xsd.vefa.validator._1.Artifacts;
 
@@ -18,7 +18,7 @@ class RepositorySourceInstance extends AbstractSourceInstance
 {
   private static final Logger log = LoggerFactory.getLogger (RepositorySourceInstance.class);
 
-  public RepositorySourceInstance (final IProperties properties, final List <URI> rootUris) throws ValidatorException
+  public RepositorySourceInstance (final IProperties properties, final List <URI> rootUris) throws VefaValidatorException
   {
     super (properties);
 
@@ -45,7 +45,7 @@ class RepositorySourceInstance extends AbstractSourceInstance
     catch (final Exception e)
     {
       log.warn (e.getMessage (), e);
-      throw new ValidatorException (e.getMessage (), e);
+      throw new VefaValidatorException (e.getMessage (), e);
     }
   }
 }

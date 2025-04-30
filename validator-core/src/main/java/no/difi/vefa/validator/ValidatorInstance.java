@@ -15,13 +15,13 @@ import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import no.difi.vefa.validator.api.Document;
+import no.difi.vefa.validator.api.VefaDocument;
 import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IRenderer;
 import no.difi.vefa.validator.api.Section;
 import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.properties.CombinedProperties;
 import no.difi.vefa.validator.trigger.TriggerFactory;
 import no.difi.vefa.validator.util.CombinedFlagFilterer;
@@ -156,9 +156,9 @@ class ValidatorInstance implements Closeable
    */
   @Deprecated
   protected void render (final StylesheetType stylesheet,
-                         final Document document,
+                         final VefaDocument document,
                          final IProperties properties,
-                         final OutputStream outputStream) throws ValidatorException
+                         final OutputStream outputStream) throws VefaValidatorException
   {
     IRenderer renderer;
     try
@@ -168,7 +168,7 @@ class ValidatorInstance implements Closeable
     catch (final Exception e)
     {
       log.warn (e.getMessage (), e);
-      throw new ValidatorException (String.format ("Unable to borrow presenter object from pool for '%s'.",
+      throw new VefaValidatorException (String.format ("Unable to borrow presenter object from pool for '%s'.",
                                                    stylesheet.getIdentifier ()),
                                     e);
     }
@@ -188,8 +188,8 @@ class ValidatorInstance implements Closeable
    * @return Result of validation.
    */
   protected Section check (final FileType fileType,
-                           final Document document,
-                           final Configuration configuration) throws ValidatorException
+                           final VefaDocument document,
+                           final Configuration configuration) throws VefaValidatorException
   {
     IChecker checker;
     try
@@ -199,7 +199,7 @@ class ValidatorInstance implements Closeable
     catch (final Exception e)
     {
       log.warn (e.getMessage (), e);
-      throw new ValidatorException (String.format ("Unable to get checker object from pool for '%s'.",
+      throw new VefaValidatorException (String.format ("Unable to get checker object from pool for '%s'.",
                                                    configuration.getIdentifier ()),
                                     e);
     }
@@ -228,8 +228,8 @@ class ValidatorInstance implements Closeable
    * @return Result of validation.
    */
   protected Section trigger (final TriggerType triggerType,
-                             final Document document,
-                             final Configuration configuration) throws ValidatorException
+                             final VefaDocument document,
+                             final Configuration configuration) throws VefaValidatorException
   {
     final Section section = new Section (new CombinedFlagFilterer (configuration, document.getExpectation ()));
     section.setFlag (FlagType.OK);

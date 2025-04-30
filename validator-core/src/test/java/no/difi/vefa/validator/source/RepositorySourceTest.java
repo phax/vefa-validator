@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import no.difi.vefa.validator.api.IProperties;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 public class RepositorySourceTest
 {
@@ -21,8 +21,8 @@ public class RepositorySourceTest
     assertNotNull (RepositorySource.forProduction ());
   }
 
-  @Test (expected = ValidatorException.class)
-  public void triggerException () throws ValidatorException
+  @Test (expected = VefaValidatorException.class)
+  public void triggerException () throws VefaValidatorException
   {
     final RepositorySource source = new RepositorySource ((URI) null);
     source.createInstance (Mockito.mock (IProperties.class));

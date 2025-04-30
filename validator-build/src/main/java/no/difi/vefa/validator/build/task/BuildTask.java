@@ -97,10 +97,10 @@ public class BuildTask
               stylesheet.setSource (null);
             }
 
-            configuration.setBuild (configuration.getBuild () != null ? configuration.getBuild ()
-                                                                      : build.getSetting ("build"));
-            configuration.setWeight (configuration.getWeight () != 0 ? configuration.getWeight ()
-                                                                     : Long.parseLong (build.getSetting ("weight")));
+            configuration.setBuild (configuration.getBuild () != null ? configuration.getBuild () : build.getSetting (
+                                                                                                                      "build"));
+            configuration.setWeight (configuration.getWeight () != 0 ? configuration.getWeight () : Long.parseLong (
+                                                                                                                    build.getSetting ("weight")));
 
             configurations.getConfiguration ().add (configuration);
           }
@@ -142,8 +142,7 @@ public class BuildTask
     AsicArchiver.archive (build.getTargetFolder ()
                                .resolve (String.format ("%s-%s.asice",
                                                         build.getSetting ("name"),
-                                                        build.getSetting ("build"))),
-                          contentsPath);
+                                                        build.getSetting ("build"))), contentsPath);
 
     DirectoryCleaner.clean (contentsPath, true);
   }

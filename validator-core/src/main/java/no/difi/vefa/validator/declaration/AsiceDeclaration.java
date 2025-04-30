@@ -19,7 +19,7 @@ import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.api.IDeclarationWithChildren;
 import no.difi.vefa.validator.api.IDeclarationWithConverter;
 import no.difi.vefa.validator.api.IExpectation;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 @Type ("zip.asice")
 public class AsiceDeclaration extends AbstractXmlDeclaration implements
@@ -64,7 +64,7 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
   }
 
   @Override
-  public void convert (final InputStream inputStream, final OutputStream outputStream) throws ValidatorException
+  public void convert (final InputStream inputStream, final OutputStream outputStream) throws VefaValidatorException
   {
     try
     {
@@ -72,7 +72,7 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
     }
     catch (final IOException e)
     {
-      throw new ValidatorException (e.getMessage (), e);
+      throw new VefaValidatorException (e.getMessage (), e);
     }
   }
 

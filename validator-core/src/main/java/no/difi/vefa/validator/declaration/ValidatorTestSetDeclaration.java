@@ -15,7 +15,7 @@ import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.api.IDeclarationWithChildren;
 import no.difi.vefa.validator.api.IExpectation;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.JAXBHelper;
 import no.difi.xsd.vefa.validator._1.Test;
 import no.difi.xsd.vefa.validator._1.TestSet;
@@ -32,13 +32,13 @@ public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements
   }
 
   @Override
-  public IExpectation expectations (final byte [] content) throws ValidatorException
+  public IExpectation expectations (final byte [] content) throws VefaValidatorException
   {
     return null;
   }
 
   @Override
-  public Iterable <CachedFile> children (final InputStream inputStream) throws ValidatorException
+  public Iterable <CachedFile> children (final InputStream inputStream) throws VefaValidatorException
   {
     return new TestSetIterator (inputStream);
   }
@@ -50,7 +50,7 @@ public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements
 
     private int counter = -1;
 
-    public TestSetIterator (final InputStream inputStream) throws ValidatorException
+    public TestSetIterator (final InputStream inputStream) throws VefaValidatorException
     {
       try
       {
@@ -60,7 +60,7 @@ public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements
       }
       catch (final JAXBException e)
       {
-        throw new ValidatorException (e.getMessage (), e);
+        throw new VefaValidatorException (e.getMessage (), e);
       }
     }
 

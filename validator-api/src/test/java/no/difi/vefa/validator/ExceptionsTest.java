@@ -3,7 +3,7 @@ package no.difi.vefa.validator;
 import org.junit.Test;
 
 import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 public class ExceptionsTest {
 
@@ -12,13 +12,13 @@ public class ExceptionsTest {
     throw new UnknownDocumentTypeException("test");
   }
 
-  @Test(expected = ValidatorException.class)
-  public void validator1() throws ValidatorException {
-    throw new ValidatorException("test");
+  @Test(expected = VefaValidatorException.class)
+  public void validator1() throws VefaValidatorException {
+    throw new VefaValidatorException("test");
   }
 
-  @Test(expected = ValidatorException.class)
-  public void validator2() throws ValidatorException {
-    throw new ValidatorException("test", null);
+  @Test(expected = VefaValidatorException.class)
+  public void validator2() throws VefaValidatorException {
+    throw new VefaValidatorException("test", null);
   }
 }

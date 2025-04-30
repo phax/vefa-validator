@@ -8,18 +8,17 @@ import net.sf.saxon.Configuration;
 import net.sf.saxon.lib.Feature;
 import net.sf.saxon.s9api.Processor;
 
-
 /**
  * @author erlend
  */
-public class SaxonModule extends AbstractModule {
-
-    @Provides
-    @Singleton
-    public Processor getProcessor() {
-        Configuration configuration = new Configuration();
-        configuration.setConfigurationProperty(Feature.ALLOW_EXTERNAL_FUNCTIONS, false);
-
-        return new Processor(configuration);
-    }
+public class SaxonModule extends AbstractModule
+{
+  @Provides
+  @Singleton
+  public Processor getProcessor ()
+  {
+    final Configuration configuration = new Configuration ();
+    configuration.setConfigurationProperty (Feature.ALLOW_EXTERNAL_FUNCTIONS, false);
+    return new Processor (configuration);
+  }
 }

@@ -17,7 +17,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.StreamUtils;
 
 /**
@@ -33,11 +33,11 @@ public class UblDeclaration extends AbstractXmlDeclaration {
     private XsltExecutable xsltExecutable;
 
     @Inject
-    private void init(Processor processor) throws ValidatorException {
+    private void init(Processor processor) throws VefaValidatorException {
         try (InputStream inputStream = getClass().getResourceAsStream("/vefa-validator/xslt/ubl-detect.xslt")) {
             xsltExecutable = processor.newXsltCompiler().compile(new StreamSource(inputStream));
         } catch (SaxonApiException | IOException e) {
-            throw new ValidatorException("Unable to load detector for UBL.", e);
+            throw new VefaValidatorException("Unable to load detector for UBL.", e);
         }
     }
 
@@ -47,7 +47,7 @@ public class UblDeclaration extends AbstractXmlDeclaration {
     }
 
     @Override
-    public List<String> detect(InputStream streamContent, List<String> parent) throws ValidatorException {
+    public List<String> detect(InputStream streamContent, List<String> parent) throws VefaValidatorException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         try (InputStream is = new ByteArrayInputStream(StreamUtils.readAllAndReset(streamContent))) {
@@ -56,7 +56,7 @@ public class UblDeclaration extends AbstractXmlDeclaration {
             xsltTransformer.setDestination(xsltExecutable.getProcessor().newSerializer(baos));
             xsltTransformer.transform();
         } catch (SaxonApiException | IOException e) {
-            throw new ValidatorException("Unable to detect UBL information.", e);
+            throw new VefaValidatorException("Unable to detect UBL information.", e);
         }
 
         //noinspection unchecked

@@ -12,7 +12,7 @@ import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IArtifactHolder;
 import no.difi.vefa.validator.api.IRenderer;
 import no.difi.vefa.validator.api.IRendererFactory;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.HolderURIResolver;
 import no.difi.vefa.validator.util.SaxonErrorListener;
 import no.difi.xsd.vefa.validator._1.StylesheetType;
@@ -28,7 +28,7 @@ public class XsltRendererFactory implements IRendererFactory {
     private Processor processor;
 
     @Override
-    public IRenderer prepare(StylesheetType stylesheetType, IArtifactHolder artifactHolder, String path) throws ValidatorException {
+    public IRenderer prepare(StylesheetType stylesheetType, IArtifactHolder artifactHolder, String path) throws VefaValidatorException {
         try (InputStream inputStream = artifactHolder.getInputStream(path)) {
             XsltCompiler xsltCompiler = processor.newXsltCompiler();
             xsltCompiler.setErrorListener(SaxonErrorListener.INSTANCE);
@@ -36,7 +36,7 @@ public class XsltRendererFactory implements IRendererFactory {
             return new XsltRenderer(xsltCompiler.compile(new StreamSource(inputStream)),
                     stylesheetType, artifactHolder, path, processor);
         } catch (Exception e) {
-            throw new ValidatorException(e.getMessage(), e);
+            throw new VefaValidatorException(e.getMessage(), e);
         }
     }
 }

@@ -15,15 +15,15 @@ import org.slf4j.LoggerFactory;
 import com.google.common.io.ByteStreams;
 
 import no.difi.vefa.validator.api.CachedFile;
-import no.difi.vefa.validator.api.ConvertedDocument;
-import no.difi.vefa.validator.api.Document;
+import no.difi.vefa.validator.api.ConvertedVefaDocument;
+import no.difi.vefa.validator.api.VefaDocument;
 import no.difi.vefa.validator.api.IExpectation;
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IValidation;
 import no.difi.vefa.validator.api.IValidationSource;
 import no.difi.vefa.validator.api.Section;
 import no.difi.vefa.validator.lang.UnknownDocumentTypeException;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.properties.CombinedProperties;
 import no.difi.vefa.validator.util.CombinedFlagFilterer;
 import no.difi.vefa.validator.util.DeclarationDetector;
@@ -60,7 +60,7 @@ class ValidationInstance implements IValidation
   /**
    * Document subject to validation.
    */
-  private Document document;
+  private VefaDocument document;
 
   private DeclarationWrapper declaration;
 
@@ -110,7 +110,7 @@ class ValidationInstance implements IValidation
     {
       section.add ("SYSTEM-003", e.getMessage (), FlagType.UNKNOWN);
     }
-    catch (final ValidatorException e)
+    catch (final VefaValidatorException e)
     {
       section.add ("SYSTEM-001", e.getMessage (), FlagType.FATAL);
     }
@@ -132,7 +132,7 @@ class ValidationInstance implements IValidation
     }
   }
 
-  private void loadDocument (final InputStream inputStream) throws ValidatorException, IOException
+  private void loadDocument (final InputStream inputStream) throws VefaValidatorException, IOException
   {
     ByteArrayInputStream byteArrayInputStream;
     if (inputStream instanceof ByteArrayInputStream)
@@ -149,7 +149,7 @@ class ValidationInstance implements IValidation
     }
 
     // To be able to reuse the stream later on.
-    document = new Document (byteArrayInputStream);
+    document = new VefaDocument (byteArrayInputStream);
     byteArrayInputStream.reset ();
 
     // Use declaration implementations to detect declaration to use.
@@ -176,14 +176,14 @@ class ValidationInstance implements IValidation
       byteArrayInputStream.reset ();
       declaration.convert (byteArrayInputStream, convertedOutputStream);
 
-      document = new ConvertedDocument (new ByteArrayInputStream (convertedOutputStream.toByteArray ()),
+      document = new ConvertedVefaDocument (new ByteArrayInputStream (convertedOutputStream.toByteArray ()),
                                         byteArrayInputStream,
                                         declarationIdentifier.getFullIdentifier (),
                                         expectation);
     }
     else
     {
-      document = new Document (byteArrayInputStream, declarationIdentifier.getFullIdentifier (), expectation);
+      document = new VefaDocument (byteArrayInputStream, declarationIdentifier.getFullIdentifier (), expectation);
     }
   }
 
@@ -225,7 +225,7 @@ class ValidationInstance implements IValidation
         if (section.getFlag ().compareTo (getReport ().getFlag ()) > 0)
           getReport ().setFlag (section.getFlag ());
       }
-      catch (final ValidatorException e)
+      catch (final VefaValidatorException e)
       {
         this.section.add ("SYSTEM-008", e.getMessage (), FlagType.ERROR);
       }
@@ -246,7 +246,7 @@ class ValidationInstance implements IValidation
         if (section.getFlag ().compareTo (getReport ().getFlag ()) > 0)
           getReport ().setFlag (section.getFlag ());
       }
-      catch (final ValidatorException e)
+      catch (final VefaValidatorException e)
       {
         this.section.add ("SYSTEM-010", e.getMessage (), FlagType.ERROR);
       }
@@ -261,7 +261,7 @@ class ValidationInstance implements IValidation
   /**
    * Handling nested validation.
    */
-  private void nestedValidation () throws ValidatorException
+  private void nestedValidation () throws VefaValidatorException
   {
     if (report.getFlag ().compareTo (FlagType.FATAL) < 0)
     {
@@ -296,7 +296,7 @@ class ValidationInstance implements IValidation
    *        Stream to use.
    */
   @Override
-  public void render (final OutputStream outputStream) throws ValidatorException
+  public void render (final OutputStream outputStream) throws VefaValidatorException
   {
     render (outputStream, null);
   }
@@ -310,15 +310,15 @@ class ValidationInstance implements IValidation
    *        Extra configuration to use for this rendering.
    */
   @Override
-  public void render (final OutputStream outputStream, final IProperties properties) throws ValidatorException
+  public void render (final OutputStream outputStream, final IProperties properties) throws VefaValidatorException
   {
     if (getReport ().getFlag ().equals (FlagType.FATAL))
-      throw new ValidatorException (String.format ("Status '%s' is not supported for rendering.",
+      throw new VefaValidatorException (String.format ("Status '%s' is not supported for rendering.",
                                                    getReport ().getFlag ()));
     if (configuration == null)
-      throw new ValidatorException ("Configuration was not detected, configuration is need for rendering.");
+      throw new VefaValidatorException ("Configuration was not detected, configuration is need for rendering.");
     if (configuration.getStylesheet () == null)
-      throw new ValidatorException ("No stylesheet is defined for document type.");
+      throw new VefaValidatorException ("No stylesheet is defined for document type.");
 
     validatorInstance.render (configuration.getStylesheet (), document, properties, outputStream);
   }
@@ -343,7 +343,7 @@ class ValidationInstance implements IValidation
    * @return Document object.
    */
   @Override
-  public Document getDocument ()
+  public VefaDocument getDocument ()
   {
     return document;
   }

@@ -1,9 +1,9 @@
 package no.difi.vefa.validator.api;
 
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 public interface ITrigger {
 
-    void check(Document document, Section section) throws ValidatorException;
+    void check(VefaDocument document, Section section) throws VefaValidatorException;
     
 }

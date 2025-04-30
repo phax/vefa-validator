@@ -3,7 +3,7 @@ package no.difi.vefa.validator.api;
 import java.io.InputStream;
 import java.util.List;
 
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 public interface IDeclaration {
   /**
@@ -12,7 +12,7 @@ public interface IDeclaration {
    * @param parent  Parent identifier
    * @return Returns true if content is of given type.
    */
-  boolean verify(byte[] content, List<String> parent) throws ValidatorException;
+  boolean verify(byte[] content, List<String> parent) throws VefaValidatorException;
 
   /**
    * Detect identifier representing standardId to be used for validation.
@@ -21,8 +21,8 @@ public interface IDeclaration {
    * @param parent  Parent identifier
    * @return Returns standardId
    */
-  List<String> detect(InputStream contentStream, List<String> parent) throws ValidatorException;
+  List<String> detect(InputStream contentStream, List<String> parent) throws VefaValidatorException;
 
-  IExpectation expectations(byte[] content) throws ValidatorException;
+  IExpectation expectations(byte[] content) throws VefaValidatorException;
 
 }

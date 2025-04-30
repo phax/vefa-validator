@@ -7,7 +7,7 @@ import java.util.List;
 
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.ISourceInstance;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 /**
  * Defines a repository as source for validation artifacts.
@@ -57,7 +57,7 @@ public class RepositorySource extends AbstractSource {
     }
 
     @Override
-    public ISourceInstance createInstance(IProperties properties) throws ValidatorException {
+    public ISourceInstance createInstance(IProperties properties) throws VefaValidatorException {
         return new RepositorySourceInstance(properties, rootUri);
     }
 }

@@ -22,8 +22,7 @@ public class XmlExpectation extends AbstractExpectation
                                        .replaceAll ("\\t", " ")
                                        .replace ("  ", "")
                                        /*
-                                        * .replaceAll(" \\n",
-                                        * "\\n").replaceAll("\\n ", "\\n")
+                                        * .replaceAll(" \\n", "\\n").replaceAll("\\n ", "\\n")
                                         */
                                        .trim ()
                                        .split ("\\n\\n"))
@@ -35,27 +34,22 @@ public class XmlExpectation extends AbstractExpectation
         case "description":
           description = parts[1].trim ().replaceAll ("\\n", " ").replace ("  ", " ");
           break;
-
         case "success":
         case "successes":
           extractRules (parts, successes);
           break;
-
         case "warning":
         case "warnings":
           extractRules (parts, warnings);
           break;
-
         case "error":
         case "errors":
           extractRules (parts, errors);
           break;
-
         case "fatal":
         case "fatals":
           extractRules (parts, fatals);
           break;
-
         case "scope":
           extractList (parts, scopes);
           break;
@@ -83,7 +77,8 @@ public class XmlExpectation extends AbstractExpectation
           final String [] r = p.trim ().split (" ");
           if (!target.containsKey (r[0]))
             target.put (r[0], 0);
-          target.put (r[0], target.get (r[0]) + (r.length == 1 ? 1 : Integer.parseInt (r[1])));
+          target.put (r[0],
+                      Integer.valueOf (target.get (r[0]).intValue () + (r.length == 1 ? 1 : Integer.parseInt (r[1]))));
         }
       }
       catch (final Exception e)

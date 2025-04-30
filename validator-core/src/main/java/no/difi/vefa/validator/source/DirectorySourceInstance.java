@@ -14,7 +14,7 @@ import com.helger.asic.IAsicReader;
 
 import jakarta.xml.bind.Unmarshaller;
 import no.difi.vefa.validator.api.IProperties;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.xsd.vefa.validator._1.ArtifactType;
 import no.difi.xsd.vefa.validator._1.Artifacts;
 
@@ -31,7 +31,7 @@ class DirectorySourceInstance extends AbstractSourceInstance
    * @param directories
    *        Directories containing validation artifacts.
    */
-  public DirectorySourceInstance (final IProperties properties, final Path... directories) throws ValidatorException
+  public DirectorySourceInstance (final IProperties properties, final Path... directories) throws VefaValidatorException
   {
     // Call #AbstractSourceInstance().
     super (properties);
@@ -95,7 +95,7 @@ class DirectorySourceInstance extends AbstractSourceInstance
     {
       // Log and throw ValidatorException.
       log.warn (e.getMessage ());
-      throw new ValidatorException (e.getMessage (), e);
+      throw new VefaValidatorException (e.getMessage (), e);
     }
   }
 }

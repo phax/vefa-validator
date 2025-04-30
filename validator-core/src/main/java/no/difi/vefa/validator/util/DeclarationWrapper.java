@@ -10,7 +10,7 @@ import no.difi.vefa.validator.api.IDeclaration;
 import no.difi.vefa.validator.api.IDeclarationWithChildren;
 import no.difi.vefa.validator.api.IDeclarationWithConverter;
 import no.difi.vefa.validator.api.IExpectation;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 public class DeclarationWrapper implements IDeclaration, IDeclarationWithChildren, IDeclarationWithConverter
 {
@@ -48,19 +48,19 @@ public class DeclarationWrapper implements IDeclaration, IDeclarationWithChildre
   }
 
   @Override
-  public boolean verify (final byte [] content, final List <String> parent) throws ValidatorException
+  public boolean verify (final byte [] content, final List <String> parent) throws VefaValidatorException
   {
     return declaration.verify (content, parent);
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent) throws ValidatorException
+  public List <String> detect (final InputStream contentStream, final List <String> parent) throws VefaValidatorException
   {
     return declaration.detect (contentStream, parent);
   }
 
   @Override
-  public IExpectation expectations (final byte [] content) throws ValidatorException
+  public IExpectation expectations (final byte [] content) throws VefaValidatorException
   {
     return declaration.expectations (content);
   }
@@ -71,7 +71,7 @@ public class DeclarationWrapper implements IDeclaration, IDeclarationWithChildre
   }
 
   @Override
-  public Iterable <CachedFile> children (final InputStream inputStream) throws ValidatorException
+  public Iterable <CachedFile> children (final InputStream inputStream) throws VefaValidatorException
   {
     return ((IDeclarationWithChildren) declaration).children (inputStream);
   }
@@ -82,7 +82,7 @@ public class DeclarationWrapper implements IDeclaration, IDeclarationWithChildre
   }
 
   @Override
-  public void convert (final InputStream inputStream, final OutputStream outputStream) throws ValidatorException
+  public void convert (final InputStream inputStream, final OutputStream outputStream) throws VefaValidatorException
   {
     ((IDeclarationWithConverter) declaration).convert (inputStream, outputStream);
   }

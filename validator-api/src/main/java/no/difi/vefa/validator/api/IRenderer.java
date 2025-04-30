@@ -2,24 +2,25 @@ package no.difi.vefa.validator.api;
 
 import java.io.OutputStream;
 
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 /**
- * Interface for classes creating presentation of business documents.
- *
- * The constructor must contain no parameters.
+ * Interface for classes creating presentation of business documents. The constructor must contain
+ * no parameters.
  */
 @Deprecated
-public interface IRenderer {
-
+public interface IRenderer
+{
   /**
    * Writes presentation to a OutputStream given a business document.
    *
-   * @param document Document to render.
-   * @param properties Configuration for the presentation.
-   * @param outputStream Stream to write presentation to.
-   * @throws ValidatorException
+   * @param document
+   *        Document to render.
+   * @param properties
+   *        Configuration for the presentation.
+   * @param outputStream
+   *        Stream to write presentation to.
+   * @throws VefaValidatorException
    */
-  void render(Document document, IProperties properties, OutputStream outputStream) throws ValidatorException;
-
+  void render (VefaDocument document, IProperties properties, OutputStream outputStream) throws VefaValidatorException;
 }

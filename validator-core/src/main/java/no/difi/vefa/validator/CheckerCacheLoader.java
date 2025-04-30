@@ -10,7 +10,7 @@ import com.google.inject.Singleton;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.ICheckerFactory;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 /**
  * @author erlend
@@ -39,9 +39,9 @@ public class CheckerCacheLoader extends CacheLoader <String, IChecker>
     }
     catch (final Exception e)
     {
-      throw new ValidatorException ("Unable to load checker for '" + key + "'.", e);
+      throw new VefaValidatorException ("Unable to load checker for '" + key + "'.", e);
     }
 
-    throw new ValidatorException ("No checker found for '" + key + "'");
+    throw new VefaValidatorException ("No checker found for '" + key + "'");
   }
 }

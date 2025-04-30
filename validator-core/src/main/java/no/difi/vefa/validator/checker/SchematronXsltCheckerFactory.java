@@ -13,7 +13,7 @@ import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IArtifactHolder;
 import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.ICheckerFactory;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.SaxonErrorListener;
 
 /**
@@ -29,7 +29,7 @@ public class SchematronXsltCheckerFactory implements ICheckerFactory {
     private Injector injector;
 
     @Override
-    public IChecker prepare(IArtifactHolder artifactHolder, String path) throws ValidatorException {
+    public IChecker prepare(IArtifactHolder artifactHolder, String path) throws VefaValidatorException {
         try (InputStream inputStream = artifactHolder.getInputStream(path)) {
             XsltCompiler xsltCompiler = processor.newXsltCompiler();
             xsltCompiler.setErrorListener(SaxonErrorListener.INSTANCE);
@@ -39,7 +39,7 @@ public class SchematronXsltCheckerFactory implements ICheckerFactory {
             return checker;
 
         } catch (Exception e) {
-            throw new ValidatorException(e.getMessage(), e);
+            throw new VefaValidatorException(e.getMessage(), e);
         }
     }
 }

@@ -12,7 +12,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import no.difi.vefa.validator.annotation.Type;
-import no.difi.vefa.validator.lang.ValidatorException;
+import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.StreamUtils;
 
 @Type ("xml.espd")
@@ -23,13 +23,13 @@ public class EspdDeclaration extends AbstractXmlDeclaration
                                                                    "urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1::ESPDResponse");
 
   @Override
-  public boolean verify (final byte [] content, final List <String> parent) throws ValidatorException
+  public boolean verify (final byte [] content, final List <String> parent) throws VefaValidatorException
   {
     return validParents.contains (parent.get (0));
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent) throws ValidatorException
+  public List <String> detect (final InputStream contentStream, final List <String> parent) throws VefaValidatorException
   {
     final List <String> results = new ArrayList <> ();
 

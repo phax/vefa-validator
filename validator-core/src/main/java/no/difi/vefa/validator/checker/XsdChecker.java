@@ -15,7 +15,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import no.difi.vefa.validator.api.IChecker;
-import no.difi.vefa.validator.api.Document;
+import no.difi.vefa.validator.api.VefaDocument;
 import no.difi.vefa.validator.api.Section;
 import no.difi.xsd.vefa.validator._1.AssertionType;
 import no.difi.xsd.vefa.validator._1.FlagType;
@@ -31,7 +31,7 @@ public class XsdChecker implements IChecker {
     }
 
     @Override
-    public void check(Document document, Section section) {
+    public void check(VefaDocument document, Section section) {
         section.setTitle("XSD validation");
 
         Source xmlFile = new StreamSource(document.getInputStream());
