@@ -53,8 +53,7 @@
               <outputDirectory>../target</outputDirectory>
               <resources>
                 <resource>
-                  <directory>
-                    ${project.build.directory}/${project.build.finalName}-full</directory>
+                  <directory>${project.build.directory}/${project.build.finalName}-full</directory>
                   <filtering>false</filtering>
                 </resource>
               </resources>
@@ -71,5 +70,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
