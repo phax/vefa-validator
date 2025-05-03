@@ -43,10 +43,15 @@ jobs:
           server-password: MAVEN_PASSWORD
               
       - name: Build and deploy with Maven
-        run: mvn --batch-mode --update-snapshots --no-transfer-progress deploy
+        run: mvn --batch-mode --update-snapshots deploy
+        if: matrix.jdk == 11
         env:
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+
+      - name: Maven Build
+        run: mvn --batch-mode --update-snapshots install
+        if: matrix.Java != 11
 
       - name: Docker login
         uses: docker/login-action@v3
