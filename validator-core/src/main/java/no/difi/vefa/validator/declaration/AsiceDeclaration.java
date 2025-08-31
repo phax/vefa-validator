@@ -13,8 +13,8 @@ import java.util.zip.ZipInputStream;
 import com.google.common.io.ByteStreams;
 import com.helger.asic.AsicReaderFactory;
 import com.helger.asic.IAsicReader;
-import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
-import com.helger.commons.io.stream.StreamHelper;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.io.stream.StreamHelper;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;

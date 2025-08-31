@@ -17,7 +17,7 @@ import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import com.helger.asic.AsicReaderFactory;
 import com.helger.asic.IAsicReader;
-import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;

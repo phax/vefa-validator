@@ -7,9 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.WillClose;
-
 import com.google.common.io.ByteStreams;
+import com.helger.annotation.WillClose;
 import com.helger.asic.IAsicReader;
 
 import no.difi.vefa.validator.api.IArtifactHolder;

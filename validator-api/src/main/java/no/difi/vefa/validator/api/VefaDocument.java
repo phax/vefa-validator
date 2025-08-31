@@ -3,7 +3,7 @@ package no.difi.vefa.validator.api;
 import java.util.Collections;
 import java.util.List;
 
-import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
 /**
  * Representation of validation document.

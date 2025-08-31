@@ -11,7 +11,7 @@ import com.helger.asic.AsicWriterFactory;
 import com.helger.asic.ESignatureMethod;
 import com.helger.asic.IAsicWriter;
 import com.helger.asic.SignatureHelper;
-import com.helger.commons.mime.CMimeType;
+import com.helger.mime.CMimeType;
 import com.helger.security.keystore.EKeyStoreType;
 
 /**
@@ -24,9 +24,9 @@ public class AsicArchiver extends SimpleFileVisitor <Path>
 
   private static final SignatureHelper SIGNATURE_HELPER = new SignatureHelper (EKeyStoreType.JKS,
                                                                                "/keystore-self-signed.jks",
-                                                                               "changeit",
+                                                                               "changeit".toCharArray (),
                                                                                "self-signed",
-                                                                               "changeit");
+                                                                               "changeit".toCharArray ());
 
   private final IAsicWriter asicWriter;
 

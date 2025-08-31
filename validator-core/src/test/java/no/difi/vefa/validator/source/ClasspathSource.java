@@ -1,7 +1,7 @@
 package no.difi.vefa.validator.source;
 
-import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IArtifactsSourceInstance;
+import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 
 public class ClasspathSource extends AbstractArtifactsSource

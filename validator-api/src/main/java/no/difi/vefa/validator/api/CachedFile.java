@@ -2,7 +2,7 @@ package no.difi.vefa.validator.api;
 
 import java.io.InputStream;
 
-import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
 /**
  * @author erlend

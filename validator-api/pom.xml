@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>com.helger.commons</groupId>
-            <artifactId>ph-commons</artifactId>
+            <artifactId>ph-base</artifactId>
         </dependency>
         
         <dependency>

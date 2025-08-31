@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.cache.LoadingCache;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.helger.commons.string.StringHelper;
+import com.helger.base.string.StringImplode;
 
 import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.IProperties;
@@ -97,10 +97,10 @@ class ValidatorInstance implements Closeable
   public String getEngineName ()
   {
     return "Engine [" +
-           StringHelper.imploder ()
-                       .source (validatorEngine.getPackages (), PackageType::getValue)
-                       .separator (", ")
-                       .build () +
+           StringImplode.imploder ()
+                        .source (validatorEngine.getPackages (), PackageType::getValue)
+                        .separator (", ")
+                        .build () +
            "]";
   }
 

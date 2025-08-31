@@ -120,7 +120,7 @@ class ValidatorEngine implements Closeable
    *        Stream of config.xml.
    */
   private void _loadConfigurations (final String configurationSource, final InputStream inputStream)
-                                                                                                    throws VefaValidatorException
+                                                                                                     throws VefaValidatorException
   {
     try
     {
@@ -288,7 +288,7 @@ class ValidatorEngine implements Closeable
     return packages;
   }
 
-  public IArtifactHolder getResource (final String resource) throws IOException
+  public IArtifactHolder getResource (final String resource)
   {
     final String [] parts = resource.split ("#", 2);
     return content.get (parts[0]);

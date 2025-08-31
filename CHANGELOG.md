@@ -5,6 +5,9 @@
 * Remove deprecated methods in ValidatorBuilder.
 * Updated dependencies.
 
+## 2.3.2
+
+* Requiring Java 17 as the baseline
 
 ## 2.1.0
 

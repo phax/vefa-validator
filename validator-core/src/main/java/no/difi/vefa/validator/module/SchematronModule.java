@@ -8,7 +8,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-import com.helger.commons.io.resource.ClassPathResource;
+import com.helger.io.resource.ClassPathResource;
 import com.helger.schematron.sch.SchematronProviderXSLTFromSCH;
 
 import net.sf.saxon.s9api.Processor;

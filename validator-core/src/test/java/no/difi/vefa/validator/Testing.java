@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.io.resource.ClassPathResource;
+import com.helger.io.resource.ClassPathResource;
 
 import no.difi.vefa.validator.api.IValidation;
 import no.difi.vefa.validator.properties.SimpleProperties;

@@ -80,7 +80,9 @@ public class Tester implements Closeable
   private void perform (final Path path)
   {
     final List <File> files = new ArrayList <> (FileUtils.listFiles (path.toFile (),
-                                                                     new WildcardFileFilter ("*.xml"),
+                                                                     WildcardFileFilter.builder ()
+                                                                                       .setWildcards ("*.xml")
+                                                                                       .get (),
                                                                      TrueFileFilter.INSTANCE));
     Collections.sort (files);
 

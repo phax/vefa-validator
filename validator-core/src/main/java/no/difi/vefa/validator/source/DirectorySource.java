@@ -2,8 +2,8 @@ package no.difi.vefa.validator.source;
 
 import java.nio.file.Path;
 
-import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IArtifactsSourceInstance;
+import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 
 /**

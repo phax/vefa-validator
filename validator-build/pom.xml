@@ -39,13 +39,6 @@
       <artifactId>validator-tester</artifactId>
     </dependency>
 
-<!--
-      <dependency>
-        <groupId>no.difi.commons</groupId>
-        <artifactId>commons-schematron</artifactId>
-        <version>0.9.5</version>
-      </dependency>
--->
     <dependency>
       <groupId>com.helger.schematron</groupId>
       <artifactId>ph-schematron-xslt</artifactId>

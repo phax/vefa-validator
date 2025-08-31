@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.helger.commons.io.resource.IReadableResource;
+import com.helger.io.resource.IReadableResource;
 
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IValidation;

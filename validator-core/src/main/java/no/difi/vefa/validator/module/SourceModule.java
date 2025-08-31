@@ -4,9 +4,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
-import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IArtifactsSource;
 import no.difi.vefa.validator.api.IArtifactsSourceInstance;
+import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.source.RepositorySource;
 

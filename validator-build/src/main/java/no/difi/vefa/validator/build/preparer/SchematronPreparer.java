@@ -5,8 +5,8 @@ import java.nio.file.Path;
 
 import org.w3c.dom.Document;
 
-import com.helger.commons.io.file.FileHelper;
-import com.helger.commons.io.resource.FileSystemResource;
+import com.helger.io.file.FileHelper;
+import com.helger.io.resource.FileSystemResource;
 import com.helger.schematron.CSchematron;
 import com.helger.schematron.pure.binding.IPSQueryBinding;
 import com.helger.schematron.pure.binding.PSQueryBindingRegistry;

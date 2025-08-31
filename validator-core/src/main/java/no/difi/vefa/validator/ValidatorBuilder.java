@@ -7,8 +7,8 @@ import com.google.inject.Guice;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 
-import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.api.IArtifactsSource;
+import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.module.PropertiesModule;
 import no.difi.vefa.validator.module.SourceModule;
 import no.difi.vefa.validator.module.ValidatorModule;

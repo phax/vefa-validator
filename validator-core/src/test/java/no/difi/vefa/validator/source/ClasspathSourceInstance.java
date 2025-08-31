@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.asic.IAsicReader;
-import com.helger.commons.io.resource.ClassPathResource;
+import com.helger.io.resource.ClassPathResource;
 
 import jakarta.xml.bind.Unmarshaller;
 import no.difi.vefa.validator.api.IProperties;
