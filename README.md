@@ -15,8 +15,10 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 * `phelger/vefa-validator:latest` - latest release version
 * `phelger/vefa-validator:edge` - latest snapshot version
 
-v2.3.2
+v2.4.0
+* Changed baseline to Java 17+
 * The Docker image is now based on `eclipse-temurin:21-jre`
+
 v2.3.1
 * Changed baseline to Java 11+
 * Updated to JAXB 4.x
