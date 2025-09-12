@@ -1,73 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>com.helger.vefa</groupId>
-        <artifactId>validator-parent</artifactId>
-        <version>2.4.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>com.helger.vefa</groupId>
+    <artifactId>validator-parent</artifactId>
+    <version>2.4.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>validator-api</artifactId>
+  <artifactId>validator-api</artifactId>
 
-    <name>VEFA Validator :: API</name>
-    <description>API for extensions to validator.</description>
+  <name>VEFA Validator :: API</name>
+  <description>API for extensions to validator.</description>
 
-    <organization>
-        <name>The Norwegian Agency for Public and Financial Management (DFØ)</name>
-        <url>http://www.dfo.no/</url>
-    </organization>
+  <organization>
+    <name>The Norwegian Agency for Public and Financial Management (DFØ)</name>
+    <url>http://www.dfo.no/</url>
+  </organization>
 
-    <developers>
-        <developer>
-            <name>Erlend Klakegg Bergheim</name>
-            <email>erlend.klakegg.bergheim@dfo.no</email>
-            <organization>DFØ</organization>
-            <roles>
-                <role>Author</role>
-            </roles>
-        </developer>
-    </developers>
+  <developers>
+    <developer>
+      <name>Erlend Klakegg Bergheim</name>
+      <email>erlend.klakegg.bergheim@dfo.no</email>
+      <organization>DFØ</organization>
+      <roles>
+        <role>Author</role>
+      </roles>
+    </developer>
+  </developers>
 
-    <dependencies>
-        <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.helger.commons</groupId>
-            <artifactId>ph-base</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.helger.commons</groupId>
+      <artifactId>ph-base</artifactId>
+    </dependency>
 
-    <build>
-        <plugins>
-            <plugin>
-              <groupId>${jaxb-plugin.group}</groupId>
-              <artifactId>${jaxb-plugin.artifact}</artifactId>
-              <version>${jaxb-plugin.version}</version>
-              <executions>
-                <execution>
-                  <goals>
-                    <goal>generate</goal>
-                  </goals>
-                </execution>
-              </executions>
-              <configuration>
-                <schemaDirectory>${basedir}/src/main/xsd</schemaDirectory>
-                <extension>false</extension>
-                <strict>true</strict>
-                <args>
-                  <arg>-no-header</arg>
-                </args>
-              </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>${jaxb-plugin.group}</groupId>
+        <artifactId>${jaxb-plugin.artifact}</artifactId>
+        <version>${jaxb-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <schemaDirectory>${basedir}/src/main/xsd</schemaDirectory>
+          <extension>false</extension>
+          <strict>true</strict>
+          <args>
+            <arg>-no-header</arg>
+          </args>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <source>17</source>
+          <sourcepath>
+            ${project.build.sourceDirectory}:${project.build.directory}/generated-sources/xjc
+          </sourcepath>
+        </configuration>
+      </plugin> 
+    </plugins>
+  </build>
 </project>
