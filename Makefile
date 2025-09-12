@@ -1,4 +1,5 @@
 IMAGE=phelger/vefa-validator
+tag=2.4.0
 
 package:
 	@mvn clean package
@@ -10,4 +11,4 @@ docker_build:
 	@DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform=linux/amd64,linux/arm64 --progress plain --tag $(IMAGE):$(tag) .
 
 docker_push:
-	@DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform=linux/amd64,linux/arm64 --progress plain --tag $(IMAGE):$(tag) --push .
+	@DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform=linux/amd64,linux/arm64 --progress plain --tag $(IMAGE):$(tag) --tag $(IMAGE):latest --push .
