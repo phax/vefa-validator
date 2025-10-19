@@ -42,8 +42,8 @@ public class Tester implements Closeable
     try (Tester tester = new Tester (artifactsPath))
     {
       for (final Path path : testPaths)
-        tester.perform (path);
-      return tester.finish ();
+        tester._perform (path);
+      return tester._finish ();
     }
   }
 
@@ -52,8 +52,8 @@ public class Tester implements Closeable
     try (Tester tester = new Tester (artifactsUri))
     {
       for (final Path path : testPaths)
-        tester.perform (path);
-      return tester.finish ();
+        tester._perform (path);
+      return tester._finish ();
     }
   }
 
@@ -77,7 +77,7 @@ public class Tester implements Closeable
                                 .build ();
   }
 
-  private void perform (final Path path)
+  private void _perform (final Path path)
   {
     final List <File> files = new ArrayList <> (FileUtils.listFiles (path.toFile (),
                                                                      WildcardFileFilter.builder ()
@@ -88,17 +88,17 @@ public class Tester implements Closeable
 
     for (final File file : files)
       if (!file.getName ().equals ("buildconfig.xml"))
-        validate (file);
+        _validate (file);
   }
 
-  private List <IValidation> finish ()
+  private List <IValidation> _finish ()
   {
-    log.info ("{} tests performed, {} tests failed", tests, failed);
+    log.info (tests + " tests performed, " + failed + " tests failed");
 
     return validations;
   }
 
-  private void validate (final File file)
+  private void _validate (final File file)
   {
     try
     {
