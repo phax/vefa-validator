@@ -1,17 +1,18 @@
 package no.difi.vefa.validator.tester;
 
-import no.difi.vefa.validator.api.IValidation;
-import no.difi.xsd.vefa.validator._1.FlagType;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
-
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+
+import no.difi.vefa.validator.api.IValidation;
+import no.difi.xsd.vefa.validator._1.FlagType;
 
 public class Cli {
 
