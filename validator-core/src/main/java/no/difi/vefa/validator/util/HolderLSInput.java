@@ -59,7 +59,7 @@ public class HolderLSInput implements LSInput
   @Override
   public String getSystemId ()
   {
-    return String.format ("holder:%s", file);
+    return "holder:" + file;
   }
 
   @Override
@@ -71,7 +71,7 @@ public class HolderLSInput implements LSInput
   @Override
   public String getPublicId ()
   {
-    return String.format ("holder:%s", file);
+    return "holder:" + file;
   }
 
   @Override

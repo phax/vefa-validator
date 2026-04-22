@@ -27,8 +27,8 @@ public class HolderURIResolver implements URIResolver {
         String newPath = ("/" + target.toString().replaceAll("\\\\", "/")).replaceAll("/(.+?)/\\.\\.", "").substring(1);
 
         StreamSource streamSource = new StreamSource(artifactHolder.getInputStream(newPath));
-        streamSource.setPublicId(String.format("holder:%s", newPath));
-        streamSource.setSystemId(String.format("holder:%s", newPath));
+        streamSource.setPublicId("holder:" + newPath);
+        streamSource.setSystemId("holder:" + newPath);
 
         return streamSource;
     }

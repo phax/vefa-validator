@@ -31,6 +31,6 @@ public class TriggerFactory
     if (triggers.containsKey (identifier))
       return triggers.get (identifier);
 
-    throw new VefaValidatorException (String.format ("Trigger '%s' not found.", identifier));
+    throw new VefaValidatorException ("Trigger '" + identifier + "' not found.");
   }
 }

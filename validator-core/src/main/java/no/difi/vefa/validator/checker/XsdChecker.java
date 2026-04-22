@@ -64,9 +64,9 @@ public class XsdChecker implements IChecker
           for (int i = 0; i < xmlStreamReader.getNamespaceCount (); i++)
           {
             if (xmlStreamReader.getNamespacePrefix (i) == null)
-              humanMessage = humanMessage.replace (String.format ("\"%s\":", xmlStreamReader.getNamespaceURI (i)), "");
+              humanMessage = humanMessage.replace ("\"" + xmlStreamReader.getNamespaceURI (i) + "\":", "");
             else
-              humanMessage = humanMessage.replace (String.format ("\"%s\"", xmlStreamReader.getNamespaceURI (i)),
+              humanMessage = humanMessage.replace ("\"" + xmlStreamReader.getNamespaceURI (i) + "\"",
                                                    xmlStreamReader.getNamespacePrefix (i));
           }
 
@@ -85,7 +85,7 @@ public class XsdChecker implements IChecker
       assertionType.setIdentifier ("XSD");
       assertionType.setText (e.getMessage ());
       assertionType.setTextFriendly (humanMessage);
-      assertionType.setLocation (String.format ("Line %s, column %s.", e.getLineNumber (), e.getColumnNumber ()));
+      assertionType.setLocation ("Line " + e.getLineNumber () + ", column " + e.getColumnNumber () + ".");
       assertionType.setFlag (FlagType.FATAL);
       section.add (assertionType);
     }

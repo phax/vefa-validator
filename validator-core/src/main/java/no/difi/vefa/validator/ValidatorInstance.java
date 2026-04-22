@@ -135,7 +135,7 @@ class ValidatorInstance implements Closeable
       }
     }
 
-    throw new UnknownDocumentTypeException (String.format ("Configuration for '%s' not found.", declarations.get (0)));
+    throw new UnknownDocumentTypeException ("Configuration for '" + declarations.get (0) + "' not found.");
   }
 
   protected DeclarationIdentifier detect (final InputStream contentStream) throws IOException

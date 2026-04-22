@@ -128,9 +128,7 @@ public class BuildTask
       }
     }
 
-    final String configFilename = String.format ("config-%s-%s.xml",
-                                                 build.getSetting ("name"),
-                                                 build.getSetting ("build"));
+    final String configFilename = "config-" + build.getSetting ("name") + "-" + build.getSetting ("build") + ".xml";
     try (OutputStream outputStream = Files.newOutputStream (contentsPath.resolve (configFilename)))
     {
       final Marshaller marshaller = JAXB_CONTEXT.createMarshaller ();
@@ -139,9 +137,7 @@ public class BuildTask
     }
 
     AsicArchiver.archive (build.getTargetFolder ()
-                               .resolve (String.format ("%s-%s.asice",
-                                                        build.getSetting ("name"),
-                                                        build.getSetting ("build"))), contentsPath);
+                               .resolve (build.getSetting ("name") + "-" + build.getSetting ("build") + ".asice"), contentsPath);
 
     DirectoryCleaner.clean (contentsPath, true);
   }

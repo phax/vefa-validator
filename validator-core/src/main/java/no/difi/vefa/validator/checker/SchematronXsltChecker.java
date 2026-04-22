@@ -83,7 +83,7 @@ public class SchematronXsltChecker implements IChecker
     }
     catch (final Exception e)
     {
-      throw new VefaValidatorException (String.format ("Unable to perform check: %s", e.getMessage ()), e);
+      throw new VefaValidatorException ("Unable to perform check: " + e.getMessage (), e);
     }
   }
 }

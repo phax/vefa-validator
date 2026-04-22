@@ -50,10 +50,7 @@ public class Testing
     {
       log.info (sectionType.getTitle () + ": " + sectionType.getRuntime ());
       for (final AssertionType assertion : sectionType.getAssertion ())
-        log.info (String.format ("- [%s] %s (%s)",
-                                 assertion.getIdentifier (),
-                                 assertion.getText (),
-                                 assertion.getFlag ()));
+        log.info ("- [" + assertion.getIdentifier () + "] " + assertion.getText () + " (" + assertion.getFlag () + ")");
     }
 
     assertEquals (validation.getReport ().getFlag (), FlagType.ERROR);
@@ -74,10 +71,7 @@ public class Testing
     {
       log.info (sectionType.getTitle () + ": " + sectionType.getRuntime ());
       for (final AssertionType assertion : sectionType.getAssertion ())
-        log.info (String.format ("- [%s] %s (%s)",
-                                 assertion.getIdentifier (),
-                                 assertion.getText (),
-                                 assertion.getFlag ()));
+        log.info ("- [" + assertion.getIdentifier () + "] " + assertion.getText () + " (" + assertion.getFlag () + ")");
     }
 
     assertEquals (validation.getReport ().getFlag (), FlagType.OK);

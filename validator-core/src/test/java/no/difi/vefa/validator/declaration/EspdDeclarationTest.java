@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -67,7 +68,7 @@ public class EspdDeclarationTest
                        "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
                        "xmlns:espd=\"urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1\">";
 
-    final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes ()));
+    final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes (StandardCharsets.UTF_8)));
     assertEquals (declarationIdentifier.getIdentifier ().get (0),
                   "urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1::ESPDResponse");
   }
@@ -90,7 +91,7 @@ public class EspdDeclarationTest
                        "xmlns:espd=\"urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1\">" +
                        "<VersionID></VersionID>";
 
-    final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes ()));
+    final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes (StandardCharsets.UTF_8)));
     assertEquals (declarationIdentifier.getIdentifier ().get (0),
                   "urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1::ESPDResponse");
   }
@@ -113,7 +114,7 @@ public class EspdDeclarationTest
                        "xmlns:espd=\"urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1\">" +
                        "</espd:ESPDResponse>";
 
-    final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes ()));
+    final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes (StandardCharsets.UTF_8)));
     assertEquals (declarationIdentifier.getIdentifier ().get (0),
                   "urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1::ESPDResponse");
   }

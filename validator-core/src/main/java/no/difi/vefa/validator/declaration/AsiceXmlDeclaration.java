@@ -65,7 +65,7 @@ public class AsiceXmlDeclaration extends AbstractXmlDeclaration implements
           do
           {
             if (source.getEventType () == XMLStreamConstants.CHARACTERS)
-              byteArrayOutputStream.write (source.getText ().getBytes ());
+              byteArrayOutputStream.write (source.getText ().getBytes (StandardCharsets.UTF_8));
           } while (source.hasNext () && source.next () > 0);
 
           outputStream.write (BaseEncoding.base64 ()

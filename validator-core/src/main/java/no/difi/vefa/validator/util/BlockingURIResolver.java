@@ -9,7 +9,7 @@ public class BlockingURIResolver implements URIResolver {
     @Override
     public Source resolve(String href, String base) throws TransformerException {
         if (href.contains(":/"))
-            throw new TransformerException(String.format("Blocking request to '%s'.", href));
+            throw new TransformerException("Blocking request to '" + href + "'.");
 
         return null;
     }
