@@ -15,6 +15,9 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 * `phelger/vefa-validator:latest` - latest release version
 * `phelger/vefa-validator:edge` - latest snapshot version
 
+v2.4.2 - 2026-04-22
+* Renewed expired internal certificate
+
 v2.4.1 - 2025-11-16
 * Updated to ph-commons 12.1.0
 * Using JSpecify annotations
