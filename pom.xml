@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.helger</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>3.0.2</version>
+    <version>3.0.3</version>
   </parent>
 
   <groupId>com.helger.vefa</groupId>
@@ -67,7 +67,7 @@
   <properties>
     <jaxb-plugin.group>org.jvnet.jaxb</jaxb-plugin.group>
     <jaxb-plugin.artifact>jaxb-maven-plugin</jaxb-plugin.artifact>
-    <jaxb-plugin.version>4.0.11</jaxb-plugin.version>
+    <jaxb-plugin.version>4.0.12</jaxb-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -75,14 +75,14 @@
       <dependency>
         <groupId>com.helger.commons</groupId>
         <artifactId>ph-commons-parent-pom</artifactId>
-        <version>12.1.0</version>
+        <version>12.2.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>com.helger.schematron</groupId>
         <artifactId>ph-schematron-parent-pom</artifactId>
-        <version>9.1.0</version>
+        <version>9.1.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -125,7 +125,7 @@
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.5.18</version>
+        <version>1.5.32</version>
       </dependency>
 
       <!-- Commons -->
@@ -144,7 +144,7 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>33.5.0-jre</version>
+        <version>33.6.0-jre</version>
       </dependency>
       <dependency>
         <groupId>com.google.inject</groupId>
@@ -168,12 +168,12 @@
       <dependency>
         <groupId>jakarta.xml.bind</groupId>
         <artifactId>jakarta.xml.bind-api</artifactId>
-        <version>4.0.2</version>
+        <version>4.0.5</version>
       </dependency>
       <dependency>
         <groupId>com.sun.xml.bind</groupId>
         <artifactId>jaxb-bom-ext</artifactId>
-        <version>4.0.5</version>
+        <version>4.0.6</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -190,7 +190,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.20.0</version>
+      <version>5.23.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
