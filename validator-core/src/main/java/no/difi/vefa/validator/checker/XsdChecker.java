@@ -2,7 +2,6 @@ package no.difi.vefa.validator.checker;
 
 import java.io.IOException;
 
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -16,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import no.difi.vefa.validator.ValidatorXml;
 import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.Section;
 import no.difi.vefa.validator.api.VefaDocument;
@@ -25,13 +25,12 @@ import no.difi.xsd.vefa.validator._1.FlagType;
 public class XsdChecker implements IChecker
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (XsdChecker.class);
-  private static final XMLInputFactory XML_INPUT_FACTORY = XMLInputFactory.newInstance ();
 
   private final Schema m_aSchema;
 
   public XsdChecker (final Schema schema)
   {
-    this.m_aSchema = schema;
+    m_aSchema = schema;
   }
 
   @Override
@@ -55,7 +54,7 @@ public class XsdChecker implements IChecker
       {
         try
         {
-          final XMLStreamReader xmlStreamReader = XML_INPUT_FACTORY.createXMLStreamReader (document.getInputStream ());
+          final XMLStreamReader xmlStreamReader = ValidatorXml.XML_INPUT_FACTORY.createXMLStreamReader (document.getInputStream ());
 
           // Go to root element.
           while (xmlStreamReader.hasNext () && xmlStreamReader.getEventType () != XMLStreamConstants.START_ELEMENT)

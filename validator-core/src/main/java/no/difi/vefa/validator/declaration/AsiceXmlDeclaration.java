@@ -20,6 +20,7 @@ import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 import com.helger.base.io.stream.NonClosingInputStream;
 import com.helger.base.io.stream.StreamHelper;
 
+import no.difi.vefa.validator.ValidatorXml;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.api.IDeclarationWithChildren;
@@ -58,7 +59,7 @@ public class AsiceXmlDeclaration extends AbstractXmlDeclaration implements
   {
     try
     {
-      final XMLStreamReader source = XML_INPUT_FACTORY.createXMLStreamReader (inputStream);
+      final XMLStreamReader source = ValidatorXml.XML_INPUT_FACTORY.createXMLStreamReader (inputStream);
       try
       {
         try (final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ())

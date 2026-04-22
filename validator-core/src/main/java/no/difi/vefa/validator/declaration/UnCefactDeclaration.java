@@ -14,6 +14,7 @@ import javax.xml.stream.events.XMLEvent;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.cache.regex.RegExHelper;
 
+import no.difi.vefa.validator.ValidatorXml;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.util.StreamUtils;
 
@@ -42,7 +43,7 @@ public class UnCefactDeclaration extends AbstractXmlDeclaration
     try
     {
       final byte [] content = StreamUtils.read50KAndReset (aIS);
-      final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new NonBlockingByteArrayInputStream (content));
+      final XMLEventReader xmlEventReader = ValidatorXml.XML_INPUT_FACTORY.createXMLEventReader (new NonBlockingByteArrayInputStream (content));
       try
       {
         while (xmlEventReader.hasNext ())

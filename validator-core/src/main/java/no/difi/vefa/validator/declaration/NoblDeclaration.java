@@ -13,6 +13,7 @@ import javax.xml.stream.events.XMLEvent;
 
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
+import no.difi.vefa.validator.ValidatorXml;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.util.StreamUtils;
 
@@ -42,7 +43,7 @@ public class NoblDeclaration extends AbstractXmlDeclaration
     try
     {
       final byte [] content = StreamUtils.read50KAndReset (aIS);
-      final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new NonBlockingByteArrayInputStream (content));
+      final XMLEventReader xmlEventReader = ValidatorXml.XML_INPUT_FACTORY.createXMLEventReader (new NonBlockingByteArrayInputStream (content));
       try
       {
         while (xmlEventReader.hasNext ())
@@ -54,7 +55,7 @@ public class NoblDeclaration extends AbstractXmlDeclaration
             if (FIELDS.contains (startElement.getName ().getLocalPart ()))
             {
               xmlEvent = xmlEventReader.nextEvent ();
-              if (xmlEvent instanceof Characters aChars)
+              if (xmlEvent instanceof final Characters aChars)
               {
                 aSB.append ("::").append (aChars.getData ());
                 results.add (type + "::" + aChars.getData ());

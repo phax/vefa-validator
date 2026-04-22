@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class VefaSaxonErrorListener implements ErrorListener
 {
-  public static VefaSaxonErrorListener INSTANCE = new VefaSaxonErrorListener ();
+  public static final VefaSaxonErrorListener INSTANCE = new VefaSaxonErrorListener ();
 
   private static final Logger log = LoggerFactory.getLogger (VefaSaxonErrorListener.class);
 
@@ -40,7 +40,7 @@ public class VefaSaxonErrorListener implements ErrorListener
   public void fatalError (final TransformerException exception)
   {
     if (Objects.nonNull (exception.getMessage ()) &&
-        exception.getMessage ().startsWith ("Exception thrown by URIResolver"))
+      exception.getMessage ().startsWith ("Exception thrown by URIResolver"))
       log.error (exception.getCause ().getMessage ());
     else
       log.error (exception.getMessage (), exception);
