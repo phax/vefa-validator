@@ -58,17 +58,24 @@ public class AsiceXmlDeclaration extends AbstractXmlDeclaration implements
     try
     {
       final XMLStreamReader source = XML_INPUT_FACTORY.createXMLStreamReader (inputStream);
-      try (final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ())
+      try
       {
-        do
+        try (final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ())
         {
-          if (source.getEventType () == XMLStreamConstants.CHARACTERS)
-            byteArrayOutputStream.write (source.getText ().getBytes ());
-        } while (source.hasNext () && source.next () > 0);
+          do
+          {
+            if (source.getEventType () == XMLStreamConstants.CHARACTERS)
+              byteArrayOutputStream.write (source.getText ().getBytes ());
+          } while (source.hasNext () && source.next () > 0);
 
-        outputStream.write (BaseEncoding.base64 ()
-                                        .decode (CharMatcher.whitespace ()
-                                                            .removeFrom (byteArrayOutputStream.getAsString (StandardCharsets.ISO_8859_1))));
+          outputStream.write (BaseEncoding.base64 ()
+                                          .decode (CharMatcher.whitespace ()
+                                                              .removeFrom (byteArrayOutputStream.getAsString (StandardCharsets.ISO_8859_1))));
+        }
+      }
+      finally
+      {
+        source.close ();
       }
     }
     catch (IOException | XMLStreamException e)

@@ -1,6 +1,5 @@
 package no.difi.vefa.validator.declaration;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Iterator;
 
@@ -8,6 +7,8 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -45,9 +46,7 @@ public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements
 
   class TestSetIterator implements Iterator <CachedFile>, Iterable <CachedFile>
   {
-
     private TestSet testSet;
-
     private int counter = -1;
 
     public TestSetIterator (final InputStream inputStream) throws VefaValidatorException
@@ -84,10 +83,14 @@ public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements
         final Test test = testSet.getTest ().get (counter);
 
         if (test.getConfiguration () == null)
+        {
           test.setConfiguration (testSet.getConfiguration ());
+        }
 
         if (test.getId () == null)
+        {
           test.setId (String.valueOf (counter + 1));
+        }
 
         if (testSet.getAssert () != null)
         {
@@ -98,10 +101,12 @@ public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements
           test.getAssert ().getSuccess ().addAll (testSet.getAssert ().getSuccess ());
 
           if (test.getAssert ().getDescription () == null)
+          {
             test.getAssert ().setDescription (testSet.getAssert ().getDescription ());
+          }
         }
 
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ();
+        final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
         JAXB_CONTEXT.createMarshaller ().marshal (test, byteArrayOutputStream);
         return CachedFile.of (byteArrayOutputStream.toByteArray ());
       }

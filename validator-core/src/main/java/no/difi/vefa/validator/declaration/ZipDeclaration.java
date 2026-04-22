@@ -1,6 +1,5 @@
 package no.difi.vefa.validator.declaration;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +11,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import com.google.common.io.ByteStreams;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
 import no.difi.vefa.validator.annotation.Type;
@@ -37,14 +37,16 @@ public class ZipDeclaration implements IDeclarationWithChildren
     try
     {
       final byte [] content = StreamUtils.read50KAndReset (contentStream);
-      final ZipInputStream zipInputStream = new ZipInputStream (new ByteArrayInputStream (content));
-      final ZipEntry entry = zipInputStream.getNextEntry ();
-
-      if ("mimetype".equals (entry.getName ()))
+      try (final ZipInputStream zipInputStream = new ZipInputStream (new NonBlockingByteArrayInputStream (content)))
       {
-        final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
-        ByteStreams.copy (zipInputStream, byteArrayOutputStream);
-        return Collections.singletonList (byteArrayOutputStream.getAsString (StandardCharsets.ISO_8859_1));
+        final ZipEntry entry = zipInputStream.getNextEntry ();
+
+        if ("mimetype".equals (entry.getName ()))
+        {
+          final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
+          ByteStreams.copy (zipInputStream, byteArrayOutputStream);
+          return Collections.singletonList (byteArrayOutputStream.getAsString (StandardCharsets.ISO_8859_1));
+        }
       }
     }
     catch (final IOException e)
@@ -64,9 +66,8 @@ public class ZipDeclaration implements IDeclarationWithChildren
   @Override
   public Iterable <CachedFile> children (final InputStream inputStream)
   {
-    try
+    try (final ZipInputStream zipInputStream = new ZipInputStream (inputStream))
     {
-      final ZipInputStream zipInputStream = new ZipInputStream (inputStream);
       final List <CachedFile> files = new ArrayList <> ();
 
       ZipEntry zipEntry;

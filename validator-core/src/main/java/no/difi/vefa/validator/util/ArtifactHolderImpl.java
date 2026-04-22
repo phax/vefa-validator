@@ -1,6 +1,5 @@
 package no.difi.vefa.validator.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -10,6 +9,7 @@ import java.util.Set;
 import com.google.common.io.ByteStreams;
 import com.helger.annotation.WillClose;
 import com.helger.asic.IAsicReader;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
 import no.difi.vefa.validator.api.IArtifactHolder;
 
@@ -40,7 +40,7 @@ public class ArtifactHolderImpl implements IArtifactHolder
   @Override
   public InputStream getInputStream (final String path)
   {
-    return new ByteArrayInputStream (content.get (path));
+    return new NonBlockingByteArrayInputStream (content.get (path));
   }
 
   @Override

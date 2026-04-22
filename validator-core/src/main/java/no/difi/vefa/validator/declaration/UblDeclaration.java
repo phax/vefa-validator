@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.xml.transform.stream.StreamSource;
 
+import org.jspecify.annotations.NonNull;
+
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
@@ -27,14 +29,14 @@ import no.difi.vefa.validator.util.StreamUtils;
 @Type ("xml.ubl")
 public class UblDeclaration extends AbstractXmlDeclaration
 {
-  private static final Gson gson = new Gson ();
+  private static final Gson GSON = new Gson ();
 
   private XsltExecutable xsltExecutable;
 
   @Inject
   private void init (final Processor processor) throws VefaValidatorException
   {
-    try (InputStream inputStream = getClass ().getResourceAsStream ("/vefa-validator/xslt/ubl-detect.xslt"))
+    try (final InputStream inputStream = getClass ().getResourceAsStream ("/vefa-validator/xslt/ubl-detect.xslt"))
     {
       xsltExecutable = processor.newXsltCompiler ().compile (new StreamSource (inputStream));
     }
@@ -45,12 +47,13 @@ public class UblDeclaration extends AbstractXmlDeclaration
   }
 
   @Override
-  public boolean verify (final byte [] content, final List <String> parent)
+  public boolean verify (final byte [] content, @NonNull final List <String> parent)
   {
     return RegExHelper.stringMatchesPattern ("urn:oasis:names:specification:ubl:schema:xsd:(.+)-2::(.+)",
                                              parent.get (0));
   }
 
+  @SuppressWarnings ("unchecked")
   @Override
   public List <String> detect (final InputStream streamContent, final List <String> parent)
                                                                                             throws VefaValidatorException
@@ -68,7 +71,6 @@ public class UblDeclaration extends AbstractXmlDeclaration
       throw new VefaValidatorException ("Unable to detect UBL information.", e);
     }
 
-    // noinspection unchecked
-    return gson.fromJson (baos.getAsString (StandardCharsets.UTF_8), List.class);
+    return GSON.fromJson (baos.getAsString (StandardCharsets.UTF_8), List.class);
   }
 }

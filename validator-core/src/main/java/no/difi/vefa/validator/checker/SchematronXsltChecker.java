@@ -1,8 +1,5 @@
 package no.difi.vefa.validator.checker;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-
 import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
@@ -11,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 import com.helger.base.timing.StopWatch;
 
 import jakarta.xml.bind.JAXBContext;
@@ -52,7 +51,7 @@ public class SchematronXsltChecker implements IChecker
     final StopWatch aSW = StopWatch.createdStarted ();
     try
     {
-      final ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+      final NonBlockingByteArrayOutputStream baos = new NonBlockingByteArrayOutputStream ();
       {
         final XsltTransformer parser = this.parser.get ().load ();
         final XsltTransformer schematron = m_aXsltExecutable.load ();
@@ -75,7 +74,7 @@ public class SchematronXsltChecker implements IChecker
       aSW.stop ();
 
       final Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller ();
-      final SectionType sectionType = unmarshaller.unmarshal (new StreamSource (new ByteArrayInputStream (baos.toByteArray ())),
+      final SectionType sectionType = unmarshaller.unmarshal (new StreamSource (new NonBlockingByteArrayInputStream (baos.toByteArray ())),
                                                               SectionType.class).getValue ();
 
       section.setTitle (sectionType.getTitle ());

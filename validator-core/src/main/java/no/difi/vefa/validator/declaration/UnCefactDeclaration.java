@@ -1,10 +1,9 @@
 package no.difi.vefa.validator.declaration;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.events.Characters;
@@ -12,6 +11,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.cache.regex.RegExHelper;
 
 import no.difi.vefa.validator.annotation.Type;
@@ -24,8 +24,8 @@ import no.difi.vefa.validator.util.StreamUtils;
 public class UnCefactDeclaration extends AbstractXmlDeclaration
 {
 
-  private final static List <String> informationElements = Arrays.asList ("BusinessProcessSpecifiedDocumentContextParameter",
-                                                                          "GuidelineSpecifiedDocumentContextParameter");
+  private final static Set <String> FIELDS = Set.of ("BusinessProcessSpecifiedDocumentContextParameter",
+                                                     "GuidelineSpecifiedDocumentContextParameter");
 
   @Override
   public boolean verify (final byte [] content, final List <String> parent)
@@ -34,47 +34,50 @@ public class UnCefactDeclaration extends AbstractXmlDeclaration
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent)
+  public List <String> detect (final InputStream aIS, final List <String> parent)
   {
-    final StringBuilder stringBuilder = new StringBuilder ();
-    stringBuilder.append (parent.get (0).split ("::")[1]);
+    final StringBuilder aSB = new StringBuilder ();
+    aSB.append (parent.get (0).split ("::")[1]);
 
     try
     {
-      final byte [] content = StreamUtils.read50KAndReset (contentStream);
-      final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new ByteArrayInputStream (content));
-      while (xmlEventReader.hasNext ())
+      final byte [] content = StreamUtils.read50KAndReset (aIS);
+      final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new NonBlockingByteArrayInputStream (content));
+      try
       {
-        XMLEvent xmlEvent = xmlEventReader.nextEvent ();
-
-        if (xmlEvent.isStartElement ())
+        while (xmlEventReader.hasNext ())
         {
-          StartElement startElement = (StartElement) xmlEvent;
-
-          if (informationElements.contains (startElement.getName ().getLocalPart ()))
+          XMLEvent xmlEvent = xmlEventReader.nextEvent ();
+          if (xmlEvent.isStartElement ())
           {
-            startElement = (StartElement) xmlEventReader.nextTag ();
-
-            if ("ID".equals (startElement.getName ().getLocalPart ()))
+            StartElement startElement = (StartElement) xmlEvent;
+            if (FIELDS.contains (startElement.getName ().getLocalPart ()))
             {
-              xmlEvent = xmlEventReader.nextEvent ();
-
-              if (xmlEvent instanceof Characters)
+              startElement = (StartElement) xmlEventReader.nextTag ();
+              if ("ID".equals (startElement.getName ().getLocalPart ()))
               {
-                stringBuilder.append ("::");
-                stringBuilder.append (((Characters) xmlEvent).getData ());
+                xmlEvent = xmlEventReader.nextEvent ();
+                if (xmlEvent instanceof final Characters aChars)
+                {
+                  aSB.append ("::").append (aChars.getData ());
+                }
               }
             }
           }
-        }
 
-        if (xmlEvent.isEndElement ())
-        {
-          final EndElement endElement = (EndElement) xmlEvent;
-
-          if ("ExchangedDocumentContext".equals (endElement.getName ().getLocalPart ()))
-            return Collections.singletonList (stringBuilder.toString ());
+          if (xmlEvent.isEndElement ())
+          {
+            final EndElement endElement = (EndElement) xmlEvent;
+            if ("ExchangedDocumentContext".equals (endElement.getName ().getLocalPart ()))
+            {
+              return Collections.singletonList (aSB.toString ());
+            }
+          }
         }
+      }
+      finally
+      {
+        xmlEventReader.close ();
       }
     }
     catch (final Exception e)

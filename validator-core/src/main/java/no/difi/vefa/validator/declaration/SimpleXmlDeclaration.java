@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
-import jakarta.xml.bind.ValidationException;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.StreamUtils;
 import no.difi.vefa.validator.util.XmlUtils;
@@ -43,9 +42,7 @@ public class SimpleXmlDeclaration extends AbstractXmlDeclaration
     }
     catch (final IOException e)
     {
-      new ValidationException ("Couldn't detect SimpleXmlDeclaration", e);
+      throw new VefaValidatorException ("Couldn't detect SimpleXmlDeclaration", e);
     }
-
-    return null;
   }
 }

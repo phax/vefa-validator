@@ -1,99 +1,118 @@
 package no.difi.vefa.validator.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 
 import org.w3c.dom.ls.LSInput;
 
-public class HolderLSInput implements LSInput {
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
-    private String file;
+public class HolderLSInput implements LSInput
+{
 
-    private byte[] content;
+  private final String file;
 
-    public HolderLSInput(byte[] content, String path) {
-        this.content = content;
-        this.file = path;
-    }
+  private final byte [] content;
 
-    @Override
-    public Reader getCharacterStream() {
-        return null;
-    }
+  public HolderLSInput (final byte [] content, final String path)
+  {
+    this.content = content;
+    this.file = path;
+  }
 
-    @Override
-    public void setCharacterStream(Reader characterStream) {
-        // No action
-    }
+  @Override
+  public Reader getCharacterStream ()
+  {
+    return null;
+  }
 
-    @Override
-    public InputStream getByteStream() {
-        return new ByteArrayInputStream(content);
-    }
+  @Override
+  public void setCharacterStream (final Reader characterStream)
+  {
+    // No action
+  }
 
-    @Override
-    public void setByteStream(InputStream byteStream) {
-        // No action
-    }
+  @Override
+  public InputStream getByteStream ()
+  {
+    return new NonBlockingByteArrayInputStream (content);
+  }
 
-    @Override
-    public String getStringData() {
-        return new String(content);
-    }
+  @Override
+  public void setByteStream (final InputStream byteStream)
+  {
+    // No action
+  }
 
-    @Override
-    public void setStringData(String stringData) {
-        // No action
-    }
+  @Override
+  public String getStringData ()
+  {
+    return new String (content);
+  }
 
-    @Override
-    public String getSystemId() {
-        return String.format("holder:%s", file);
-    }
+  @Override
+  public void setStringData (final String stringData)
+  {
+    // No action
+  }
 
-    @Override
-    public void setSystemId(String systemId) {
-        // No action
-    }
+  @Override
+  public String getSystemId ()
+  {
+    return String.format ("holder:%s", file);
+  }
 
-    @Override
-    public String getPublicId() {
-        return String.format("holder:%s", file);
-    }
+  @Override
+  public void setSystemId (final String systemId)
+  {
+    // No action
+  }
 
-    @Override
-    public void setPublicId(String publicId) {
-        // No action
-    }
+  @Override
+  public String getPublicId ()
+  {
+    return String.format ("holder:%s", file);
+  }
 
-    @Override
-    public String getBaseURI() {
-        return file;
-    }
+  @Override
+  public void setPublicId (final String publicId)
+  {
+    // No action
+  }
 
-    @Override
-    public void setBaseURI(String baseURI) {
-        // No action
-    }
+  @Override
+  public String getBaseURI ()
+  {
+    return file;
+  }
 
-    @Override
-    public String getEncoding() {
-        return null;
-    }
+  @Override
+  public void setBaseURI (final String baseURI)
+  {
+    // No action
+  }
 
-    @Override
-    public void setEncoding(String encoding) {
-        // No action
-    }
+  @Override
+  public String getEncoding ()
+  {
+    return null;
+  }
 
-    @Override
-    public boolean getCertifiedText() {
-        return false;
-    }
+  @Override
+  public void setEncoding (final String encoding)
+  {
+    // No action
+  }
 
-    @Override
-    public void setCertifiedText(boolean certifiedText) {
-        // No action
-    }
+  @Override
+  public boolean getCertifiedText ()
+  {
+    return false;
+  }
+
+  @Override
+  public void setCertifiedText (final boolean certifiedText)
+  {
+    // No action
+  }
 }

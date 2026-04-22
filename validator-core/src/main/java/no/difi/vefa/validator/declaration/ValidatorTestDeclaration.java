@@ -1,6 +1,5 @@
 package no.difi.vefa.validator.declaration;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,9 +17,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
+
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -36,7 +38,7 @@ import no.difi.xsd.vefa.validator._1.Test;
 @Type ("xml.test")
 public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements IDeclarationWithConverter
 {
-  private static final Logger log = LoggerFactory.getLogger (ValidatorTestDeclaration.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (ValidatorTestDeclaration.class);
   private static final TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance ();
   private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (Test.class);
 
@@ -46,19 +48,34 @@ public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements ID
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent) throws VefaValidatorException
+  public List <String> detect (final InputStream contentStream, final List <String> parent)
+                                                                                            throws VefaValidatorException
   {
     try
     {
       final byte [] content = StreamUtils.read50KAndReset (contentStream);
-      final XMLStreamReader source = XML_INPUT_FACTORY.createXMLStreamReader (new ByteArrayInputStream (content));
-      do
+      final XMLStreamReader source = XML_INPUT_FACTORY.createXMLStreamReader (new NonBlockingByteArrayInputStream (content));
+      try
       {
-        if (source.getEventType () == XMLStreamConstants.START_ELEMENT && source.getNamespaceURI ().equals (m_sNamespace))
-          for (int i = 0; i < source.getAttributeCount (); i++)
-            if (source.getAttributeName (i).toString ().equals ("configuration"))
-              return Collections.singletonList (String.format ("configuration::%s", source.getAttributeValue (i)));
-      } while (source.hasNext () && source.next () > 0);
+        do
+        {
+          if (source.getEventType () == XMLStreamConstants.START_ELEMENT &&
+            source.getNamespaceURI ().equals (m_sNamespace))
+          {
+            for (int i = 0; i < source.getAttributeCount (); i++)
+            {
+              if (source.getAttributeName (i).toString ().equals ("configuration"))
+              {
+                return Collections.singletonList ("configuration::" + source.getAttributeValue (i));
+              }
+            }
+          }
+        } while (source.hasNext () && source.next () > 0);
+      }
+      finally
+      {
+        source.close ();
+      }
     }
     catch (IOException | XMLStreamException e)
     {
@@ -78,22 +95,23 @@ public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements ID
   {
     try
     {
-      final Test test = convertInputStream (inputStream);
+      final Test test = _convertInputStream (inputStream);
 
-      if (test.getAny () instanceof Node)
+      if (test.getAny () instanceof final Node aNode)
       {
         final Transformer transformer = TRANSFORMER_FACTORY.newTransformer ();
         transformer.setOutputProperty (OutputKeys.INDENT, "yes");
-        transformer.transform (new DOMSource ((Node) test.getAny ()), new StreamResult (outputStream));
+        transformer.transform (new DOMSource (aNode), new StreamResult (outputStream));
       }
     }
     catch (JAXBException | TransformerException e)
     {
-      log.warn (e.getMessage (), e);
+      LOGGER.warn (e.getMessage (), e);
     }
   }
 
-  private Test convertInputStream (final InputStream inputStream) throws JAXBException
+  @Nullable
+  private Test _convertInputStream (final InputStream inputStream) throws JAXBException
   {
     return JAXB_CONTEXT.createUnmarshaller ().unmarshal (new StreamSource (inputStream), Test.class).getValue ();
   }

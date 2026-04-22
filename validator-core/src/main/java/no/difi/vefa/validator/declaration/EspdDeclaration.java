@@ -1,6 +1,5 @@
 package no.difi.vefa.validator.declaration;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +9,8 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.lang.VefaValidatorException;
@@ -36,26 +37,37 @@ public class EspdDeclaration extends AbstractXmlDeclaration
     try
     {
       final byte [] content = StreamUtils.read50KAndReset (contentStream);
-      final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new ByteArrayInputStream (content));
-      while (xmlEventReader.hasNext ())
+      final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new NonBlockingByteArrayInputStream (content));
+      try
       {
-        XMLEvent xmlEvent = xmlEventReader.nextEvent ();
-
-        if (xmlEvent.isStartElement ())
+        while (xmlEventReader.hasNext ())
         {
-          if ("CustomizationID".equals (((StartElement) xmlEvent).getName ().getLocalPart ()))
+          XMLEvent xmlEvent = xmlEventReader.nextEvent ();
+
+          if (xmlEvent.isStartElement ())
           {
-            xmlEvent = xmlEventReader.nextEvent ();
-            if (xmlEvent instanceof Characters)
-              results.add (parent.get (0) + "::" + ((Characters) xmlEvent).getData ());
-          }
-          if ("VersionID".equals (((StartElement) xmlEvent).getName ().getLocalPart ()))
-          {
-            xmlEvent = xmlEventReader.nextEvent ();
-            if (xmlEvent instanceof Characters)
-              results.add (parent.get (0) + "::" + ((Characters) xmlEvent).getData ());
+            if ("CustomizationID".equals (((StartElement) xmlEvent).getName ().getLocalPart ()))
+            {
+              xmlEvent = xmlEventReader.nextEvent ();
+              if (xmlEvent instanceof Characters)
+              {
+                results.add (parent.get (0) + "::" + ((Characters) xmlEvent).getData ());
+              }
+            }
+            if ("VersionID".equals (((StartElement) xmlEvent).getName ().getLocalPart ()))
+            {
+              xmlEvent = xmlEventReader.nextEvent ();
+              if (xmlEvent instanceof Characters)
+              {
+                results.add (parent.get (0) + "::" + ((Characters) xmlEvent).getData ());
+              }
+            }
           }
         }
+      }
+      finally
+      {
+        xmlEventReader.close ();
       }
     }
     catch (final Exception e)

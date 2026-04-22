@@ -3,8 +3,6 @@ package no.difi.vefa.validator.declaration;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
 
@@ -12,6 +10,8 @@ import org.junit.Test;
 
 import com.google.common.io.ByteStreams;
 import com.helger.asic.AsicVerifierFactory;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
 public class AsiceDeclarationTest
 {
@@ -23,7 +23,7 @@ public class AsiceDeclarationTest
   @Test
   public void validFile () throws Exception
   {
-    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ();
+    final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
 
     try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/asic-cades-test-valid.asice"))
     {
@@ -36,7 +36,7 @@ public class AsiceDeclarationTest
   @Test
   public void invalidFile () throws Exception
   {
-    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ();
+    final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
 
     try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/peppol-bis-invoice-sbdh.zip"))
     {
@@ -49,7 +49,7 @@ public class AsiceDeclarationTest
   @Test
   public void simpleXmlFile () throws Exception
   {
-    final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ();
+    final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
 
     try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/asic-xml.xml"))
     {
@@ -59,9 +59,9 @@ public class AsiceDeclarationTest
     assertTrue (xmlDeclaration.verify (byteArrayOutputStream.toByteArray (),
                                        Collections.singletonList ("urn:etsi.org:specification:02918:v1.2.1::asic")));
 
-    final ByteArrayOutputStream converted = new ByteArrayOutputStream ();
-    xmlDeclaration.convert (new ByteArrayInputStream (byteArrayOutputStream.toByteArray ()), converted);
+    final NonBlockingByteArrayOutputStream converted = new NonBlockingByteArrayOutputStream ();
+    xmlDeclaration.convert (new NonBlockingByteArrayInputStream (byteArrayOutputStream.toByteArray ()), converted);
 
-    AsicVerifierFactory.newFactory ().verify (new ByteArrayInputStream (converted.toByteArray ()));
+    AsicVerifierFactory.newFactory ().verify (new NonBlockingByteArrayInputStream (converted.toByteArray ()));
   }
 }

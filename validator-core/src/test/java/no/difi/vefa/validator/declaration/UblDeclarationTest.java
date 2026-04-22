@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import org.junit.Before;
@@ -14,6 +13,7 @@ import org.junit.Test;
 import com.google.common.io.ByteStreams;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
 import no.difi.vefa.validator.module.ValidatorModule;
 import no.difi.vefa.validator.util.DeclarationDetector;
@@ -21,8 +21,7 @@ import no.difi.vefa.validator.util.DeclarationIdentifier;
 
 public class UblDeclarationTest
 {
-
-  private static final String docStart = "<Invoice:Invoice xmlns:Invoice=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\"";
+  private static final String DOC_START = "<Invoice:Invoice xmlns:Invoice=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\"";
 
   @Inject
   private DeclarationDetector declarationDetector;
@@ -36,74 +35,73 @@ public class UblDeclarationTest
   @Test
   public void validNormal () throws Exception
   {
-    final String s = docStart +
+    final String s = DOC_START +
                      " xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">" +
                      "<CustomizationID>customization</CustomizationID><ProfileID>profile</ProfileID></Invoice:Invoice>";
 
-    final ByteArrayInputStream inputStream = new ByteArrayInputStream (s.getBytes ());
-
+    final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes ());
     assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
   }
 
   @Test
   public void validNormalNamespace1 () throws Exception
   {
-    final String s = docStart +
+    final String s = DOC_START +
                      " xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">" +
                      "<cbc:CustomizationID>customization</cbc:CustomizationID>" +
                      "<cbc:ProfileID>profile</cbc:ProfileID>" +
                      "</Invoice:Invoice>";
-    final ByteArrayInputStream inputStream = new ByteArrayInputStream (s.getBytes ());
+    final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes ());
     assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
   }
 
   @Test
   public void validNormalNamespace2 () throws Exception
   {
-    final String s = docStart +
+    final String s = DOC_START +
                      " xmlns:ns1=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">" +
                      "<ns1:CustomizationID>customization</ns1:CustomizationID>" +
                      "<ns1:ProfileID>profile</ns1:ProfileID>" +
                      "</Invoice:Invoice>";
-    final ByteArrayInputStream inputStream = new ByteArrayInputStream (s.getBytes ());
+    final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes ());
     assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
   }
 
   @Test
   public void validSpaces () throws Exception
   {
-    final String s = docStart +
+    final String s = DOC_START +
                      " xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">" +
                      "<CustomizationID   >customization</CustomizationID   >" +
                      "<ProfileID  >profile</ProfileID   >" +
                      "</Invoice:Invoice>";
-    final ByteArrayInputStream inputStream = new ByteArrayInputStream (s.getBytes ());
+    final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes ());
     assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
   }
 
   @Test
   public void validTabs () throws Exception
   {
-    final String s = docStart +
+    final String s = DOC_START +
                      " xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">" +
                      "<CustomizationID\t>customization</CustomizationID\t>" +
                      "<ProfileID\t>profile</ProfileID\t>" +
                      "</Invoice:Invoice>";
-    final ByteArrayInputStream inputStream = new ByteArrayInputStream (s.getBytes ());
+    final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes ());
     assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
   }
 
   @Test
   public void validOioublDeclaration () throws Exception
   {
-    final String s = docStart +
+    final String s = DOC_START +
                      " xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">" +
                      "<cbc:CustomizationID>OIOUBL-2.02</cbc:CustomizationID>" +
                      "<cbc:ProfileID " +
                      "schemeAgencyID=\"320\" " +
                      "schemeID=\"urn:oioubl:id:profileid-1.2\">Procurement-OrdSimR-BilSim-1.0</cbc:ProfileID>" +
                      "</Invoice:Invoice>";
-    final ByteArrayInputStream inputStream = new ByteArrayInputStream (s.getBytes ());
+    final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes ());
     assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0),
                   "Procurement-OrdSimR-BilSim-1.0#OIOUBL-2.02");
   }
@@ -111,21 +109,18 @@ public class UblDeclarationTest
   @Test
   public void issue17 () throws Exception
   {
-    final String s = docStart +
+    final String s = DOC_START +
                      " xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">" +
                      "<cbc:CustomizationID " +
                      "schemeID=\"PEPPOL\">urn:www.cenbii.eu:transaction:biitrns010:ver2.0:extended:" +
                      "urn:www.peppol.eu:bis:peppol4a:ver2.0</cbc:CustomizationID> " +
                      "<cbc:ProfileID>profile</cbc:ProfileID>" +
                      "</Invoice:Invoice>";
-    final ByteArrayInputStream inputStream = new ByteArrayInputStream (s.getBytes ());
-    assertEquals (declarationDetector.detect (inputStream)
-                                     .getIdentifier ()
-                                     .get (0),
+    final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes ());
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0),
                   "profile#" +
-                                               "urn:www.cenbii.eu:transaction:biitrns010:ver2.0:extended:" +
-                                               "urn:www.peppol.eu:bis:peppol4a:ver2.0");
-
+                                                                                     "urn:www.cenbii.eu:transaction:biitrns010:ver2.0:extended:" +
+                                                                                     "urn:www.peppol.eu:bis:peppol4a:ver2.0");
   }
 
   @Test
@@ -134,21 +129,20 @@ public class UblDeclarationTest
   {
     final String sl = " schemaLocation=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 " +
                       "D:/MapForcewspc/MapForce.InvoiciaXML/Schemes/UBL 2.1/maindoc/UBL-Invoice-2.1.xsd\"";
-    final String s = docStart +
+    final String s = DOC_START +
                      sl +
                      " xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\">" +
                      "<CustomizationID>customization</CustomizationID>" +
                      "<ProfileID>profile</ProfileID>" +
                      "</Invoice:Invoice>";
-    final ByteArrayInputStream inputStream = new ByteArrayInputStream (s.getBytes ());
+    final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes ());
     assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
   }
 
   @Test
   public void invalidSbdhDocument () throws Exception
   {
-    try (
-        InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/peppol-bis-invoice-sbdh.xml")))
+    try (InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/peppol-bis-invoice-sbdh.xml")))
     {
       assertNotEquals (declarationDetector.detect (inputStream).getDeclaration ().getType (), "xml.ubl");
     }
@@ -157,8 +151,7 @@ public class UblDeclarationTest
   @Test
   public void validDocument () throws Exception
   {
-    try (
-        InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/T10-hode-feilkoder.xml")))
+    try (InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/T10-hode-feilkoder.xml")))
     {
       assertEquals (declarationDetector.detect (inputStream).getDeclaration ().getType (), "xml.ubl");
     }
@@ -167,8 +160,7 @@ public class UblDeclarationTest
   @Test
   public void invalidEdifact () throws Exception
   {
-    try (
-        InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/edifact-invoic-d-97b-un.txt")))
+    try (InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/edifact-invoic-d-97b-un.txt")))
     {
       assertEquals (declarationDetector.detect (inputStream), DeclarationDetector.UNKNOWN);
     }
@@ -178,28 +170,32 @@ public class UblDeclarationTest
   public void emptyElements () throws Exception
   {
     final String xml = "<test><CustomizationID></CustomizationID><ProfileID></ProfileID></test>";
-    assertEquals (declarationDetector.detect (new ByteArrayInputStream (xml.getBytes ())), DeclarationDetector.UNKNOWN);
+    assertEquals (declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes ())),
+                  DeclarationDetector.UNKNOWN);
   }
 
   @Test
   public void customizationOnly () throws Exception
   {
     final String xml = "<test><CustomizationID>Test</CustomizationID></test>";
-    assertEquals (declarationDetector.detect (new ByteArrayInputStream (xml.getBytes ())), DeclarationDetector.UNKNOWN);
+    assertEquals (declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes ())),
+                  DeclarationDetector.UNKNOWN);
   }
 
   @Test
   public void incompleteDeclaration () throws Exception
   {
     final String xml = "<test>";
-    assertEquals (declarationDetector.detect (new ByteArrayInputStream (xml.getBytes ())), DeclarationDetector.UNKNOWN);
+    assertEquals (declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes ())),
+                  DeclarationDetector.UNKNOWN);
   }
 
   @Test
   public void withoutDeclaration () throws Exception
   {
     final String xml = "<test></test>";
-    assertEquals (declarationDetector.detect (new ByteArrayInputStream (xml.getBytes ())), DeclarationDetector.UNKNOWN);
+    assertEquals (declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes ())),
+                  DeclarationDetector.UNKNOWN);
   }
 
   @Test
@@ -207,7 +203,7 @@ public class UblDeclarationTest
   {
     final byte [] bytes = ByteStreams.toByteArray (getClass ().getResourceAsStream ("/documents/eforms-cn_23.xml"));
 
-    try (InputStream inputStream = new ByteArrayInputStream (bytes))
+    try (InputStream inputStream = new NonBlockingByteArrayInputStream (bytes))
     {
       final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (inputStream);
       assertEquals (declarationIdentifier.getDeclaration ().getType (), "xml.ubl");

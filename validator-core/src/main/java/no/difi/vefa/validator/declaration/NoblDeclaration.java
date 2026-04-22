@@ -2,8 +2,8 @@ package no.difi.vefa.validator.declaration;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLEventReader;
@@ -19,10 +19,9 @@ import no.difi.vefa.validator.util.StreamUtils;
 @Type ("xml.nobl")
 public class NoblDeclaration extends AbstractXmlDeclaration
 {
-
   private static final Pattern PATTERN = Pattern.compile ("urn:fdc:difi.no:2018:nobl:(.+)-1::(.+)");
 
-  private static final List <String> FIELDS = Arrays.asList ("CustomizationID", "ProfileID");
+  private static final Set <String> FIELDS = Set.of ("CustomizationID", "ProfileID");
 
   @Override
   public boolean verify (final byte [] content, final List <String> parent)
@@ -31,37 +30,42 @@ public class NoblDeclaration extends AbstractXmlDeclaration
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent)
+  public List <String> detect (final InputStream aIS, final List <String> parent)
   {
     final List <String> results = new ArrayList <> ();
 
     final String type = parent.get (0).split ("::")[1];
 
-    final StringBuilder stringBuilder = new StringBuilder ();
-    stringBuilder.append (type);
+    final StringBuilder aSB = new StringBuilder ();
+    aSB.append (type);
 
     try
     {
-      final byte [] content = StreamUtils.read50KAndReset (contentStream);
+      final byte [] content = StreamUtils.read50KAndReset (aIS);
       final XMLEventReader xmlEventReader = XML_INPUT_FACTORY.createXMLEventReader (new NonBlockingByteArrayInputStream (content));
-      while (xmlEventReader.hasNext ())
+      try
       {
-        XMLEvent xmlEvent = xmlEventReader.nextEvent ();
-
-        if (xmlEvent.isStartElement ())
+        while (xmlEventReader.hasNext ())
         {
-          final StartElement startElement = (StartElement) xmlEvent;
-
-          if (FIELDS.contains (startElement.getName ().getLocalPart ()))
+          XMLEvent xmlEvent = xmlEventReader.nextEvent ();
+          if (xmlEvent.isStartElement ())
           {
-            xmlEvent = xmlEventReader.nextEvent ();
-            if (xmlEvent instanceof Characters)
+            final StartElement startElement = (StartElement) xmlEvent;
+            if (FIELDS.contains (startElement.getName ().getLocalPart ()))
             {
-              stringBuilder.append ("::").append (((Characters) xmlEvent).getData ());
-              results.add (type + "::" + ((Characters) xmlEvent).getData ());
+              xmlEvent = xmlEventReader.nextEvent ();
+              if (xmlEvent instanceof Characters aChars)
+              {
+                aSB.append ("::").append (aChars.getData ());
+                results.add (type + "::" + aChars.getData ());
+              }
             }
           }
         }
+      }
+      finally
+      {
+        xmlEventReader.close ();
       }
     }
     catch (final Exception e)
@@ -69,7 +73,7 @@ public class NoblDeclaration extends AbstractXmlDeclaration
       // No action.
     }
 
-    results.add (stringBuilder.toString ());
+    results.add (aSB.toString ());
 
     return results;
   }

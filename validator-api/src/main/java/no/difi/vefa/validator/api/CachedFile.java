@@ -2,6 +2,9 @@ package no.difi.vefa.validator.api;
 
 import java.io.InputStream;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
 /**
@@ -12,12 +15,13 @@ public final class CachedFile
   private final byte [] m_aContent;
   private final String m_sFilename;
 
-  private CachedFile (final String filename, final byte [] content)
+  private CachedFile (@Nullable final String filename, final byte @NonNull [] content)
   {
     m_aContent = content;
     m_sFilename = filename;
   }
 
+  @Nullable
   public String getFilename ()
   {
     return m_sFilename;
@@ -28,17 +32,18 @@ public final class CachedFile
     return m_aContent;
   }
 
+  @NonNull
   public InputStream getContentStream ()
   {
     return new NonBlockingByteArrayInputStream (m_aContent);
   }
 
-  public static CachedFile of (final byte [] content)
+  public static CachedFile of (final byte @NonNull [] content)
   {
     return new CachedFile (null, content);
   }
 
-  public static CachedFile of (final String filename, final byte [] content)
+  public static CachedFile of (final String filename, final byte @NonNull [] content)
   {
     return new CachedFile (filename, content);
   }
