@@ -3,7 +3,6 @@ package no.difi.vefa.validator.declaration;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -13,6 +12,7 @@ import org.junit.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.helger.base.io.nonblocking.NonBlockingBufferedInputStream;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.io.stream.StreamHelper;
 
@@ -143,7 +143,7 @@ public class UblDeclarationTest
   @Test
   public void invalidSbdhDocument () throws Exception
   {
-    try (InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/peppol-bis-invoice-sbdh.xml")))
+    try (InputStream inputStream = new NonBlockingBufferedInputStream (getClass ().getResourceAsStream ("/documents/peppol-bis-invoice-sbdh.xml")))
     {
       assertNotEquals (declarationDetector.detect (inputStream).getDeclaration ().getType (), "xml.ubl");
     }
@@ -152,7 +152,7 @@ public class UblDeclarationTest
   @Test
   public void validDocument () throws Exception
   {
-    try (InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/T10-hode-feilkoder.xml")))
+    try (InputStream inputStream = new NonBlockingBufferedInputStream (getClass ().getResourceAsStream ("/documents/T10-hode-feilkoder.xml")))
     {
       assertEquals (declarationDetector.detect (inputStream).getDeclaration ().getType (), "xml.ubl");
     }
@@ -161,7 +161,7 @@ public class UblDeclarationTest
   @Test
   public void invalidEdifact () throws Exception
   {
-    try (InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/edifact-invoic-d-97b-un.txt")))
+    try (InputStream inputStream = new NonBlockingBufferedInputStream (getClass ().getResourceAsStream ("/documents/edifact-invoic-d-97b-un.txt")))
     {
       assertEquals (declarationDetector.detect (inputStream), DeclarationDetector.UNKNOWN);
     }

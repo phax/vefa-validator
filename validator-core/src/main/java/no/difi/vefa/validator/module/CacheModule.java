@@ -1,6 +1,6 @@
 package no.difi.vefa.validator.module;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
@@ -24,7 +24,7 @@ public class CacheModule extends AbstractModule
     return CacheBuilder.newBuilder ()
                        .softValues ()
                        .maximumSize (properties.getInteger ("pools.checker.size"))
-                       .expireAfterAccess (properties.getInteger ("pools.checker.expire"), TimeUnit.MINUTES)
+                       .expireAfterAccess (Duration.ofMinutes (properties.getInteger ("pools.checker.expire")))
                        .build (loader);
   }
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import com.helger.annotation.WillNotClose;
+import com.helger.base.io.stream.NonClosingInputStream;
 import com.helger.base.io.stream.StreamHelper;
 
 public class StreamUtils
@@ -16,14 +18,14 @@ public class StreamUtils
    * @return Read data
    * @throws IOException
    */
-  public static byte [] readAllAndReset (final InputStream inputStream) throws IOException
+  public static byte [] readAllAndReset (@WillNotClose final InputStream inputStream) throws IOException
   {
-    final byte [] bytes = StreamHelper.getAllBytes (inputStream);
+    final byte [] bytes = StreamHelper.getAllBytes (new NonClosingInputStream (inputStream));
     inputStream.reset ();
     return bytes;
   }
 
-  public static byte [] read50KAndReset (final InputStream inputStream) throws IOException
+  public static byte [] read50KAndReset (@WillNotClose final InputStream inputStream) throws IOException
   {
     // Read at most 50K
     return readAndReset (inputStream, 50 * 1024);
@@ -40,7 +42,7 @@ public class StreamUtils
    * @throws IOException
    *         in case of IO error
    */
-  public static byte [] readAndReset (final InputStream inputStream, final int length) throws IOException
+  public static byte [] readAndReset (@WillNotClose final InputStream inputStream, final int length) throws IOException
   {
     byte [] bytes = new byte [length];
 

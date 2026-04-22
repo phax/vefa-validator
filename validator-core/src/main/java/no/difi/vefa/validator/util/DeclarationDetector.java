@@ -34,6 +34,7 @@ public class DeclarationDetector
     final Map <String, DeclarationWrapper> wrapperMap = new HashMap <> ();
 
     for (final IDeclaration declaration : declarations)
+    {
       if (declaration.getClass ().isAnnotationPresent (Type.class))
       {
         for (final String type : declaration.getClass ().getAnnotation (Type.class).value ())
@@ -41,6 +42,7 @@ public class DeclarationDetector
           wrapperMap.put (type, DeclarationWrapper.of (type, declaration));
         }
       }
+    }
 
     for (final String key : wrapperMap.keySet ())
     {
@@ -58,13 +60,13 @@ public class DeclarationDetector
 
   public DeclarationIdentifier detect (final InputStream contentStream) throws IOException
   {
-    return detect (rootDeclarationWrappers, null, contentStream, UNKNOWN);
+    return _detect (rootDeclarationWrappers, null, contentStream, UNKNOWN);
   }
 
-  private DeclarationIdentifier detect (final List <DeclarationWrapper> wrappers,
-                                        byte [] content,
-                                        final InputStream contentStream,
-                                        final DeclarationIdentifier parent) throws IOException
+  private DeclarationIdentifier _detect (final List <DeclarationWrapper> wrappers,
+                                         byte [] content,
+                                         final InputStream contentStream,
+                                         final DeclarationIdentifier parent) throws IOException
   {
     if (content == null)
     {
@@ -82,14 +84,18 @@ public class DeclarationDetector
                                                            parent == null ? null : parent.getIdentifier ());
 
           if (identifier == null)
+          {
             break;
+          }
           if (log.isDebugEnabled ())
+          {
             log.debug ("Found: " + wrapper.getType () + " - " + identifier);
+          }
 
-          return detect (wrapper.getChildren (),
-                         content,
-                         contentStream,
-                         new DeclarationIdentifier (parent, wrapper, identifier));
+          return _detect (wrapper.getChildren (),
+                          content,
+                          contentStream,
+                          new DeclarationIdentifier (parent, wrapper, identifier));
         }
       }
       catch (final VefaValidatorException e)

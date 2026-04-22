@@ -13,6 +13,7 @@ import java.util.zip.ZipInputStream;
 import com.helger.asic.AsicReaderFactory;
 import com.helger.asic.IAsicReader;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.io.stream.NonClosingInputStream;
 import com.helger.base.io.stream.StreamHelper;
 
 import no.difi.vefa.validator.annotation.Type;
@@ -81,7 +82,8 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
       String filename;
       while ((filename = asicReader.getNextFile ()) != null)
       {
-        files.add (CachedFile.of (filename, StreamHelper.getAllBytes (asicReader.inputStream ())));
+        files.add (CachedFile.of (filename,
+                                  StreamHelper.getAllBytes (new NonClosingInputStream (asicReader.inputStream ()))));
       }
 
       return files;

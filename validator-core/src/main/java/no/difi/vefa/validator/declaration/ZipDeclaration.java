@@ -11,6 +11,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.io.stream.NonClosingInputStream;
 import com.helger.base.io.stream.StreamHelper;
 
 import no.difi.vefa.validator.annotation.Type;
@@ -71,7 +72,8 @@ public class ZipDeclaration implements IDeclarationWithChildren
       ZipEntry zipEntry;
       while ((zipEntry = zipInputStream.getNextEntry ()) != null)
       {
-        ret.add (CachedFile.of (zipEntry.getName (), StreamHelper.getAllBytes (zipInputStream)));
+        ret.add (CachedFile.of (zipEntry.getName (),
+                                StreamHelper.getAllBytes (new NonClosingInputStream (zipInputStream))));
       }
 
       return ret;
