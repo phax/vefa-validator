@@ -52,7 +52,7 @@ public class Cli
     options.addOption ("p", "profile", true, "Buildconfig profile");
     options.addOption ("a", "source", true, "Source folder");
     options.addOption ("s", "site", true, "Create site - DEPRECATED");
-    options.addOption (Option.builder ("target").desc ("Target folder").hasArg (true).build ());
+    options.addOption (Option.builder ("target").desc ("Target folder").hasArg (true).get ());
 
     final CommandLineParser parser = new DefaultParser ();
     final CommandLine cmd = parser.parse (options, args);
