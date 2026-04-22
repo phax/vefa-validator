@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.io.ByteStreams;
 import com.helger.annotation.WillClose;
 import com.helger.asic.IAsicReader;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.io.stream.StreamHelper;
 
 import no.difi.vefa.validator.api.IArtifactHolder;
 
@@ -57,7 +57,7 @@ public class ArtifactHolderImpl implements IArtifactHolder
     while ((filename = asicReader.getNextFile ()) != null)
     {
       // Keep source stream open
-      content.put (filename, ByteStreams.toByteArray (asicReader.inputStream ()));
+      content.put (filename, StreamHelper.getAllBytes (asicReader.inputStream ()));
     }
 
     // Close asice-file

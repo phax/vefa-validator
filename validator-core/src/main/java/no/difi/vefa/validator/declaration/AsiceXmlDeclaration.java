@@ -14,10 +14,10 @@ import javax.xml.stream.XMLStreamReader;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.io.BaseEncoding;
-import com.google.common.io.ByteStreams;
 import com.helger.asic.AsicReaderFactory;
 import com.helger.asic.IAsicReader;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
+import com.helger.base.io.stream.StreamHelper;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
@@ -65,7 +65,9 @@ public class AsiceXmlDeclaration extends AbstractXmlDeclaration implements
           do
           {
             if (source.getEventType () == XMLStreamConstants.CHARACTERS)
+            {
               byteArrayOutputStream.write (source.getText ().getBytes (StandardCharsets.UTF_8));
+            }
           } while (source.hasNext () && source.next () > 0);
 
           outputStream.write (BaseEncoding.base64 ()
@@ -95,7 +97,7 @@ public class AsiceXmlDeclaration extends AbstractXmlDeclaration implements
       String filename;
       while ((filename = asicReader.getNextFile ()) != null)
       {
-        files.add (CachedFile.of (filename, ByteStreams.toByteArray (asicReader.inputStream ())));
+        files.add (CachedFile.of (filename, StreamHelper.getAllBytes (asicReader.inputStream ())));
       }
 
       return files;

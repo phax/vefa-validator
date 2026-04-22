@@ -10,9 +10,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import com.google.common.io.ByteStreams;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
-import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
+import com.helger.base.io.stream.StreamHelper;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
@@ -43,9 +42,8 @@ public class ZipDeclaration implements IDeclarationWithChildren
 
         if ("mimetype".equals (entry.getName ()))
         {
-          final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
-          ByteStreams.copy (zipInputStream, byteArrayOutputStream);
-          return Collections.singletonList (byteArrayOutputStream.getAsString (StandardCharsets.ISO_8859_1));
+          return Collections.singletonList (StreamHelper.getAllBytesAsString (zipInputStream,
+                                                                              StandardCharsets.ISO_8859_1));
         }
       }
     }
@@ -68,15 +66,15 @@ public class ZipDeclaration implements IDeclarationWithChildren
   {
     try (final ZipInputStream zipInputStream = new ZipInputStream (inputStream))
     {
-      final List <CachedFile> files = new ArrayList <> ();
+      final List <CachedFile> ret = new ArrayList <> ();
 
       ZipEntry zipEntry;
       while ((zipEntry = zipInputStream.getNextEntry ()) != null)
       {
-        files.add (CachedFile.of (zipEntry.getName (), ByteStreams.toByteArray (zipInputStream)));
+        ret.add (CachedFile.of (zipEntry.getName (), StreamHelper.getAllBytes (zipInputStream)));
       }
 
-      return files;
+      return ret;
     }
     catch (final IOException e)
     {

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import com.google.common.io.ByteStreams;
+import com.helger.base.io.stream.StreamHelper;
 
 public class StreamUtils
 {
@@ -18,7 +18,7 @@ public class StreamUtils
    */
   public static byte [] readAllAndReset (final InputStream inputStream) throws IOException
   {
-    final byte [] bytes = ByteStreams.toByteArray (inputStream);
+    final byte [] bytes = StreamHelper.getAllBytes (inputStream);
     inputStream.reset ();
     return bytes;
   }
@@ -49,7 +49,9 @@ public class StreamUtils
     inputStream.reset ();
 
     if (numberOfReadBytes == -1)
+    {
       throw new IOException ("Empty file");
+    }
 
     bytes = Arrays.copyOfRange (bytes, 0, numberOfReadBytes);
     return bytes;

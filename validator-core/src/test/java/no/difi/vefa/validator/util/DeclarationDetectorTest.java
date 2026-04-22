@@ -8,10 +8,10 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.io.ByteStreams;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.io.stream.StreamHelper;
 
 import no.difi.vefa.validator.module.ValidatorModule;
 
@@ -30,7 +30,7 @@ public class DeclarationDetectorTest
   public void simple () throws Exception
   {
     // noinspection ConstantConditions
-    final byte [] bytes = ByteStreams.toByteArray (getClass ().getResourceAsStream ("/documents/ehf-invoice-2.0.xml"));
+    final byte [] bytes = StreamHelper.getAllBytes (getClass ().getResourceAsStream ("/documents/ehf-invoice-2.0.xml"));
 
     final InputStream inputStream = new NonBlockingByteArrayInputStream (bytes);
     final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (inputStream);

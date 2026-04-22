@@ -11,10 +11,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.common.io.ByteStreams;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.io.stream.StreamHelper;
 
 import no.difi.vefa.validator.module.ValidatorModule;
 import no.difi.vefa.validator.util.DeclarationDetector;
@@ -202,7 +202,7 @@ public class UblDeclarationTest
   @Test
   public void eforms () throws Exception
   {
-    final byte [] bytes = ByteStreams.toByteArray (getClass ().getResourceAsStream ("/documents/eforms-cn_23.xml"));
+    final byte [] bytes = StreamHelper.getAllBytes (getClass ().getResourceAsStream ("/documents/eforms-cn_23.xml"));
 
     try (InputStream inputStream = new NonBlockingByteArrayInputStream (bytes))
     {

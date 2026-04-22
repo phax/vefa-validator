@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import com.google.common.io.ByteStreams;
 import com.helger.asic.AsicReaderFactory;
 import com.helger.asic.IAsicReader;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
@@ -34,14 +33,18 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
   public boolean verify (final byte [] content, final List <String> parent)
   {
     if (content.length < 29 || content[28] != 0)
+    {
       return false;
+    }
 
     try (final ZipInputStream zipInputStream = new ZipInputStream (new NonBlockingByteArrayInputStream (content)))
     {
       final ZipEntry entry = zipInputStream.getNextEntry ();
 
       if ("mimetype".equals (entry.getName ()))
+      {
         return MIME.equals (StreamHelper.getAllBytesAsString (zipInputStream, StandardCharsets.ISO_8859_1));
+      }
     }
     catch (final IOException e)
     {
@@ -51,7 +54,6 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
     return false;
   }
 
-  @Override
   public List <String> detect (final InputStream contentStream, final List <String> parent)
   {
     return Collections.singletonList (MIME);
@@ -63,17 +65,9 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
     return null;
   }
 
-  @Override
   public void convert (final InputStream inputStream, final OutputStream outputStream) throws VefaValidatorException
   {
-    try
-    {
-      ByteStreams.copy (inputStream, outputStream);
-    }
-    catch (final IOException e)
-    {
-      throw new VefaValidatorException (e.getMessage (), e);
-    }
+    StreamHelper.copyByteStream ().from (inputStream).closeFrom (false).to (outputStream).closeTo (false).build ();
   }
 
   @Override
@@ -87,7 +81,7 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
       String filename;
       while ((filename = asicReader.getNextFile ()) != null)
       {
-        files.add (CachedFile.of (filename, ByteStreams.toByteArray (asicReader.inputStream ())));
+        files.add (CachedFile.of (filename, StreamHelper.getAllBytes (asicReader.inputStream ())));
       }
 
       return files;

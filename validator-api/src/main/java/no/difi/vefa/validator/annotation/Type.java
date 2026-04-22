@@ -8,10 +8,9 @@ import java.lang.annotation.Target;
 /**
  * @author erlend
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Type {
-
-    String[] value();
-
+@Retention (RetentionPolicy.RUNTIME)
+@Target (ElementType.TYPE)
+public @interface Type
+{
+  String [] value();
 }

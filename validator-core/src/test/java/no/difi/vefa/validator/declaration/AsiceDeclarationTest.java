@@ -8,10 +8,9 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import com.google.common.io.ByteStreams;
 import com.helger.asic.AsicVerifierFactory;
-import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
+import com.helger.base.io.stream.StreamHelper;
 
 public class AsiceDeclarationTest
 {
@@ -23,27 +22,15 @@ public class AsiceDeclarationTest
   @Test
   public void validFile () throws Exception
   {
-    final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
-
-    try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/asic-cades-test-valid.asice"))
-    {
-      ByteStreams.copy (inputStream, byteArrayOutputStream);
-    }
-
-    assertTrue (declaration.verify (byteArrayOutputStream.toByteArray (), null));
+    assertTrue (declaration.verify (StreamHelper.getAllBytes (getClass ().getResourceAsStream ("/documents/asic-cades-test-valid.asice")),
+                                    null));
   }
 
   @Test
   public void invalidFile () throws Exception
   {
-    final NonBlockingByteArrayOutputStream byteArrayOutputStream = new NonBlockingByteArrayOutputStream ();
-
-    try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/peppol-bis-invoice-sbdh.zip"))
-    {
-      ByteStreams.copy (inputStream, byteArrayOutputStream);
-    }
-
-    assertFalse (declaration.verify (byteArrayOutputStream.toByteArray (), null));
+    assertFalse (declaration.verify (StreamHelper.getAllBytes (getClass ().getResourceAsStream ("/documents/peppol-bis-invoice-sbdh.zip")),
+                                     null));
   }
 
   @Test
@@ -53,15 +40,20 @@ public class AsiceDeclarationTest
 
     try (InputStream inputStream = getClass ().getResourceAsStream ("/documents/asic-xml.xml"))
     {
-      ByteStreams.copy (inputStream, byteArrayOutputStream);
+      StreamHelper.copyByteStream ()
+                  .from (inputStream)
+                  .closeFrom (false)
+                  .to (byteArrayOutputStream)
+                  .closeTo (true)
+                  .build ();
     }
 
     assertTrue (xmlDeclaration.verify (byteArrayOutputStream.toByteArray (),
                                        Collections.singletonList ("urn:etsi.org:specification:02918:v1.2.1::asic")));
 
     final NonBlockingByteArrayOutputStream converted = new NonBlockingByteArrayOutputStream ();
-    xmlDeclaration.convert (new NonBlockingByteArrayInputStream (byteArrayOutputStream.toByteArray ()), converted);
+    xmlDeclaration.convert (byteArrayOutputStream.getAsInputStream (), converted);
 
-    AsicVerifierFactory.newFactory ().verify (new NonBlockingByteArrayInputStream (converted.toByteArray ()));
+    AsicVerifierFactory.newFactory ().verify (converted.getAsInputStream ());
   }
 }

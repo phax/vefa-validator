@@ -38,12 +38,14 @@ public final class CachedFile
     return new NonBlockingByteArrayInputStream (m_aContent);
   }
 
+  @NonNull
   public static CachedFile of (final byte @NonNull [] content)
   {
     return new CachedFile (null, content);
   }
 
-  public static CachedFile of (final String filename, final byte @NonNull [] content)
+  @NonNull
+  public static CachedFile of (@NonNull final String filename, final byte @NonNull [] content)
   {
     return new CachedFile (filename, content);
   }
