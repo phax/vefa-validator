@@ -12,10 +12,9 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import com.google.common.base.CharMatcher;
-import com.google.common.io.BaseEncoding;
 import com.helger.asic.AsicReaderFactory;
 import com.helger.asic.IAsicReader;
+import com.helger.base.codec.base64.Base64;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 import com.helger.base.io.stream.NonClosingInputStream;
 import com.helger.base.io.stream.StreamHelper;
@@ -72,9 +71,7 @@ public class AsiceXmlDeclaration extends AbstractXmlDeclaration implements
             }
           } while (source.hasNext () && source.next () > 0);
 
-          outputStream.write (BaseEncoding.base64 ()
-                                          .decode (CharMatcher.whitespace ()
-                                                              .removeFrom (byteArrayOutputStream.getAsString (StandardCharsets.UTF_8))));
+          outputStream.write (Base64.safeDecode (byteArrayOutputStream.toByteArray ()));
         }
       }
       finally
