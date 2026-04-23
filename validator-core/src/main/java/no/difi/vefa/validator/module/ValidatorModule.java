@@ -46,7 +46,6 @@ public class ValidatorModule extends AbstractModule
     install (new PropertiesModule ());
     install (new SbdhModule ());
     install (new SourceModule ());
-    install (new SchematronModule ());
 
     final Multibinder <ICheckerFactory> checkers = Multibinder.newSetBinder (binder (), ICheckerFactory.class);
     checkers.addBinding ().to (SchematronCheckerFactory.class);

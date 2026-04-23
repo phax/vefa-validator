@@ -13,8 +13,7 @@ import no.difi.xsd.vefa.validator._1.FlagType;
 @Type ("asice")
 public class AsiceTrigger implements ITrigger
 {
-
-  private final static AsicVerifierFactory factory = AsicVerifierFactory.newFactory ();
+  private final static AsicVerifierFactory FACTORY = AsicVerifierFactory.newFactory ();
 
   @Override
   public void check (final VefaDocument document, final Section section)
@@ -22,7 +21,7 @@ public class AsiceTrigger implements ITrigger
     try
     {
       section.setTitle ("ASiC-E Verifier");
-      final AsicVerifier verifier = factory.verify (document.getInputStream ());
+      final AsicVerifier verifier = FACTORY.verify (document.getInputStream ());
 
       for (final Certificate certificate : verifier.getAsicManifest ().getCertificate ())
         section.add ("ASICE-001", "Certificate: " + certificate.getSubject (), FlagType.INFO);

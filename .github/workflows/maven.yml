@@ -20,10 +20,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Prepare version labels
-        uses: k15g/action-version-labels@edge
-        with:
-          prefix: project
+#      - name: Prepare version labels
+#        uses: k15g/action-version-labels@edge
+#        with:
+#          prefix: project
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
@@ -49,7 +49,7 @@ jobs:
         if: matrix.java != 17
 
       - name: Docker login
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         if: matrix.java == 17
         with:
           username: ${{ secrets.DOCKER_USERNAME }}

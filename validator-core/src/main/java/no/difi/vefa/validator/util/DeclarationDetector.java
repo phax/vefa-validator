@@ -24,7 +24,7 @@ public class DeclarationDetector
   public static final DeclarationIdentifier UNKNOWN = new DeclarationIdentifier (null,
                                                                                  null,
                                                                                  Collections.singletonList ("unknown"));
-  private static final Logger log = LoggerFactory.getLogger (DeclarationDetector.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (DeclarationDetector.class);
 
   private final List <DeclarationWrapper> rootDeclarationWrappers = new ArrayList <> ();
 
@@ -34,15 +34,9 @@ public class DeclarationDetector
     final Map <String, DeclarationWrapper> wrapperMap = new HashMap <> ();
 
     for (final IDeclaration declaration : declarations)
-    {
       if (declaration.getClass ().isAnnotationPresent (Type.class))
-      {
         for (final String type : declaration.getClass ().getAnnotation (Type.class).value ())
-        {
           wrapperMap.put (type, DeclarationWrapper.of (type, declaration));
-        }
-      }
-    }
 
     for (final String key : wrapperMap.keySet ())
     {
@@ -87,9 +81,9 @@ public class DeclarationDetector
           {
             break;
           }
-          if (log.isDebugEnabled ())
+          if (LOGGER.isDebugEnabled ())
           {
-            log.debug ("Found: " + wrapper.getType () + " - " + identifier);
+            LOGGER.debug ("Found: " + wrapper.getType () + " - " + identifier);
           }
 
           return _detect (wrapper.getChildren (),
@@ -100,7 +94,7 @@ public class DeclarationDetector
       }
       catch (final VefaValidatorException e)
       {
-        log.warn (e.getMessage (), e);
+        LOGGER.warn (e.getMessage (), e);
       }
       finally
       {
@@ -110,7 +104,7 @@ public class DeclarationDetector
         }
         catch (final IOException e)
         {
-          log.warn ("Couldn't reset stream!", e);
+          LOGGER.warn ("Couldn't reset stream!", e);
         }
       }
     }

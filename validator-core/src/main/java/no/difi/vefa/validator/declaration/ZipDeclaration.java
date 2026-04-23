@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.io.stream.NonClosingInputStream;
 import com.helger.base.io.stream.StreamHelper;
@@ -23,6 +26,7 @@ import no.difi.vefa.validator.util.StreamUtils;
 @Type ("zip")
 public class ZipDeclaration implements IDeclarationWithChildren
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (ZipDeclaration.class);
   private static final byte [] STARTS_WITH = { 0x50, 0x4B, 0x03, 0x04 };
 
   @Override
@@ -50,7 +54,7 @@ public class ZipDeclaration implements IDeclarationWithChildren
     }
     catch (final IOException e)
     {
-      // No action
+      LOGGER.error ("Error reading ZIP as ZIP", e);
     }
 
     return Collections.singletonList ("application/zip");

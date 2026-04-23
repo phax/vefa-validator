@@ -33,39 +33,39 @@ public class SchematronXsltChecker implements IChecker
   private static final Logger LOGGER = LoggerFactory.getLogger (SchematronXsltChecker.class);
   private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (SectionType.class);
 
-  private static XsltExecutable s_aSvrlParser;
+  private static final XsltExecutable SVRL_PARSER;
+  static
+  {
+    LOGGER.info ("Compiling SVRL Parser");
+    try (final InputStream inputStream = ClassPathResource.getInputStream ("/vefa-validator/xslt/svrl-parser.xslt",
+                                                                           SchematronXsltChecker.class.getClassLoader ()))
+    {
+      final XsltCompiler xsltCompiler = ValidatorFactory.SAXON_PROCESSOR.newXsltCompiler ();
+      SVRL_PARSER = xsltCompiler.compile (new StreamSource (inputStream));
+    }
+    catch (final Exception e)
+    {
+      throw new IllegalStateException ("Unable to load parsing of Schematron reports.", e);
+    }
+  }
 
   private final XsltExecutable m_aXsltExecutable;
 
   public SchematronXsltChecker (final XsltExecutable xsltExecutable)
   {
     m_aXsltExecutable = xsltExecutable;
-    if (s_aSvrlParser == null)
-    {
-      LOGGER.info ("Compiling SVRL Parser");
-      try (InputStream inputStream = ClassPathResource.getInputStream ("/vefa-validator/xslt/svrl-parser.xslt",
-                                                                       SchematronXsltChecker.class.getClassLoader ()))
-      {
-        final XsltCompiler xsltCompiler = ValidatorFactory.SAXON_PROCESSOR.newXsltCompiler ();
-        s_aSvrlParser = xsltCompiler.compile (new StreamSource (inputStream));
-      }
-      catch (final Exception e)
-      {
-        throw new IllegalStateException ("Unable to load parsing of Schematron reports.", e);
-      }
-    }
   }
 
   @Override
   public void check (@NonNull final VefaDocument document, @NonNull final Section section) throws VefaValidatorException
   {
-    LOGGER.info ("Running Schematron validation");
+    LOGGER.info ("Running Schematron XSTL-based validation");
     final StopWatch aSW = StopWatch.createdStarted ();
     try
     {
       final NonBlockingByteArrayOutputStream baos = new NonBlockingByteArrayOutputStream ();
       {
-        final XsltTransformer parser = s_aSvrlParser.load ();
+        final XsltTransformer parser = SVRL_PARSER.load ();
         parser.setErrorListener (VefaSaxonErrorListener.INSTANCE);
         parser.setMessageHandler (VefaSaxonMessageListener.INSTANCE);
         parser.setDestination (ValidatorFactory.SAXON_PROCESSOR.newSerializer (baos));

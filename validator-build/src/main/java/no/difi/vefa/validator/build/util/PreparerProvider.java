@@ -7,53 +7,60 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IPreparer;
+import no.difi.vefa.validator.build.preparer.DefaultPreparer;
+import no.difi.vefa.validator.build.preparer.SchematronPreparer;
 
 /**
  * @author erlend
  */
 @Singleton
-public class PreparerProvider {
+public class PreparerProvider
+{
+  public static final String DEFAULT = "#DEFAULT";
 
-    public static final String DEFAULT = "#DEFAULT";
+  private final Map <String, IPreparer> m_aPreparerMap = new HashMap <> ();
 
-    private Map<String, IPreparer> preparerMap = new HashMap<>();
+  public PreparerProvider ()
+  {
+    for (final IPreparer preparer : new IPreparer [] { new DefaultPreparer (), new SchematronPreparer () })
+      for (final String extension : preparer.getClass ().getAnnotation (Type.class).value ())
+        m_aPreparerMap.put (extension, preparer);
+  }
 
-    @Inject
-    public PreparerProvider(List<IPreparer> preparers) {
-        for (IPreparer preparer : preparers)
-            for (String extension : preparer.getClass().getAnnotation(Type.class).value())
-                preparerMap.put(extension, preparer);
-    }
+  private IPreparer _get (final String extension)
+  {
+    return m_aPreparerMap.containsKey (extension) ? m_aPreparerMap.get (extension) : m_aPreparerMap.get (DEFAULT);
+  }
 
-    public IPreparer get(String extension) {
-        return preparerMap.containsKey(extension) ?
-                preparerMap.get(extension) : preparerMap.get(DEFAULT);
-    }
-
-    public void prepare(final Path source, final Path target, final IPreparer.EPreparerType type) throws IOException {
-        if (IPreparer.EPreparerType.INCLUDE.equals(type) && Files.isDirectory(source)) {
-            Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path path, BasicFileAttributes basicFileAttributes) throws IOException {
-                    String filename = path.toString().substring(source.toString().length() + 1);
-                    prepare(source.resolve(filename), target.resolve(filename), type);
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        } else {
-            if (target.getParent() != null)
-                Files.createDirectories(target.getParent());
-
-            String extension = source.toString().substring(source.toString().lastIndexOf("."));
-            get(extension).prepare(source, target, type);
+  public void prepare (final Path source, final Path target, final IPreparer.EPreparerType type) throws IOException
+  {
+    if (IPreparer.EPreparerType.INCLUDE.equals (type) && Files.isDirectory (source))
+    {
+      Files.walkFileTree (source, new SimpleFileVisitor <Path> ()
+      {
+        @Override
+        public FileVisitResult visitFile (final Path path, final BasicFileAttributes basicFileAttributes)
+                                                                                                          throws IOException
+        {
+          final String filename = path.toString ().substring (source.toString ().length () + 1);
+          prepare (source.resolve (filename), target.resolve (filename), type);
+          return FileVisitResult.CONTINUE;
         }
+      });
     }
+    else
+    {
+      if (target.getParent () != null)
+        Files.createDirectories (target.getParent ());
+
+      final String extension = source.toString ().substring (source.toString ().lastIndexOf ("."));
+      _get (extension).prepare (source, target, type);
+    }
+  }
 }

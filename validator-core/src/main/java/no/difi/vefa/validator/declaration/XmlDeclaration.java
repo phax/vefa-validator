@@ -2,6 +2,7 @@ package no.difi.vefa.validator.declaration;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,11 +15,10 @@ import no.difi.vefa.validator.util.XmlUtils;
 @Type ("xml")
 public class XmlDeclaration extends AbstractXmlDeclaration
 {
-
   @Override
   public boolean verify (final byte [] content, final List <String> parent) throws VefaValidatorException
   {
-    return XmlUtils.extractRootNamespace (new String (content)) != null;
+    return XmlUtils.extractRootNamespace (new String (content, StandardCharsets.UTF_8)) != null;
   }
 
   @Override
@@ -28,7 +28,7 @@ public class XmlDeclaration extends AbstractXmlDeclaration
     try
     {
       final byte [] content = StreamUtils.read50KAndReset (contentStream);
-      final String c = new String (content);
+      final String c = new String (content, StandardCharsets.UTF_8);
       return Collections.singletonList (XmlUtils.extractRootNamespace (c) + "::" + XmlUtils.extractLocalName (c));
     }
     catch (final IOException e)

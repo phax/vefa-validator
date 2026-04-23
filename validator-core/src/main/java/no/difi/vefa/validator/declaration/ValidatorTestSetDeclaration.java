@@ -24,7 +24,7 @@ import no.difi.xsd.vefa.validator._1.TestSet;
 @Type ("xml.testset")
 public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements IDeclarationWithChildren
 {
-  private static final Logger log = LoggerFactory.getLogger (ValidatorTestSetDeclaration.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (ValidatorTestSetDeclaration.class);
   private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (TestSet.class, Test.class);
 
   public ValidatorTestSetDeclaration ()
@@ -112,7 +112,7 @@ public class ValidatorTestSetDeclaration extends SimpleXmlDeclaration implements
       }
       catch (final JAXBException e)
       {
-        log.warn ("Unable to marshall test object.");
+        LOGGER.warn ("Unable to marshall test object.");
       }
       return null;
     }

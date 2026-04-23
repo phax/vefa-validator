@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.asic.AsicReaderFactory;
 import com.helger.asic.IAsicReader;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
@@ -28,6 +31,7 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
                               IDeclarationWithChildren,
                               IDeclarationWithConverter
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (AsiceDeclaration.class);
   private static final String MIME = "application/vnd.etsi.asic-e+zip";
 
   @Override
@@ -49,7 +53,7 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
     }
     catch (final IOException e)
     {
-      // No action.
+      LOGGER.error ("Error reading Asice as ZIP", e);
     }
 
     return false;

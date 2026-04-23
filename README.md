@@ -15,6 +15,10 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 * `phelger/vefa-validator:latest` - latest release version
 * `phelger/vefa-validator:edge` - latest snapshot version
 
+v2.4.3 - 2026-04-23
+* Fixed an error in serializing certain XSLT documents to disk
+* Some performance and security improvements
+
 v2.4.2 - 2026-04-22
 * Renewed expired internal certificate
 

@@ -24,7 +24,6 @@ import no.difi.vefa.validator.util.StreamUtils;
 @Type ("xml.uncefact")
 public class UnCefactDeclaration extends AbstractXmlDeclaration
 {
-
   private final static Set <String> FIELDS = Set.of ("BusinessProcessSpecifiedDocumentContextParameter",
                                                      "GuidelineSpecifiedDocumentContextParameter");
 
