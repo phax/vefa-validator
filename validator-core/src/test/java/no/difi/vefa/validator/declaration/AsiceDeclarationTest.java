@@ -14,9 +14,7 @@ import com.helger.base.io.stream.StreamHelper;
 
 public class AsiceDeclarationTest
 {
-
   private final AsiceDeclaration declaration = new AsiceDeclaration ();
-
   private final AsiceXmlDeclaration xmlDeclaration = new AsiceXmlDeclaration ();
 
   @Test
