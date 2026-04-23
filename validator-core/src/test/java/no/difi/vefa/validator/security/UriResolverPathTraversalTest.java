@@ -6,8 +6,6 @@
  */
 package no.difi.vefa.validator.security;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.xml.transform.Source;
@@ -18,8 +16,8 @@ import org.junit.Test;
 import no.difi.vefa.validator.util.BlockingURIResolver;
 
 /**
- * Tests verifying URI resolver security behavior.
- * Relates to finding F-05 (HolderURIResolver incomplete path traversal) in the security audit.
+ * Tests verifying URI resolver security behavior. Relates to finding F-05 (HolderURIResolver
+ * incomplete path traversal) in the security audit.
  */
 public class UriResolverPathTraversalTest
 {
@@ -55,8 +53,8 @@ public class UriResolverPathTraversalTest
   }
 
   /**
-   * Verifies that BlockingURIResolver allows relative paths (including traversals).
-   * This documents a weakness: "../" paths without ":" are not blocked.
+   * Verifies that BlockingURIResolver allows relative paths (including traversals). This documents
+   * a weakness: "../" paths without ":" are not blocked.
    */
   @Test
   public void testBlockingResolverAllowsRelativeTraversal () throws TransformerException

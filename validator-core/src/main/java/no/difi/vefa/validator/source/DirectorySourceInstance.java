@@ -23,7 +23,7 @@ import no.difi.xsd.vefa.validator._1.Artifacts;
  */
 class DirectorySourceInstance extends AbstractArtifactsSourceInstance
 {
-  private static final Logger log = LoggerFactory.getLogger (DirectorySourceInstance.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (DirectorySourceInstance.class);
 
   /**
    * Constructor, loads validation artifacts into memory.
@@ -40,7 +40,7 @@ class DirectorySourceInstance extends AbstractArtifactsSourceInstance
     {
       for (final Path directory : directories)
       {
-        log.info ("Directory: " + directory);
+        LOGGER.info ("Directory: " + directory);
 
         // Directories containing artifacts.xml results in lower memory
         // footprint.
@@ -51,7 +51,7 @@ class DirectorySourceInstance extends AbstractArtifactsSourceInstance
 
           // Read artifacts.xml
           final Path artifactsPath = directory.resolve ("artifacts.xml");
-          log.info ("  Loading " + artifactsPath);
+          LOGGER.info ("  Loading " + artifactsPath);
           Artifacts artifactsType;
 
           try (InputStream inputStream = Files.newInputStream (artifactsPath))
@@ -64,7 +64,7 @@ class DirectorySourceInstance extends AbstractArtifactsSourceInstance
           {
             // Load validation artifact to memory.
             final Path artifactPath = directory.resolve (artifact.getFilename ());
-            log.info ("    Unpacking " + artifactPath);
+            LOGGER.info ("    Unpacking " + artifactPath);
             try (IAsicReader asicReader = ASIC_READER_FACTORY.open (artifactPath))
             {
               unpackAsic (asicReader, artifact.getFilename ());
@@ -80,7 +80,7 @@ class DirectorySourceInstance extends AbstractArtifactsSourceInstance
             {
               if (path.toString ().endsWith (".asice"))
               {
-                log.info ("Loading: {}", path);
+                LOGGER.info ("Loading: {}", path);
                 try (IAsicReader asicReader = ASIC_READER_FACTORY.open (path))
                 {
                   unpackAsic (asicReader, path.getFileName ().toString ());
@@ -94,7 +94,7 @@ class DirectorySourceInstance extends AbstractArtifactsSourceInstance
     catch (final Exception e)
     {
       // Log and throw ValidatorException.
-      log.warn (e.getMessage ());
+      LOGGER.warn (e.getMessage ());
       throw new VefaValidatorException (e.getMessage (), e);
     }
   }

@@ -3,6 +3,8 @@ package no.difi.vefa.validator.api;
 import java.util.Collections;
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
 /**
@@ -39,10 +41,12 @@ public class VefaDocument
    *        Expectations when performing validation of triggered rules.
    */
   public VefaDocument (final NonBlockingByteArrayInputStream inputStream,
-                       final String declaration,
-                       final IExpectation expectation)
+                       @Nullable final String declaration,
+                       @Nullable final IExpectation expectation)
   {
-    this (inputStream, Collections.singletonList (declaration), expectation);
+    this (inputStream,
+          declaration == null ? Collections.emptyList () : Collections.singletonList (declaration),
+          expectation);
   }
 
   /**
@@ -55,11 +59,11 @@ public class VefaDocument
    */
   public VefaDocument (final NonBlockingByteArrayInputStream inputStream,
                        final List <String> declarations,
-                       final IExpectation expectation)
+                       @Nullable final IExpectation expectation)
   {
-    this.m_aBAIS = inputStream;
-    this.m_aDeclarations = declarations;
-    this.m_aExpectation = expectation;
+    m_aBAIS = inputStream;
+    m_aDeclarations = declarations;
+    m_aExpectation = expectation;
   }
 
   /**

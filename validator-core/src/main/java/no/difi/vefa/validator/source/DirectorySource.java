@@ -21,7 +21,7 @@ public class DirectorySource extends AbstractArtifactsSource
    */
   public DirectorySource (final Path... directories)
   {
-    this.m_aDirectories = directories;
+    m_aDirectories = directories;
   }
 
   @Override

@@ -31,10 +31,10 @@ public class CheckerCacheLoader extends CacheLoader <String, IChecker>
   {
     try
     {
-      for (final ICheckerFactory factory : factories)
-        for (final String extension : factory.getClass ().getAnnotation (Type.class).value ())
+      for (final ICheckerFactory aFactory : factories)
+        for (final String extension : aFactory.getClass ().getAnnotation (Type.class).value ())
           if (key.toLowerCase (Locale.ROOT).endsWith (extension))
-            return factory.prepare (validatorEngine.getResource (key), key.split ("#")[1]);
+            return aFactory.prepare (validatorEngine.getResource (key), key.split ("#")[1]);
     }
     catch (final Exception e)
     {

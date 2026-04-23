@@ -11,6 +11,7 @@ import com.google.inject.name.Named;
 import com.helger.io.resource.ClassPathResource;
 import com.helger.schematron.sch.SchematronProviderXSLTFromSCH;
 
+import net.sf.saxon.lib.ResourceResolverWrappingURIResolver;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
@@ -31,8 +32,8 @@ public class SchematronModule extends AbstractModule
                                                                      SchematronProviderXSLTFromSCH.class.getClassLoader ()))
     {
       final XsltCompiler xsltCompiler = processor.newXsltCompiler ();
-      xsltCompiler.setURIResolver (new ClasspathURIResolver (SchematronProviderXSLTFromSCH.SCHEMATRON_DIRECTORY_XSLT2,
-                                                             SchematronProviderXSLTFromSCH.class.getClassLoader ()));
+      xsltCompiler.setResourceResolver (new ResourceResolverWrappingURIResolver (new ClasspathURIResolver (SchematronProviderXSLTFromSCH.SCHEMATRON_DIRECTORY_XSLT2,
+                                                                                                           SchematronProviderXSLTFromSCH.class.getClassLoader ())));
       return xsltCompiler.compile (new StreamSource (inputStream));
     }
     catch (final Exception e)
@@ -46,7 +47,8 @@ public class SchematronModule extends AbstractModule
   @Singleton
   public XsltExecutable getSchematronSvrlParser (final Processor processor)
   {
-    try (InputStream inputStream = ClassPathResource.getInputStream ("/vefa-validator/xslt/svrl-parser.xslt"))
+    try (InputStream inputStream = ClassPathResource.getInputStream ("/vefa-validator/xslt/svrl-parser.xslt",
+                                                                     SchematronModule.class.getClassLoader ()))
     {
       final XsltCompiler xsltCompiler = processor.newXsltCompiler ();
       return xsltCompiler.compile (new StreamSource (inputStream));

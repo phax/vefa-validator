@@ -1,5 +1,7 @@
 package no.difi.vefa.validator.module;
 
+import org.jspecify.annotations.Nullable;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -22,7 +24,7 @@ public class SourceModule extends AbstractModule
     this (null);
   }
 
-  public SourceModule (final IArtifactsSource source)
+  public SourceModule (@Nullable final IArtifactsSource source)
   {
     m_aSource = source;
   }

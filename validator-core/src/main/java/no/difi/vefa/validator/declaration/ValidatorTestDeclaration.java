@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.xml.XMLFactory;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -40,7 +41,7 @@ import no.difi.xsd.vefa.validator._1.Test;
 public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements IDeclarationWithConverter
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ValidatorTestDeclaration.class);
-  private static final TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance ();
+  private static final TransformerFactory TRANSFORMER_FACTORY = XMLFactory.createDefaultTransformerFactory ();
   private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (Test.class);
 
   public ValidatorTestDeclaration ()

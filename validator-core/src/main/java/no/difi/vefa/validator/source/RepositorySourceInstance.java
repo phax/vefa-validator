@@ -16,7 +16,7 @@ import no.difi.xsd.vefa.validator._1.Artifacts;
 
 class RepositorySourceInstance extends AbstractArtifactsSourceInstance
 {
-  private static final Logger log = LoggerFactory.getLogger (RepositorySourceInstance.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (RepositorySourceInstance.class);
 
   public RepositorySourceInstance (final IProperties properties, final List <URI> rootUris)
                                                                                             throws VefaValidatorException
@@ -28,15 +28,15 @@ class RepositorySourceInstance extends AbstractArtifactsSourceInstance
       for (final URI rootUri : rootUris)
       {
         final Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller ();
-        final URI artifactsUri = rootUri.resolve ("artifacts.xml");
-        log.info ("Fetching repo " + artifactsUri);
-        final Artifacts artifactsType = (Artifacts) unmarshaller.unmarshal (artifactsUri.toURL ());
+        final URI aArtifactsUri = rootUri.resolve ("artifacts.xml");
+        LOGGER.info ("Fetching repo '" + aArtifactsUri + "'");
+        final Artifacts artifactsType = (Artifacts) unmarshaller.unmarshal (aArtifactsUri.toURL ());
 
         for (final ArtifactType artifact : artifactsType.getArtifact ())
         {
-          final URI artifactUri = rootUri.resolve (artifact.getFilename ());
-          log.info ("  Unpacking " + artifactUri);
-          try (IAsicReader asicReader = ASIC_READER_FACTORY.open (artifactUri.toURL ().openStream ()))
+          final URI aElementUri = rootUri.resolve (artifact.getFilename ());
+          LOGGER.info ("  Unpacking '" + aElementUri.toString () + "'");
+          try (final IAsicReader asicReader = ASIC_READER_FACTORY.open (aElementUri.toURL ().openStream ()))
           {
             unpackAsic (asicReader, artifact.getFilename ());
           }
@@ -45,7 +45,7 @@ class RepositorySourceInstance extends AbstractArtifactsSourceInstance
     }
     catch (final Exception e)
     {
-      log.warn (e.getMessage (), e);
+      LOGGER.warn (e.getMessage (), e);
       throw new VefaValidatorException (e.getMessage (), e);
     }
   }

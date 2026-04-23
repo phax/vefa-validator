@@ -1,29 +1,27 @@
 package no.difi.vefa.validator.util;
 
-import javax.xml.transform.SourceLocator;
+import java.util.function.Consumer;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.saxon.s9api.MessageListener2;
-import net.sf.saxon.s9api.QName;
-import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.Message;
 
-public class VefaSaxonMessageListener implements MessageListener2
+public class VefaSaxonMessageListener implements Consumer <Message>
 {
-  private static final Logger log = LoggerFactory.getLogger (VefaSaxonMessageListener.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (VefaSaxonMessageListener.class);
 
   public static final VefaSaxonMessageListener INSTANCE = new VefaSaxonMessageListener ();
 
-  @Override
-  public void message (final XdmNode content,
-                       final QName errorCode,
-                       final boolean terminate,
-                       final SourceLocator locator)
+  protected VefaSaxonMessageListener ()
+  {}
+
+  public void accept (@NonNull final Message aMsg)
   {
-    if (terminate)
-      log.warn (errorCode + " - " + content.getStringValue ());
+    if (aMsg.isTerminate ())
+      LOGGER.error (aMsg.getErrorCode () + " - " + aMsg.getContent ().getStringValue ());
     else
-      log.debug (errorCode + " - " + content.getStringValue ());
+      LOGGER.info (aMsg.getErrorCode () + " - " + aMsg.getContent ().getStringValue ());
   }
 }

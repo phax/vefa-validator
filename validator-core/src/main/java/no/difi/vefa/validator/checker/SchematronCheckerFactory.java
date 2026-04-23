@@ -9,6 +9,7 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 
+import net.sf.saxon.lib.ErrorReporterToListener;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XsltCompiler;
@@ -49,13 +50,13 @@ public class SchematronCheckerFactory implements ICheckerFactory
 
       final XsltTransformer xsltTransformer = schematronCompiler.get ().load ();
       xsltTransformer.setErrorListener (VefaSaxonErrorListener.INSTANCE);
-      xsltTransformer.setMessageListener (VefaSaxonMessageListener.INSTANCE);
+      xsltTransformer.setMessageHandler (VefaSaxonMessageListener.INSTANCE);
       xsltTransformer.setSource (new StreamSource (inputStream));
       xsltTransformer.setDestination (destination);
       xsltTransformer.transform ();
 
       final XsltCompiler xsltCompiler = processor.newXsltCompiler ();
-      xsltCompiler.setErrorListener (VefaSaxonErrorListener.INSTANCE);
+      xsltCompiler.setErrorReporter (new ErrorReporterToListener (VefaSaxonErrorListener.INSTANCE));
 
       final IChecker checker = new SchematronXsltChecker (processor,
                                                           xsltCompiler.compile (destination.getXdmNode ().asSource ()));

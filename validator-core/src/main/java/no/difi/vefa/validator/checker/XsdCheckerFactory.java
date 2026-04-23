@@ -2,9 +2,10 @@ package no.difi.vefa.validator.checker;
 
 import java.io.InputStream;
 
-import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
+
+import com.helger.xml.schema.XMLSchemaCache;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IArtifactHolder;
@@ -24,7 +25,7 @@ public class XsdCheckerFactory implements ICheckerFactory
   {
     try (final InputStream inputStream = artifactHolder.getInputStream (path))
     {
-      final SchemaFactory schemaFactory = SchemaFactory.newInstance (XMLConstants.W3C_XML_SCHEMA_NS_URI);
+      final SchemaFactory schemaFactory = XMLSchemaCache.createXSDSchemaFactory ();
       schemaFactory.setResourceResolver (new HolderLSResolveResource (artifactHolder, path));
       return new XsdChecker (schemaFactory.newSchema (new StreamSource (inputStream)));
     }

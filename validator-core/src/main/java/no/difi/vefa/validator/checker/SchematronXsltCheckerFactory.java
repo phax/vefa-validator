@@ -7,6 +7,7 @@ import javax.xml.transform.stream.StreamSource;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import net.sf.saxon.lib.ErrorReporterToListener;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XsltCompiler;
 import no.difi.vefa.validator.annotation.Type;
@@ -31,16 +32,15 @@ public class SchematronXsltCheckerFactory implements ICheckerFactory
   @Override
   public IChecker prepare (final IArtifactHolder artifactHolder, final String path) throws VefaValidatorException
   {
-    try (InputStream inputStream = artifactHolder.getInputStream (path))
+    try (final InputStream inputStream = artifactHolder.getInputStream (path))
     {
       final XsltCompiler xsltCompiler = processor.newXsltCompiler ();
-      xsltCompiler.setErrorListener (VefaSaxonErrorListener.INSTANCE);
+      xsltCompiler.setErrorReporter (new ErrorReporterToListener (VefaSaxonErrorListener.INSTANCE));
 
       final IChecker checker = new SchematronXsltChecker (processor,
                                                           xsltCompiler.compile (new StreamSource (inputStream)));
       injector.injectMembers (checker);
       return checker;
-
     }
     catch (final Exception e)
     {

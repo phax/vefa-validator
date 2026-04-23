@@ -2,6 +2,7 @@ package no.difi.vefa.validator.declaration;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,16 +17,16 @@ public class SimpleXmlDeclaration extends AbstractXmlDeclaration
 
   public SimpleXmlDeclaration (final String namespace, final String localName)
   {
-    this.m_sNamespace = namespace;
-    this.m_sLocalName = localName;
+    m_sNamespace = namespace;
+    m_sLocalName = localName;
   }
 
   @Override
   public boolean verify (final byte [] content, final List <String> parent) throws VefaValidatorException
   {
-    final String c = new String (content);
+    final String c = new String (content, StandardCharsets.UTF_8);
     return m_sNamespace.equals (XmlUtils.extractRootNamespace (c)) &&
-           (m_sLocalName == null || m_sLocalName.equals (XmlUtils.extractLocalName (c)));
+      (m_sLocalName == null || m_sLocalName.equals (XmlUtils.extractLocalName (c)));
   }
 
   @Override
@@ -38,7 +39,7 @@ public class SimpleXmlDeclaration extends AbstractXmlDeclaration
       return Collections.singletonList (m_sNamespace +
                                         "::" +
                                         (m_sLocalName == null ? XmlUtils.extractLocalName (new String (bytes))
-                                                           : m_sLocalName));
+                                                              : m_sLocalName));
     }
     catch (final IOException e)
     {

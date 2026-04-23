@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
-import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 import com.helger.base.timing.StopWatch;
 
@@ -36,12 +35,12 @@ public class SchematronXsltChecker implements IChecker
 
   @Inject
   @Named ("schematron-svrl-parser")
-  private Provider <XsltExecutable> parser;
+  private Provider <XsltExecutable> m_aParser;
 
   public SchematronXsltChecker (final Processor processor, final XsltExecutable xsltExecutable)
   {
-    this.m_aProcessor = processor;
-    this.m_aXsltExecutable = xsltExecutable;
+    m_aProcessor = processor;
+    m_aXsltExecutable = xsltExecutable;
   }
 
   @Override
@@ -53,16 +52,16 @@ public class SchematronXsltChecker implements IChecker
     {
       final NonBlockingByteArrayOutputStream baos = new NonBlockingByteArrayOutputStream ();
       {
-        final XsltTransformer parser = this.parser.get ().load ();
+        final XsltTransformer parser = m_aParser.get ().load ();
         final XsltTransformer schematron = m_aXsltExecutable.load ();
 
         schematron.setErrorListener (VefaSaxonErrorListener.INSTANCE);
-        schematron.setMessageListener (VefaSaxonMessageListener.INSTANCE);
+        schematron.setMessageHandler (VefaSaxonMessageListener.INSTANCE);
         schematron.setSource (new StreamSource (document.getInputStream ()));
         schematron.setDestination (parser);
 
         parser.setErrorListener (VefaSaxonErrorListener.INSTANCE);
-        parser.setMessageListener (VefaSaxonMessageListener.INSTANCE);
+        parser.setMessageHandler (VefaSaxonMessageListener.INSTANCE);
         parser.setDestination (m_aProcessor.newSerializer (baos));
 
         schematron.transform ();
@@ -74,7 +73,7 @@ public class SchematronXsltChecker implements IChecker
       aSW.stop ();
 
       final Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller ();
-      final SectionType sectionType = unmarshaller.unmarshal (new StreamSource (new NonBlockingByteArrayInputStream (baos.toByteArray ())),
+      final SectionType sectionType = unmarshaller.unmarshal (new StreamSource (baos.getAsInputStream ()),
                                                               SectionType.class).getValue ();
 
       section.setTitle (sectionType.getTitle ());
