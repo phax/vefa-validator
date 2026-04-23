@@ -2,6 +2,8 @@ package no.difi.vefa.validator.source;
 
 import java.nio.file.Path;
 
+import org.jspecify.annotations.NonNull;
+
 import no.difi.vefa.validator.api.IArtifactsSourceInstance;
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.lang.VefaValidatorException;
@@ -24,7 +26,7 @@ public class DirectorySource extends AbstractArtifactsSource
     m_aDirectories = directories;
   }
 
-  @Override
+  @NonNull
   public IArtifactsSourceInstance createInstance (final IProperties properties) throws VefaValidatorException
   {
     return new DirectorySourceInstance (properties, m_aDirectories);

@@ -37,7 +37,7 @@ import no.difi.xsd.vefa.validator._1.TriggerType;
 @Singleton
 class ValidatorInstance implements Closeable
 {
-  private static final Logger log = LoggerFactory.getLogger (ValidatorInstance.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (ValidatorInstance.class);
 
   /**
    * Instance of ValidatorEngine containing all raw content needed for validation.
@@ -164,7 +164,7 @@ class ValidatorInstance implements Closeable
     }
     catch (final Exception e)
     {
-      log.error (e.getMessage (), e);
+      LOGGER.error (e.getMessage (), e);
       throw new VefaValidatorException ("Unable to get checker object from pool for '" +
                                         configuration.getIdentifier () +
                                         "'.",

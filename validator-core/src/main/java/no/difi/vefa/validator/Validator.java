@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,7 @@ public class Validator implements Closeable
    * @return Validation result.
    * @throws IOException
    */
-  public IValidation validate (final File file) throws IOException
+  public IValidation validate (@NonNull final File file) throws IOException
   {
     return validate (file.toPath ());
   }

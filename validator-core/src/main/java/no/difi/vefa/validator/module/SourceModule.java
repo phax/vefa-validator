@@ -6,7 +6,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
-import no.difi.vefa.validator.api.IArtifactsSource;
+import no.difi.vefa.validator.api.IArtifactsSourceProvider;
 import no.difi.vefa.validator.api.IArtifactsSourceInstance;
 import no.difi.vefa.validator.api.IProperties;
 import no.difi.vefa.validator.lang.VefaValidatorException;
@@ -17,14 +17,14 @@ import no.difi.vefa.validator.source.RepositorySource;
  */
 public class SourceModule extends AbstractModule
 {
-  private final IArtifactsSource m_aSource;
+  private final IArtifactsSourceProvider m_aSource;
 
   public SourceModule ()
   {
     this (null);
   }
 
-  public SourceModule (@Nullable final IArtifactsSource source)
+  public SourceModule (@Nullable final IArtifactsSourceProvider source)
   {
     m_aSource = source;
   }

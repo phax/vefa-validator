@@ -1,8 +1,8 @@
 package no.difi.vefa.validator.source;
 
-import no.difi.vefa.validator.api.IArtifactsSource;
+import no.difi.vefa.validator.api.IArtifactsSourceProvider;
 
-public abstract class AbstractArtifactsSource implements IArtifactsSource
+public abstract class AbstractArtifactsSource implements IArtifactsSourceProvider
 {
   // empty
 }

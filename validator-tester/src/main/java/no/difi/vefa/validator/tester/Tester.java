@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ import no.difi.xsd.vefa.validator._1.SectionType;
 @Singleton
 public class Tester implements Closeable
 {
-  private static final Logger log = LoggerFactory.getLogger (Tester.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger (Tester.class);
 
   private Validator validator;
   private final List <IValidation> validations = new ArrayList <> ();
@@ -91,9 +92,10 @@ public class Tester implements Closeable
         _validate (file);
   }
 
+  @NonNull
   private List <IValidation> _finish ()
   {
-    log.info (tests + " tests performed, " + failed + " tests failed");
+    LOGGER.info (tests + " tests performed, " + failed + " tests failed");
 
     return validations;
   }
@@ -109,7 +111,7 @@ public class Tester implements Closeable
                     .getDeclarations ()
                     .contains ("xml.testset::http://difi.no/xsd/vefa/validator/1.0::testSet"))
       {
-        log.info ("TestSet '" + file + "'");
+        LOGGER.info ("TestSet '" + file + "'");
 
         int i = 0;
         for (final IValidation v : validation.getChildren ())
@@ -126,11 +128,11 @@ public class Tester implements Closeable
     }
     catch (final NullPointerException e)
     {
-      log.warn ("File '{}' ({})", file, "Unable to parse file - please make sure it contains valid xml.");
+      LOGGER.warn ("File '" + file + "' (Unable to parse file - please make sure it contains valid XML)");
     }
     catch (final IOException e)
     {
-      log.warn ("Test '{}' ({})", file, e.getMessage (), e);
+      LOGGER.warn ("Test '" + file + "' (" + e.getMessage () + ")", e);
     }
   }
 
@@ -145,22 +147,25 @@ public class Tester implements Closeable
 
     if (validation.getReport ().getFlag ().compareTo (FlagType.EXPECTED) > 0)
     {
-      log.warn (prefix + "Test '" + description + "' (" + validation.getReport ().getFlag () + ")");
+      LOGGER.warn (prefix + "Test '" + description + "' (" + validation.getReport ().getFlag () + ")");
       failed++;
 
       for (final SectionType sectionType : validation.getReport ().getSection ())
         for (final AssertionType assertionType : sectionType.getAssertion ())
           if (assertionType.getFlag ().compareTo (FlagType.EXPECTED) > 0)
-            log.info ("{}  * {} {} ({})",
-                      prefix,
-                      assertionType.getIdentifier (),
-                      assertionType.getText (),
-                      assertionType.getFlag ());
+            LOGGER.info (prefix +
+                         " * " +
+                         assertionType.getIdentifier () +
+                         " " +
+                         assertionType.getText () +
+                         " (" +
+                         assertionType.getFlag () +
+                         ")");
     }
     else
       if (numberInSet <= 0)
       {
-        log.info ("Test '" + description + "'");
+        LOGGER.info ("Test '" + description + "'");
       }
   }
 

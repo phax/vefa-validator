@@ -1,5 +1,8 @@
 package no.difi.vefa.validator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.stream.XMLInputFactory;
 
 import com.google.errorprone.annotations.Immutable;
@@ -7,6 +10,9 @@ import com.google.errorprone.annotations.Immutable;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.lib.Feature;
 import net.sf.saxon.s9api.Processor;
+import no.difi.vefa.validator.configuration.AsiceConfigurationProvider;
+import no.difi.vefa.validator.configuration.ValidatorTestConfigurationProvider;
+import no.difi.xsd.vefa.validator._1.Configurations;
 
 @Immutable
 public final class ValidatorFactory
@@ -29,6 +35,14 @@ public final class ValidatorFactory
     SAXON_PROCESSOR = new Processor (configuration);
   }
 
+  public static final List <Configurations> CONFIGURATIONS = new ArrayList <> ();
+  static
+  {
+    CONFIGURATIONS.add (new AsiceConfigurationProvider ().getConfigurations ());
+    CONFIGURATIONS.add (new ValidatorTestConfigurationProvider ().getConfigurations ());
+  }
+
   private ValidatorFactory ()
   {}
+
 }

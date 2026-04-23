@@ -5,9 +5,8 @@ import no.difi.vefa.validator.lang.VefaValidatorException;
 /**
  * Source for validation artifacts.
  */
-public interface IArtifactsSource
+public interface IArtifactsSourceProvider
 {
-
   /**
    * Instance of source with validation artifacts ready for use.
    *

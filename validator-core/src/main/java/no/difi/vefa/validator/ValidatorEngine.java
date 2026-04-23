@@ -72,11 +72,10 @@ class ValidatorEngine implements Closeable
    * Loading a new validator engine loading configurations from current source.
    */
   @Inject
-  public ValidatorEngine (final IArtifactsSourceInstance sourceInstance, final List <Configurations> configurations)
-                                                                                                                     throws VefaValidatorException
+  public ValidatorEngine (final IArtifactsSourceInstance sourceInstance) throws VefaValidatorException
   {
     // Load configurations from ValidatorBuilder.
-    for (final Configurations c : configurations)
+    for (final Configurations c : ValidatorFactory.CONFIGURATIONS)
       _loadConfigurations ("", c);
 
     try
@@ -180,14 +179,14 @@ class ValidatorEngine implements Closeable
 
       // Add by identifier if not registered or weight is higher
       if (!identifierMap.containsKey (configuration.getIdentifier ().getValue ()) ||
-          identifierMap.get (configuration.getIdentifier ().getValue ()).getWeight () < configuration.getWeight ())
+        identifierMap.get (configuration.getIdentifier ().getValue ()).getWeight () < configuration.getWeight ())
         identifierMap.put (configuration.getIdentifier ().getValue (), configuration);
 
       if (configuration.getBuild () != null)
       {
         final String identifierBuild = configuration.getIdentifier () + "#" + configuration.getBuild ();
         if (!identifierMap.containsKey (identifierBuild) ||
-            identifierMap.get (identifierBuild).getWeight () < configuration.getWeight ())
+          identifierMap.get (identifierBuild).getWeight () < configuration.getWeight ())
           identifierMap.put (identifierBuild, configuration);
       }
 
@@ -225,7 +224,7 @@ class ValidatorEngine implements Closeable
       {
         final String identifier = declaration.getType () + "::" + declaration.getValue ();
         if (!declarationMap.containsKey (identifier) ||
-            declarationMap.get (identifier).getWeight () < configuration.getWeight ())
+          declarationMap.get (identifier).getWeight () < configuration.getWeight ())
           declarationMap.put (identifier, configuration);
       }
 

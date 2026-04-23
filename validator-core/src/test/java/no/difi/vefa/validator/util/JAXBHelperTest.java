@@ -8,7 +8,6 @@ import no.difi.xsd.vefa.validator._1.Configurations;
 
 public class JAXBHelperTest
 {
-
   @Test
   public void simpleContructor ()
   {

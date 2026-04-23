@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -12,14 +11,11 @@ import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
 
 import no.difi.vefa.validator.api.ICheckerFactory;
-import no.difi.vefa.validator.api.IConfigurationProvider;
 import no.difi.vefa.validator.api.IDeclaration;
 import no.difi.vefa.validator.api.ITrigger;
 import no.difi.vefa.validator.checker.SchematronCheckerFactory;
 import no.difi.vefa.validator.checker.SchematronXsltCheckerFactory;
 import no.difi.vefa.validator.checker.XsdCheckerFactory;
-import no.difi.vefa.validator.configuration.AsiceConfigurationProvider;
-import no.difi.vefa.validator.configuration.ValidatorTestConfigurationProvider;
 import no.difi.vefa.validator.declaration.AsiceDeclaration;
 import no.difi.vefa.validator.declaration.AsiceXmlDeclaration;
 import no.difi.vefa.validator.declaration.EspdDeclaration;
@@ -32,7 +28,6 @@ import no.difi.vefa.validator.declaration.ValidatorTestSetDeclaration;
 import no.difi.vefa.validator.declaration.XmlDeclaration;
 import no.difi.vefa.validator.declaration.ZipDeclaration;
 import no.difi.vefa.validator.trigger.AsiceTrigger;
-import no.difi.xsd.vefa.validator._1.Configurations;
 
 /**
  * @author erlend
@@ -67,11 +62,6 @@ public class ValidatorModule extends AbstractModule
     declarations.addBinding ().to (ValidatorTestSetDeclaration.class);
     declarations.addBinding ().to (XmlDeclaration.class);
     declarations.addBinding ().to (ZipDeclaration.class);
-
-    final Multibinder <IConfigurationProvider> configurations = Multibinder.newSetBinder (binder (),
-                                                                                          IConfigurationProvider.class);
-    configurations.addBinding ().to (AsiceConfigurationProvider.class);
-    configurations.addBinding ().to (ValidatorTestConfigurationProvider.class);
   }
 
   @Provides
@@ -93,12 +83,5 @@ public class ValidatorModule extends AbstractModule
   public List <IDeclaration> getDeclarations (final Set <IDeclaration> declarations)
   {
     return Collections.unmodifiableList (new ArrayList <> (declarations));
-  }
-
-  @Provides
-  @Singleton
-  public List <Configurations> getConfigurations (final Set <IConfigurationProvider> providers)
-  {
-    return providers.stream ().map (IConfigurationProvider::getConfigurations).collect (Collectors.toList ());
   }
 }
