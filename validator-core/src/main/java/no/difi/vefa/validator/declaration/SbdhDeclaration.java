@@ -12,10 +12,10 @@ import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
-import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
+import no.difi.vefa.validator.ValidatorFactory;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.api.IDeclarationWithChildren;
@@ -30,9 +30,6 @@ public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarat
   @Inject
   @Named ("sbdh-extractor")
   private Provider <XsltExecutable> extractor;
-
-  @Inject
-  private Processor processor;
 
   @Override
   public boolean verify (final byte [] content, final List <String> parent)
@@ -55,7 +52,7 @@ public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarat
 
       final XsltTransformer xsltTransformer = extractor.get ().load ();
       xsltTransformer.setSource (new StreamSource (inputStream));
-      xsltTransformer.setDestination (processor.newSerializer (baos));
+      xsltTransformer.setDestination (ValidatorFactory.SAXON_PROCESSOR.newSerializer (baos));
       xsltTransformer.transform ();
       xsltTransformer.close ();
 

@@ -27,7 +27,7 @@ import com.helger.xml.XMLFactory;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import no.difi.vefa.validator.ValidatorXml;
+import no.difi.vefa.validator.ValidatorFactory;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IDeclarationWithConverter;
 import no.difi.vefa.validator.api.IExpectation;
@@ -56,7 +56,7 @@ public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements ID
     try
     {
       final byte [] content = StreamUtils.read50KAndReset (contentStream);
-      final XMLStreamReader source = ValidatorXml.XML_INPUT_FACTORY.createXMLStreamReader (new NonBlockingByteArrayInputStream (content));
+      final XMLStreamReader source = ValidatorFactory.XML_INPUT_FACTORY.createXMLStreamReader (new NonBlockingByteArrayInputStream (content));
       try
       {
         do

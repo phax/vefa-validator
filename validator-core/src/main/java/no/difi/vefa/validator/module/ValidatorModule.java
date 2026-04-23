@@ -39,13 +39,11 @@ import no.difi.xsd.vefa.validator._1.Configurations;
  */
 public class ValidatorModule extends AbstractModule
 {
-
   @Override
   protected void configure ()
   {
     install (new CacheModule ());
     install (new PropertiesModule ());
-    install (new SaxonModule ());
     install (new SbdhModule ());
     install (new SourceModule ());
     install (new SchematronModule ());

@@ -1,5 +1,8 @@
 package no.difi.vefa.validator.properties;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import no.difi.vefa.validator.api.IProperties;
 
 /**
@@ -15,7 +18,7 @@ public class CombinedProperties implements IProperties
    * @param properties
    *        List containing instances of Properties to be combined.
    */
-  public CombinedProperties (final IProperties... properties)
+  public CombinedProperties (@NonNull final IProperties @Nullable... properties)
   {
     m_aProps = properties;
   }

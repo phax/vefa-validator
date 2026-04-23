@@ -1,11 +1,19 @@
 package no.difi.vefa.validator.build.preparer;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
+import javax.xml.XMLConstants;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import com.helger.collection.commons.CommonsLinkedHashMap;
+import com.helger.collection.commons.ICommonsMap;
 import com.helger.io.file.FileHelper;
+import com.helger.io.file.SimpleFileIO;
 import com.helger.io.resource.FileSystemResource;
 import com.helger.schematron.CSchematron;
 import com.helger.schematron.pure.binding.IPSQueryBinding;
@@ -17,10 +25,10 @@ import com.helger.schematron.pure.preprocess.SchematronPreprocessException;
 import com.helger.schematron.sch.SchematronProviderXSLTFromSCH;
 import com.helger.schematron.sch.TransformerCustomizerSCH;
 import com.helger.schematron.svrl.CSVRL;
+import com.helger.xml.XMLHelper;
 import com.helger.xml.microdom.serialize.MicroWriter;
 import com.helger.xml.namespace.MapBasedNamespaceContext;
 import com.helger.xml.serialize.write.EXMLSerializeIndent;
-import com.helger.xml.serialize.write.IXMLWriterSettings;
 import com.helger.xml.serialize.write.XMLWriter;
 import com.helger.xml.serialize.write.XMLWriterSettings;
 
@@ -30,6 +38,8 @@ import no.difi.vefa.validator.api.IPreparer;
 @Type ({ ".sch", ".scmt" })
 public class SchematronPreparer implements IPreparer
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (SchematronPreparer.class);
+
   @Override
   public void prepare (final Path source, final Path target, final EPreparerType type) throws IOException
   {
@@ -39,11 +49,13 @@ public class SchematronPreparer implements IPreparer
       aNSCtx.addDefaultNamespaceURI (CSchematron.NAMESPACE_SCHEMATRON);
       aNSCtx.addMapping ("xsl", "http://www.w3.org/1999/XSL/Transform");
       aNSCtx.addMapping ("svrl", CSVRL.SVRL_NAMESPACE_URI);
-      final IXMLWriterSettings aXWS = new XMLWriterSettings ().setIndent (EXMLSerializeIndent.INDENT_AND_ALIGN)
-                                                              .setNamespaceContext (aNSCtx);
+      final XMLWriterSettings aXWS = new XMLWriterSettings ().setIndent (EXMLSerializeIndent.INDENT_AND_ALIGN)
+                                                             .setNamespaceContext (aNSCtx);
 
       if (target.toString ().endsWith (".sch"))
       {
+        LOGGER.info ("Preprocessing Schematron '" + source.toString () + "' to '" + target.toString () + "'");
+
         // Read Schematron
         final PSSchema aSchema = new PSReader (new FileSystemResource (source)).readSchema ();
         final IPSQueryBinding aQueryBinding = PSQueryBindingRegistry.getQueryBindingOfNameOrThrow (aSchema.getQueryBinding ());
@@ -57,20 +69,33 @@ public class SchematronPreparer implements IPreparer
                                                    aQueryBinding);
         // Convert to XML string
         MicroWriter.writeToFile (aPreprocessedSchema.getAsMicroElement (), target.toFile (), aXWS);
-
-        // schematronPrepare.get ().compile (source, target);
       }
       else
       {
-        final Document aDoc = SchematronProviderXSLTFromSCH.createSchematronXSLT (new FileSystemResource (source),
-                                                                                  new TransformerCustomizerSCH ());
-        XMLWriter.writeToStream (aDoc, FileHelper.getOutputStream (target.toFile ()), aXWS);
-        // schematronCompile.get ().compile (source, target);
+        LOGGER.info ("Converting Schematron '" + source.toString () + "' to XSLT '" + target.toString () + "'");
+
+        final Document aXsltDoc = SchematronProviderXSLTFromSCH.createSchematronXSLT (new FileSystemResource (source),
+                                                                                      new TransformerCustomizerSCH ());
+
+        // Add all namespaces from XSLT document root to output
+        final String sNSPrefix = XMLConstants.XMLNS_ATTRIBUTE + ":";
+        final ICommonsMap <String, String> aMapFromXml = new CommonsLinkedHashMap <> ();
+        XMLHelper.forAllAttributes (aXsltDoc.getDocumentElement (), (sAttrName, sAttrValue) -> {
+          if (sAttrName.startsWith (sNSPrefix))
+            aMapFromXml.put (sAttrName.substring (sNSPrefix.length ()), sAttrValue);
+        });
+        aNSCtx.setMappings (aMapFromXml);
+        aXWS.setNamespaceContext (aNSCtx).setPutNamespaceContextPrefixesInRoot (true);
+
+        XMLWriter.writeToStream (aXsltDoc, FileHelper.getOutputStream (target.toFile ()), aXWS);
+
+        if (false)
+          LOGGER.info ("==> " + SimpleFileIO.getFileAsString (target.toFile (), StandardCharsets.UTF_8));
       }
     }
     catch (final Exception e)
     {
-      throw new IOException ("Unable to handle Schematron.", e);
+      throw new IOException ("Unable to handle Schematron", e);
     }
   }
 }

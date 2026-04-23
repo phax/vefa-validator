@@ -3,6 +3,8 @@ package no.difi.vefa.validator;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+
 import com.google.inject.Guice;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
@@ -26,6 +28,7 @@ public class ValidatorBuilder
    *
    * @return Builder object
    */
+  @NonNull
   public static ValidatorBuilder newValidator ()
   {
     return new ValidatorBuilder ();
@@ -35,9 +38,7 @@ public class ValidatorBuilder
    * Internal constructor, no action needed.
    */
   private ValidatorBuilder ()
-  {
-    // No action
-  }
+  {}
 
   /**
    * Defines configuration to use for validator.

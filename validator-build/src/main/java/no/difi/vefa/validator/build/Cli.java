@@ -19,7 +19,6 @@ import no.difi.vefa.validator.build.model.Build;
 import no.difi.vefa.validator.build.module.BuildModule;
 import no.difi.vefa.validator.build.task.BuildTask;
 import no.difi.vefa.validator.build.task.TestTask;
-import no.difi.vefa.validator.module.SaxonModule;
 
 public class Cli
 {
@@ -37,7 +36,7 @@ public class Cli
 
   protected static Injector getInjector ()
   {
-    return Guice.createInjector (new SaxonModule (), new BuildModule ());
+    return Guice.createInjector (new BuildModule ());
   }
 
   public int perform (final String... args) throws IOException, JAXBException, ParseException

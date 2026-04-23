@@ -1,5 +1,8 @@
 package no.difi.vefa.validator.module;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -20,13 +23,14 @@ public class PropertiesModule extends AbstractModule
     this (null);
   }
 
-  public PropertiesModule (final IProperties properties)
+  public PropertiesModule (@Nullable final IProperties properties)
   {
     m_aProps = properties;
   }
 
   @Provides
   @Singleton
+  @NonNull
   public IProperties getProperties ()
   {
     // Create config combined with default values.

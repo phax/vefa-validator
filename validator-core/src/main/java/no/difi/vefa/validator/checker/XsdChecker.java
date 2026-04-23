@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import no.difi.vefa.validator.ValidatorXml;
+import no.difi.vefa.validator.ValidatorFactory;
 import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.Section;
 import no.difi.vefa.validator.api.VefaDocument;
@@ -54,7 +54,7 @@ public class XsdChecker implements IChecker
       {
         try
         {
-          final XMLStreamReader xmlStreamReader = ValidatorXml.XML_INPUT_FACTORY.createXMLStreamReader (document.getInputStream ());
+          final XMLStreamReader xmlStreamReader = ValidatorFactory.XML_INPUT_FACTORY.createXMLStreamReader (document.getInputStream ());
 
           // Go to root element.
           while (xmlStreamReader.hasNext () && xmlStreamReader.getEventType () != XMLStreamConstants.START_ELEMENT)

@@ -15,10 +15,10 @@ import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 import com.helger.cache.regex.RegExHelper;
 
-import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
+import no.difi.vefa.validator.ValidatorFactory;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 import no.difi.vefa.validator.util.StreamUtils;
@@ -34,11 +34,11 @@ public class UblDeclaration extends AbstractXmlDeclaration
   private XsltExecutable xsltExecutable;
 
   @Inject
-  private void init (final Processor processor) throws VefaValidatorException
+  private void init () throws VefaValidatorException
   {
     try (final InputStream inputStream = getClass ().getResourceAsStream ("/vefa-validator/xslt/ubl-detect.xslt"))
     {
-      xsltExecutable = processor.newXsltCompiler ().compile (new StreamSource (inputStream));
+      xsltExecutable = ValidatorFactory.SAXON_PROCESSOR.newXsltCompiler ().compile (new StreamSource (inputStream));
     }
     catch (SaxonApiException | IOException e)
     {

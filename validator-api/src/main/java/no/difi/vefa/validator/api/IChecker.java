@@ -7,5 +7,5 @@ package no.difi.vefa.validator.api;
  */
 public interface IChecker extends ITrigger
 {
-
+  // empty
 }

@@ -5,16 +5,15 @@ import java.io.InputStream;
 import javax.xml.transform.stream.StreamSource;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 
 import net.sf.saxon.lib.ErrorReporterToListener;
-import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
+import no.difi.vefa.validator.ValidatorFactory;
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IArtifactHolder;
 import no.difi.vefa.validator.api.IChecker;
@@ -35,17 +34,12 @@ public class SchematronCheckerFactory implements ICheckerFactory
   @Named ("schematron-step3")
   private Provider <XsltExecutable> schematronCompiler;
 
-  @Inject
-  private Processor processor;
-
-  @Inject
-  private Injector injector;
-
   @Override
   public IChecker prepare (final IArtifactHolder artifactHolder, final String path) throws VefaValidatorException
   {
     try (final InputStream inputStream = artifactHolder.getInputStream (path))
     {
+
       final XdmDestination destination = new XdmDestination ();
 
       final XsltTransformer xsltTransformer = schematronCompiler.get ().load ();
@@ -55,13 +49,10 @@ public class SchematronCheckerFactory implements ICheckerFactory
       xsltTransformer.setDestination (destination);
       xsltTransformer.transform ();
 
-      final XsltCompiler xsltCompiler = processor.newXsltCompiler ();
+      final XsltCompiler xsltCompiler = ValidatorFactory.SAXON_PROCESSOR.newXsltCompiler ();
       xsltCompiler.setErrorReporter (new ErrorReporterToListener (VefaSaxonErrorListener.INSTANCE));
 
-      final IChecker checker = new SchematronXsltChecker (processor,
-                                                          xsltCompiler.compile (destination.getXdmNode ().asSource ()));
-      injector.injectMembers (checker);
-      return checker;
+      return new SchematronXsltChecker (xsltCompiler.compile (destination.getXdmNode ().asSource ()));
     }
     catch (final Exception e)
     {

@@ -6,7 +6,6 @@ import no.difi.vefa.validator.lang.VefaValidatorException;
 
 public class SchematronXsltCheckerTest
 {
-
   @Test (expected = VefaValidatorException.class)
   public void simpleTriggerException () throws Exception
   {

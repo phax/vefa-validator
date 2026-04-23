@@ -9,15 +9,13 @@ import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
 public class HolderLSInput implements LSInput
 {
-
-  private final String file;
-
-  private final byte [] content;
+  private final byte [] m_aContent;
+  private final String m_sBaseURI;
 
   public HolderLSInput (final byte [] content, final String path)
   {
-    this.content = content;
-    this.file = path;
+    m_aContent = content;
+    m_sBaseURI = path;
   }
 
   @Override
@@ -35,7 +33,7 @@ public class HolderLSInput implements LSInput
   @Override
   public InputStream getByteStream ()
   {
-    return new NonBlockingByteArrayInputStream (content);
+    return new NonBlockingByteArrayInputStream (m_aContent);
   }
 
   @Override
@@ -47,7 +45,7 @@ public class HolderLSInput implements LSInput
   @Override
   public String getStringData ()
   {
-    return new String (content);
+    return new String (m_aContent);
   }
 
   @Override
@@ -59,7 +57,7 @@ public class HolderLSInput implements LSInput
   @Override
   public String getSystemId ()
   {
-    return "holder:" + file;
+    return "holder:" + m_sBaseURI;
   }
 
   @Override
@@ -71,7 +69,7 @@ public class HolderLSInput implements LSInput
   @Override
   public String getPublicId ()
   {
-    return "holder:" + file;
+    return "holder:" + m_sBaseURI;
   }
 
   @Override
@@ -83,7 +81,7 @@ public class HolderLSInput implements LSInput
   @Override
   public String getBaseURI ()
   {
-    return file;
+    return m_sBaseURI;
   }
 
   @Override
