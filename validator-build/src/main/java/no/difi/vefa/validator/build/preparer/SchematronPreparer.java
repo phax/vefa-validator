@@ -4,14 +4,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
-import javax.xml.XMLConstants;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import com.helger.collection.commons.CommonsLinkedHashMap;
-import com.helger.collection.commons.ICommonsMap;
 import com.helger.io.file.FileHelper;
 import com.helger.io.file.SimpleFileIO;
 import com.helger.io.resource.FileSystemResource;
@@ -25,7 +21,6 @@ import com.helger.schematron.pure.preprocess.SchematronPreprocessException;
 import com.helger.schematron.sch.SchematronProviderXSLTFromSCH;
 import com.helger.schematron.sch.TransformerCustomizerSCH;
 import com.helger.schematron.svrl.CSVRL;
-import com.helger.xml.XMLHelper;
 import com.helger.xml.microdom.serialize.MicroWriter;
 import com.helger.xml.namespace.MapBasedNamespaceContext;
 import com.helger.xml.serialize.write.EXMLSerializeIndent;
@@ -78,14 +73,7 @@ public class SchematronPreparer implements IPreparer
                                                                                       new TransformerCustomizerSCH ());
 
         // Add all namespaces from XSLT document root to output
-        final String sNSPrefix = XMLConstants.XMLNS_ATTRIBUTE + ":";
-        final ICommonsMap <String, String> aMapFromXml = new CommonsLinkedHashMap <> ();
-        XMLHelper.forAllAttributes (aXsltDoc.getDocumentElement (), (sAttrName, sAttrValue) -> {
-          if (sAttrName.startsWith (sNSPrefix))
-            aMapFromXml.put (sAttrName.substring (sNSPrefix.length ()), sAttrValue);
-        });
-        aNSCtx.setMappings (aMapFromXml);
-        aXWS.setNamespaceContext (aNSCtx).setPutNamespaceContextPrefixesInRoot (true);
+        aXWS.setUseExistingNamespaceDeclarations (true).setPutNamespaceContextPrefixesInRoot (true);
 
         XMLWriter.writeToStream (aXsltDoc, FileHelper.getOutputStream (target.toFile ()), aXWS);
 

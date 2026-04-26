@@ -1,5 +1,5 @@
 IMAGE=phelger/vefa-validator
-tag=2.4.3
+tag=2.4.4
 
 package:
 	@mvn clean package
