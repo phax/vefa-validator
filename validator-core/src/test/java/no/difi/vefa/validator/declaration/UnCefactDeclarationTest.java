@@ -8,22 +8,18 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-
-import no.difi.vefa.validator.module.ValidatorModule;
+import no.difi.vefa.validator.ValidatorFactory;
 import no.difi.vefa.validator.util.DeclarationDetector;
 
 public class UnCefactDeclarationTest
 {
 
-  @Inject
   private DeclarationDetector declarationDetector;
 
   @Before
   public void beforeClass ()
   {
-    Guice.createInjector (new ValidatorModule ()).injectMembers (this);
+    declarationDetector = ValidatorFactory.createDeclarationDetector ();
   }
 
   @Test

@@ -10,10 +10,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.cache.LoadingCache;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.helger.base.string.StringImplode;
+import com.helger.cache.IMutableCache;
 
 import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.IProperties;
@@ -34,7 +32,6 @@ import no.difi.xsd.vefa.validator._1.TriggerType;
 /**
  * Contains CheckerPools and Configuration, and is entry point for validation.
  */
-@Singleton
 class ValidatorInstance implements Closeable
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (ValidatorInstance.class);
@@ -42,37 +39,45 @@ class ValidatorInstance implements Closeable
   /**
    * Instance of ValidatorEngine containing all raw content needed for validation.
    */
-  @Inject
-  private ValidatorEngine validatorEngine;
+  private final ValidatorEngine validatorEngine;
 
   /**
    * Current validator configuration.
    */
-  @Inject
-  private IProperties properties;
+  private final IProperties properties;
 
   /**
    * Declarations to use.
    */
-  @Inject
-  private DeclarationDetector declarationDetector;
+  private final DeclarationDetector declarationDetector;
 
   /**
    * Cache of checkers.
    */
-  @Inject
-  private LoadingCache <String, IChecker> checkerCache;
+  private final IMutableCache <String, IChecker> checkerCache;
 
   /**
    * Trigger factory.
    */
-  @Inject
-  private TriggerFactory triggerFactory;
+  private final TriggerFactory triggerFactory;
 
   /**
    * Normalized configurations indexed by document declarations.
    */
   private final Map <String, Configuration> configurationMap = new HashMap <> ();
+
+  public ValidatorInstance (final ValidatorEngine validatorEngine,
+                            final IProperties properties,
+                            final DeclarationDetector declarationDetector,
+                            final IMutableCache <String, IChecker> checkerCache,
+                            final TriggerFactory triggerFactory)
+  {
+    this.validatorEngine = validatorEngine;
+    this.properties = properties;
+    this.declarationDetector = declarationDetector;
+    this.checkerCache = checkerCache;
+    this.triggerFactory = triggerFactory;
+  }
 
   /**
    * List of packages supported by validator.
@@ -160,7 +165,7 @@ class ValidatorInstance implements Closeable
     final IChecker checker;
     try
     {
-      checker = checkerCache.get (fileType.getPath ());
+      checker = checkerCache.getFromCache (fileType.getPath ());
     }
     catch (final Exception e)
     {
@@ -207,8 +212,7 @@ class ValidatorInstance implements Closeable
   @Override
   public void close () throws IOException
   {
-    checkerCache.invalidateAll ();
-    checkerCache.cleanUp ();
+    checkerCache.clearCache ();
 
     // This is last statement, allow to propagate.
     validatorEngine.close ();

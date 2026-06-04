@@ -9,8 +9,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.inject.Singleton;
-
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IPreparer;
 import no.difi.vefa.validator.build.preparer.DefaultPreparer;
@@ -19,7 +17,6 @@ import no.difi.vefa.validator.build.preparer.SchematronPreparer;
 /**
  * @author erlend
  */
-@Singleton
 public class PreparerProvider
 {
   public static final String DEFAULT = "#DEFAULT";

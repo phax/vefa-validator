@@ -14,9 +14,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -36,7 +33,6 @@ import no.difi.xsd.vefa.validator._1.TriggerType;
  * This class handles all raw configurations detected in source of validation artifacts and
  * preserves links between source and configurations.
  */
-@Singleton
 class ValidatorEngine implements Closeable
 {
   private static final Logger log = LoggerFactory.getLogger (ValidatorEngine.class);
@@ -71,7 +67,6 @@ class ValidatorEngine implements Closeable
   /**
    * Loading a new validator engine loading configurations from current source.
    */
-  @Inject
   public ValidatorEngine (final IArtifactsSourceInstance sourceInstance) throws VefaValidatorException
   {
     // Load configurations from ValidatorBuilder.

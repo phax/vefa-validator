@@ -8,22 +8,19 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.io.stream.StreamHelper;
 
-import no.difi.vefa.validator.module.ValidatorModule;
+import no.difi.vefa.validator.ValidatorFactory;
 
 public class DeclarationDetectorTest
 {
-  @Inject
   private DeclarationDetector declarationDetector;
 
   @Before
   public void beforeClass ()
   {
-    Guice.createInjector (new ValidatorModule ()).injectMembers (this);
+    declarationDetector = ValidatorFactory.createDeclarationDetector ();
   }
 
   @Test

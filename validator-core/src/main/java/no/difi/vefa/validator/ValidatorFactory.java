@@ -1,20 +1,48 @@
 package no.difi.vefa.validator;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.transform.stream.StreamSource;
 
-import com.google.errorprone.annotations.Immutable;
+import com.helger.cache.IMutableCache;
+import com.helger.cache.impl.Cache;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.lib.Feature;
 import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XsltCompiler;
+import net.sf.saxon.s9api.XsltExecutable;
+import no.difi.vefa.validator.api.IChecker;
+import no.difi.vefa.validator.api.ICheckerFactory;
+import no.difi.vefa.validator.api.IDeclaration;
+import no.difi.vefa.validator.api.IProperties;
+import no.difi.vefa.validator.api.ITrigger;
+import no.difi.vefa.validator.checker.SchematronCheckerFactory;
+import no.difi.vefa.validator.checker.SchematronXsltCheckerFactory;
+import no.difi.vefa.validator.checker.XsdCheckerFactory;
 import no.difi.vefa.validator.configuration.AsiceConfigurationProvider;
 import no.difi.vefa.validator.configuration.ValidatorTestConfigurationProvider;
+import no.difi.vefa.validator.declaration.AsiceDeclaration;
+import no.difi.vefa.validator.declaration.AsiceXmlDeclaration;
+import no.difi.vefa.validator.declaration.EspdDeclaration;
+import no.difi.vefa.validator.declaration.NoblDeclaration;
+import no.difi.vefa.validator.declaration.SbdhDeclaration;
+import no.difi.vefa.validator.declaration.UblDeclaration;
+import no.difi.vefa.validator.declaration.UnCefactDeclaration;
+import no.difi.vefa.validator.declaration.ValidatorTestDeclaration;
+import no.difi.vefa.validator.declaration.ValidatorTestSetDeclaration;
+import no.difi.vefa.validator.declaration.XmlDeclaration;
+import no.difi.vefa.validator.declaration.ZipDeclaration;
+import no.difi.vefa.validator.trigger.AsiceTrigger;
+import no.difi.vefa.validator.util.DeclarationDetector;
 import no.difi.xsd.vefa.validator._1.Configurations;
 
-@Immutable
 public final class ValidatorFactory
 {
   public static final XMLInputFactory XML_INPUT_FACTORY;
@@ -35,6 +63,21 @@ public final class ValidatorFactory
     SAXON_PROCESSOR = new Processor (configuration);
   }
 
+  public static final XsltExecutable SBDH_EXTRACTOR;
+
+  static
+  {
+    try (InputStream inputStream = ValidatorFactory.class.getResourceAsStream ("/vefa-validator/xslt/sbdh-extractor.xslt"))
+    {
+      final XsltCompiler xsltCompiler = SAXON_PROCESSOR.newXsltCompiler ();
+      SBDH_EXTRACTOR = xsltCompiler.compile (new StreamSource (inputStream));
+    }
+    catch (IOException | SaxonApiException e)
+    {
+      throw new IllegalStateException ("Unable to load extraction of SBDH content.", e);
+    }
+  }
+
   public static final List <Configurations> CONFIGURATIONS = new ArrayList <> ();
   static
   {
@@ -45,4 +88,49 @@ public final class ValidatorFactory
   private ValidatorFactory ()
   {}
 
+  public static List <IDeclaration> createDeclarations ()
+  {
+    final List <IDeclaration> list = new ArrayList <> ();
+    list.add (new AsiceDeclaration ());
+    list.add (new AsiceXmlDeclaration ());
+    list.add (new EspdDeclaration ());
+    list.add (new NoblDeclaration ());
+    list.add (new SbdhDeclaration ());
+    list.add (new UblDeclaration ());
+    list.add (new UnCefactDeclaration ());
+    list.add (new ValidatorTestDeclaration ());
+    list.add (new ValidatorTestSetDeclaration ());
+    list.add (new XmlDeclaration ());
+    list.add (new ZipDeclaration ());
+    return Collections.unmodifiableList (list);
+  }
+
+  public static List <ICheckerFactory> createCheckerFactories ()
+  {
+    final List <ICheckerFactory> list = new ArrayList <> ();
+    list.add (new SchematronCheckerFactory ());
+    list.add (new SchematronXsltCheckerFactory ());
+    list.add (new XsdCheckerFactory ());
+    return Collections.unmodifiableList (list);
+  }
+
+  public static List <ITrigger> createTriggers ()
+  {
+    final List <ITrigger> list = new ArrayList <> ();
+    list.add (new AsiceTrigger ());
+    return Collections.unmodifiableList (list);
+  }
+
+  public static DeclarationDetector createDeclarationDetector ()
+  {
+    return new DeclarationDetector (createDeclarations ());
+  }
+
+  // TODO restore time-based expiration (was Guava expireAfterAccess, configured via
+  // pools.checker.expire) once ph-cache supports an expiration policy.
+  public static IMutableCache <String, IChecker> createCheckerCache (final IProperties properties,
+                                                                     final CheckerCacheLoader loader)
+  {
+    return new Cache <> (loader, properties.getInteger ("pools.checker.size"), "vefa-checker-cache");
+  }
 }

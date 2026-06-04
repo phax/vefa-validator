@@ -13,8 +13,6 @@ import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.helger.io.resource.IReadableResource;
 
 import no.difi.vefa.validator.api.IProperties;
@@ -27,7 +25,6 @@ import no.difi.xsd.vefa.validator._1.PackageType;
  * <p>
  * Validator is thread safe and should normally be created only once in a program.
  */
-@Singleton
 public class Validator implements Closeable
 {
   private static final Logger log = LoggerFactory.getLogger (Validator.class);
@@ -35,8 +32,12 @@ public class Validator implements Closeable
   /**
    * Current validator instance.
    */
-  @Inject
   private ValidatorInstance validatorInstance;
+
+  Validator (final ValidatorInstance validatorInstance)
+  {
+    this.validatorInstance = validatorInstance;
+  }
 
   /**
    * Validate file.

@@ -13,9 +13,6 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -32,15 +29,18 @@ import no.difi.xsd.vefa.validator._1.Configurations;
 import no.difi.xsd.vefa.validator._1.FileType;
 import no.difi.xsd.vefa.validator._1.StylesheetType;
 
-@Singleton
 public class BuildTask
 {
   private static final Logger log = LoggerFactory.getLogger (BuildTask.class);
 
   private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (Configurations.class, BuildConfigurations.class);
 
-  @Inject
-  private PreparerProvider preparerProvider;
+  private final PreparerProvider preparerProvider;
+
+  public BuildTask (final PreparerProvider preparerProvider)
+  {
+    this.preparerProvider = preparerProvider;
+  }
 
   public void build (final Build build) throws IOException, JAXBException
   {

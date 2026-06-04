@@ -7,13 +7,9 @@ import java.util.List;
 
 import javax.xml.transform.stream.StreamSource;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.name.Named;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
 import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
 import no.difi.vefa.validator.ValidatorFactory;
 import no.difi.vefa.validator.annotation.Type;
@@ -26,10 +22,6 @@ public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarat
 {
 
   private static final String NAMESPACE = "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader";
-
-  @Inject
-  @Named ("sbdh-extractor")
-  private Provider <XsltExecutable> extractor;
 
   @Override
   public boolean verify (final byte [] content, final List <String> parent)
@@ -50,7 +42,7 @@ public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarat
     {
       final NonBlockingByteArrayOutputStream baos = new NonBlockingByteArrayOutputStream ();
 
-      final XsltTransformer xsltTransformer = extractor.get ().load ();
+      final XsltTransformer xsltTransformer = ValidatorFactory.SBDH_EXTRACTOR.load ();
       xsltTransformer.setSource (new StreamSource (inputStream));
       xsltTransformer.setDestination (ValidatorFactory.SAXON_PROCESSOR.newSerializer (baos));
       xsltTransformer.transform ();

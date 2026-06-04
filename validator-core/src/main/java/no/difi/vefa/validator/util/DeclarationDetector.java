@@ -11,14 +11,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IDeclaration;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 
-@Singleton
 public class DeclarationDetector
 {
   public static final DeclarationIdentifier UNKNOWN = new DeclarationIdentifier (null,
@@ -28,7 +24,6 @@ public class DeclarationDetector
 
   private final List <DeclarationWrapper> rootDeclarationWrappers = new ArrayList <> ();
 
-  @Inject
   public DeclarationDetector (final List <IDeclaration> declarations)
   {
     final Map <String, DeclarationWrapper> wrapperMap = new HashMap <> ();

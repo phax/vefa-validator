@@ -1,19 +1,18 @@
 package no.difi.vefa.validator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jspecify.annotations.NonNull;
 
-import com.google.inject.Guice;
-import com.google.inject.Module;
-import com.google.inject.util.Modules;
+import com.helger.cache.IMutableCache;
 
+import no.difi.vefa.validator.api.IArtifactsSourceInstance;
 import no.difi.vefa.validator.api.IArtifactsSourceProvider;
+import no.difi.vefa.validator.api.IChecker;
 import no.difi.vefa.validator.api.IProperties;
-import no.difi.vefa.validator.module.PropertiesModule;
-import no.difi.vefa.validator.module.SourceModule;
-import no.difi.vefa.validator.module.ValidatorModule;
+import no.difi.vefa.validator.lang.VefaValidatorException;
+import no.difi.vefa.validator.properties.CombinedProperties;
+import no.difi.vefa.validator.source.RepositorySource;
+import no.difi.vefa.validator.trigger.TriggerFactory;
+import no.difi.vefa.validator.util.DeclarationDetector;
 
 /**
  * Builder supporting creation of validator.
@@ -73,11 +72,31 @@ public class ValidatorBuilder
    */
   public Validator build ()
   {
-    final List <Module> modules = new ArrayList <> ();
-    modules.add (new PropertiesModule (m_aProperties));
-    modules.add (new SourceModule (m_aSource));
+    try
+    {
+      final IProperties properties = new CombinedProperties (m_aProperties, ValidatorDefaults.PROPERTIES);
 
-    return Guice.createInjector (Modules.override (new ValidatorModule ()).with (modules))
-                .getInstance (Validator.class);
+      final IArtifactsSourceProvider sourceProvider = m_aSource != null ? m_aSource : RepositorySource.forProduction ();
+      final IArtifactsSourceInstance sourceInstance = sourceProvider.createInstance (properties);
+
+      final ValidatorEngine validatorEngine = new ValidatorEngine (sourceInstance);
+      final CheckerCacheLoader checkerCacheLoader = new CheckerCacheLoader (ValidatorFactory.createCheckerFactories (),
+                                                                            validatorEngine);
+      final IMutableCache <String, IChecker> checkerCache = ValidatorFactory.createCheckerCache (properties,
+                                                                                                 checkerCacheLoader);
+      final DeclarationDetector declarationDetector = ValidatorFactory.createDeclarationDetector ();
+      final TriggerFactory triggerFactory = new TriggerFactory (ValidatorFactory.createTriggers ());
+
+      final ValidatorInstance validatorInstance = new ValidatorInstance (validatorEngine,
+                                                                         properties,
+                                                                         declarationDetector,
+                                                                         checkerCache,
+                                                                         triggerFactory);
+      return new Validator (validatorInstance);
+    }
+    catch (final VefaValidatorException e)
+    {
+      throw new IllegalStateException ("Unable to build Validator.", e);
+    }
   }
 }

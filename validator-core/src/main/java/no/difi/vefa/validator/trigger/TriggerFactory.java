@@ -4,19 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.ITrigger;
 import no.difi.vefa.validator.lang.VefaValidatorException;
 
-@Singleton
 public class TriggerFactory
 {
   private final Map <String, ITrigger> m_aTriggers = new HashMap <> ();
 
-  @Inject
   public TriggerFactory (final List <ITrigger> triggers)
   {
     for (final ITrigger trigger : triggers)

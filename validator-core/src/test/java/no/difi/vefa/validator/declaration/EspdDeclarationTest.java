@@ -9,24 +9,21 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
-import no.difi.vefa.validator.module.ValidatorModule;
+import no.difi.vefa.validator.ValidatorFactory;
 import no.difi.vefa.validator.util.DeclarationDetector;
 import no.difi.vefa.validator.util.DeclarationIdentifier;
 
 public class EspdDeclarationTest
 {
 
-  @Inject
   private DeclarationDetector declarationDetector;
 
   @Before
   public void beforeClass ()
   {
-    Guice.createInjector (new ValidatorModule ()).injectMembers (this);
+    declarationDetector = ValidatorFactory.createDeclarationDetector ();
   }
 
   @Test

@@ -9,32 +9,31 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Provider;
-
 import jakarta.xml.bind.JAXBException;
 import no.difi.vefa.validator.build.model.Build;
 import no.difi.vefa.validator.build.task.BuildTask;
 import no.difi.vefa.validator.build.task.TestTask;
+import no.difi.vefa.validator.build.util.PreparerProvider;
 
 public class Cli
 {
-  @Inject
-  private Provider <BuildTask> buildTask;
+  private final BuildTask buildTask;
+  private final TestTask testTask;
 
-  @Inject
-  private Provider <TestTask> testTask;
+  public Cli (final BuildTask buildTask, final TestTask testTask)
+  {
+    this.buildTask = buildTask;
+    this.testTask = testTask;
+  }
+
+  public static Cli createDefault ()
+  {
+    return new Cli (new BuildTask (new PreparerProvider ()), new TestTask ());
+  }
 
   public static void main (final String... args) throws Exception
   {
-    System.exit (getInjector ().getInstance (Cli.class).perform (args));
-  }
-
-  protected static Injector getInjector ()
-  {
-    return Guice.createInjector ();
+    System.exit (createDefault ().perform (args));
   }
 
   public int perform (final String... args) throws IOException, JAXBException, ParseException
@@ -60,10 +59,10 @@ public class Cli
     {
       final Build build = Build.of (arg, cmd);
 
-      buildTask.get ().build (build);
+      buildTask.build (build);
 
       if (cmd.hasOption ("test"))
-        result += testTask.get ().perform (build) ? 0 : 1;
+        result += testTask.perform (build) ? 0 : 1;
     }
 
     return result;

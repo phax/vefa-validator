@@ -10,7 +10,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.jspecify.annotations.NonNull;
 
 import com.google.gson.Gson;
-import com.google.inject.Inject;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 import com.helger.cache.regex.RegExHelper;
@@ -31,10 +30,9 @@ public class UblDeclaration extends AbstractXmlDeclaration
 {
   private static final Gson GSON = new Gson ();
 
-  private XsltExecutable xsltExecutable;
+  private final XsltExecutable xsltExecutable;
 
-  @Inject
-  private void init () throws VefaValidatorException
+  public UblDeclaration ()
   {
     try (final InputStream inputStream = getClass ().getResourceAsStream ("/vefa-validator/xslt/ubl-detect.xslt"))
     {
@@ -42,7 +40,7 @@ public class UblDeclaration extends AbstractXmlDeclaration
     }
     catch (SaxonApiException | IOException e)
     {
-      throw new VefaValidatorException ("Unable to load detector for UBL.", e);
+      throw new IllegalStateException ("Unable to load detector for UBL.", e);
     }
   }
 

@@ -2,10 +2,7 @@ package no.difi.vefa.validator;
 
 import java.util.List;
 import java.util.Locale;
-
-import com.google.common.cache.CacheLoader;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import java.util.function.Function;
 
 import no.difi.vefa.validator.annotation.Type;
 import no.difi.vefa.validator.api.IChecker;
@@ -15,19 +12,22 @@ import no.difi.vefa.validator.lang.VefaValidatorException;
 /**
  * @author erlend
  */
-@Singleton
-public class CheckerCacheLoader extends CacheLoader <String, IChecker>
+public class CheckerCacheLoader implements Function <String, IChecker>
 {
   public static final int DEFAULT_SIZE = 250;
 
-  @Inject
-  private List <ICheckerFactory> factories;
+  private final List <ICheckerFactory> factories;
 
-  @Inject
-  private ValidatorEngine validatorEngine;
+  private final ValidatorEngine validatorEngine;
+
+  public CheckerCacheLoader (final List <ICheckerFactory> factories, final ValidatorEngine validatorEngine)
+  {
+    this.factories = factories;
+    this.validatorEngine = validatorEngine;
+  }
 
   @Override
-  public IChecker load (final String key) throws Exception
+  public IChecker apply (final String key)
   {
     try
     {
@@ -38,9 +38,9 @@ public class CheckerCacheLoader extends CacheLoader <String, IChecker>
     }
     catch (final Exception e)
     {
-      throw new VefaValidatorException ("Unable to load checker for '" + key + "'.", e);
+      throw new IllegalStateException (new VefaValidatorException ("Unable to load checker for '" + key + "'.", e));
     }
 
-    throw new VefaValidatorException ("No checker found for '" + key + "'");
+    throw new IllegalStateException (new VefaValidatorException ("No checker found for '" + key + "'"));
   }
 }

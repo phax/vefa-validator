@@ -10,18 +10,15 @@ import java.nio.file.Paths;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.inject.Inject;
-
 public class SimpleProjectTest
 {
 
-  @Inject
   private Cli cli;
 
   @Before
   public void before ()
   {
-    Cli.getInjector ().injectMembers (this);
+    cli = Cli.createDefault ();
   }
 
   @Test
