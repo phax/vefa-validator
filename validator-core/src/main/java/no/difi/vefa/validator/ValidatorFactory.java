@@ -2,6 +2,7 @@ package no.difi.vefa.validator;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +11,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.transform.stream.StreamSource;
 
 import com.helger.cache.IMutableCache;
-import com.helger.cache.impl.Cache;
+import com.helger.cache.impl.ProviderCache;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.lib.Feature;
@@ -126,11 +127,16 @@ public final class ValidatorFactory
     return new DeclarationDetector (createDeclarations ());
   }
 
-  // TODO restore time-based expiration (was Guava expireAfterAccess, configured via
-  // pools.checker.expire) once ph-cache supports an expiration policy.
+  // Note: ph-cache offers expireAfterWrite (fixed lifetime from put), not Guava's
+  // expireAfterAccess (sliding window). The pools.checker.expire value is reused as-is.
   public static IMutableCache <String, IChecker> createCheckerCache (final IProperties properties,
                                                                      final CheckerCacheLoader loader)
   {
-    return new Cache <> (loader, properties.getInteger ("pools.checker.size"), "vefa-checker-cache");
+    return ProviderCache.<String, IChecker> builder ()
+                        .name ("vefa-checker-cache")
+                        .maxSize (properties.getInteger ("pools.checker.size"))
+                        .expireAfterWrite (Duration.ofMinutes (properties.getInteger ("pools.checker.expire")))
+                        .valueProvider (loader)
+                        .build ();
   }
 }
