@@ -12,14 +12,14 @@ import com.helger.io.file.FileHelper;
 import com.helger.io.file.SimpleFileIO;
 import com.helger.io.resource.FileSystemResource;
 import com.helger.schematron.CSchematron;
+import com.helger.schematron.exchange.PSReader;
+import com.helger.schematron.model.PSSchema;
+import com.helger.schematron.preprocess.PSPreprocessor;
+import com.helger.schematron.preprocess.SchematronPreprocessException;
 import com.helger.schematron.pure.binding.IPSQueryBinding;
 import com.helger.schematron.pure.binding.PSQueryBindingRegistry;
-import com.helger.schematron.pure.exchange.PSReader;
-import com.helger.schematron.pure.model.PSSchema;
-import com.helger.schematron.pure.preprocess.PSPreprocessor;
-import com.helger.schematron.pure.preprocess.SchematronPreprocessException;
 import com.helger.schematron.sch.SchematronProviderXSLTFromSCH;
-import com.helger.schematron.sch.TransformerCustomizerSCH;
+import com.helger.schematron.sch.SchematronSCHConfig;
 import com.helger.schematron.svrl.CSVRL;
 import com.helger.xml.microdom.serialize.MicroWriter;
 import com.helger.xml.namespace.MapBasedNamespaceContext;
@@ -69,8 +69,8 @@ public class SchematronPreparer implements IPreparer
       {
         LOGGER.info ("Converting Schematron '" + source.toString () + "' to XSLT '" + target.toString () + "'");
 
-        final Document aXsltDoc = SchematronProviderXSLTFromSCH.createSchematronXSLT (new FileSystemResource (source),
-                                                                                      new TransformerCustomizerSCH ());
+        final Document aXsltDoc = SchematronProviderXSLTFromSCH.createSchematronXSLT (SchematronSCHConfig.builder (new FileSystemResource (source))
+                                                                                                         .build ());
 
         // Add all namespaces from XSLT document root to output
         aXWS.setUseExistingNamespaceDeclarations (true).setPutNamespaceContextPrefixesInRoot (true);

@@ -41,11 +41,11 @@
 
     <dependency>
       <groupId>com.helger.schematron</groupId>
-      <artifactId>ph-schematron-xslt</artifactId>
+      <artifactId>ph-schematron-pure</artifactId>
     </dependency>
     <dependency>
       <groupId>com.helger.schematron</groupId>
-      <artifactId>ph-schematron-pure</artifactId>
+      <artifactId>ph-schematron-isosch</artifactId>
     </dependency>
   </dependencies>
 </project>
