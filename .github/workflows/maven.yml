@@ -1,4 +1,4 @@
-name: Build
+name: Maven build
 
 on:
   push:
@@ -6,65 +6,74 @@ on:
     types:
       - published
   workflow_dispatch:
+        
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         java: [ 17, 21, 25 ]
     name: Java ${{ matrix.java }} build
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+    - uses: actions/checkout@v6
 
-#      - name: Prepare version labels
-#        uses: k15g/action-version-labels@edge
-#        with:
-#          prefix: project
+#    - name: Prepare version labels
+#      uses: k15g/action-version-labels@edge
+#      with:
+#        prefix: project
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
 
-      - name: Set up JDK ${{ matrix.java }}
-        uses: actions/setup-java@v5
-        with:
-          java-version: ${{ matrix.java }}
-          distribution: 'adopt'
-          server-id: central
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-              
-      - name: Build and deploy with Maven
-        run: mvn --batch-mode --update-snapshots -P release-snapshot deploy
-        if: matrix.java == 17
-        env:
-          MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+    - name: Set up JDK ${{ matrix.java }}
+      uses: actions/setup-java@v5
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: 'temurin'
+        server-id: central
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_PASSWORD
 
-      - name: Maven Build
-        run: mvn --batch-mode --update-snapshots install
-        if: matrix.java != 17
+    - name: Cache local Maven repository
+      uses: actions/cache@v5
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
 
-      - name: Docker login
-        uses: docker/login-action@v4
-        if: matrix.java == 17
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+    - name: Publish to the Maven Central Repository
+      run: mvn --batch-mode --update-snapshots -P release-snapshot deploy
+      if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && matrix.java == 17
+      env:
+        MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
-      - name: Build Docker image
-        if: matrix.java == 17
-        run: make docker_build tag=dev
+    - name: Maven Build
+      run: mvn --batch-mode --update-snapshots install
+      if: github.event_name != 'push' || github.ref != format('refs/heads/{0}', github.event.repository.default_branch) || matrix.java != 17
 
-      - name: Push Snapshot images
-        if: "matrix.java == 17 && !startsWith(github.ref, 'refs/tags/')"
-        run: make docker_push tag=edge
+    - name: Docker login
+      uses: docker/login-action@v4
+      if: matrix.java == 17
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Push Release images
-        if: "matrix.java == 17 && startsWith(github.ref, 'refs/tags/')"
-        run: |
-          make docker_push tag=${{ env.PROJECT_VERSION }}
-          make docker_push tag=latest
+    - name: Build Docker image
+      if: matrix.java == 17
+      run: make docker_build tag=dev
+
+    - name: Push Snapshot images
+      if: "matrix.java == 17 && !startsWith(github.ref, 'refs/tags/')"
+      run: make docker_push tag=edge
+
+    - name: Push Release images
+      if: "matrix.java == 17 && startsWith(github.ref, 'refs/tags/')"
+      run: |
+        make docker_push tag=${{ env.PROJECT_VERSION }}
+        make docker_push tag=latest
