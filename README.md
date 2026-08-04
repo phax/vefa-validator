@@ -15,13 +15,13 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 * `phelger/vefa-validator:latest` - latest release version
 * `phelger/vefa-validator:edge` - latest snapshot version
 
-v2.4.4 - work in progress
+v2.4.4 - 2026-08-04
 * Extended the README with a user guide covering the supported document formats, their detection constraints and all default values
 * Removed Google Guice as the dependency injection framework — the validator is now wired with plain Java constructor calls in `ValidatorBuilder.build()` and `ValidatorFactory`. The public `ValidatorBuilder` API (`newValidator().setProperties(...).setSource(...).build()`) is unchanged.
 * Deleted the `no.difi.vefa.validator.module` package (`ValidatorModule`, `CacheModule`, `SbdhModule`, `SourceModule`, `PropertiesModule`).
 * Replaced Guava's `LoadingCache` with `com.helger.cache.impl.ProviderCache` from ph-cache for the checker cache. Soft values, `maximumSize` and time-based eviction (`pools.checker.expire`) are preserved. Note the semantic change: ph-cache uses `expireAfterWrite` (fixed lifetime from put) instead of Guava's `expireAfterAccess` (sliding window reset on read).
 * Dropped the `com.google.inject:guice` and `com.google.guava:guava` dependencies.
-* Bumped ph-commons to 12.3.0-SNAPSHOT for the new `CacheBuilder` expiration API.
+* Bumped ph-commons to 12.3.x for the new `CacheBuilder` expiration API.
 
 v2.4.3 - 2026-04-23
 * Fixed an error in serializing certain XSLT documents to disk

@@ -59,21 +59,21 @@ jobs:
 
     - name: Docker login
       uses: docker/login-action@v4
-      if: matrix.java == 17
+      if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && matrix.java == 17
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_TOKEN }}
 
     - name: Build Docker image
-      if: matrix.java == 17
+      if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && matrix.java == 17
       run: make docker_build tag=dev
 
     - name: Push Snapshot images
-      if: "matrix.java == 17 && !startsWith(github.ref, 'refs/tags/')"
+      if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && matrix.java == 17
       run: make docker_push tag=edge
 
     - name: Push Release images
-      if: "matrix.java == 17 && startsWith(github.ref, 'refs/tags/')"
+      if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && matrix.java == 17
       run: |
         make docker_push tag=${{ env.PROJECT_VERSION }}
         make docker_push tag=latest
