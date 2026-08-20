@@ -392,3 +392,8 @@ All artifacts are read into memory when the `Validator` is built; updates in the
 * Detection is heuristic and works on the first 50 KB only — a document whose identifying elements appear later is only recognised at the generic `xml` level. The exception is UBL, which processes the whole document.
 * Validation artifacts are external. Without a matching artifact even a perfectly well-formed document ends in `Unknown document type`.
 * Security relevant defaults: the shared StAX factory used for detection has DTD support and external entity resolution disabled, the shared Saxon processor disallows external function calls, and XSD imports/includes are resolved from within the artifact rather than from the network.
+
+---
+
+My personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md) |
+It is appreciated if you star the GitHub project if you like it.
