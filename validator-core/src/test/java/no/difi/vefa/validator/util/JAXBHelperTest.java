@@ -24,6 +24,6 @@ public class JAXBHelperTest
   @SuppressWarnings ("all")
   public void simpleError ()
   {
-    JAXBHelper.context (null);
+    JAXBHelper.context ((Class <?> []) null);
   }
 }
