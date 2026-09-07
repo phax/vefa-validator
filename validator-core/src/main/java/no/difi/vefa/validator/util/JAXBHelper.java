@@ -4,7 +4,7 @@ import jakarta.xml.bind.JAXBContext;
 
 public class JAXBHelper
 {
-
+  @SafeVarargs
   public static JAXBContext context (final Class <?>... classes)
   {
     try
