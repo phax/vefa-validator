@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,20 +54,17 @@ public class DeclarationDetector
   }
 
   private DeclarationIdentifier _detect (final List <DeclarationWrapper> wrappers,
-                                         byte [] content,
+                                         final byte @Nullable [] content,
                                          final InputStream contentStream,
                                          final DeclarationIdentifier parent) throws IOException
   {
-    if (content == null)
-    {
-      content = StreamUtils.read50KAndReset (contentStream);
-    }
+    final byte [] realContent = content != null ? content : StreamUtils.read50KAndReset (contentStream);
 
     for (final DeclarationWrapper wrapper : wrappers)
     {
       try
       {
-        if (wrapper.verify (content, parent == null ? null : parent.getIdentifier ()))
+        if (wrapper.verify (realContent, parent == null ? null : parent.getIdentifier ()))
         {
           contentStream.mark (0);
           final List <String> identifier = wrapper.detect (contentStream,
@@ -76,13 +74,12 @@ public class DeclarationDetector
           {
             break;
           }
+
           if (LOGGER.isDebugEnabled ())
-          {
             LOGGER.debug ("Found: " + wrapper.getType () + " - " + identifier);
-          }
 
           return _detect (wrapper.getChildren (),
-                          content,
+                          realContent,
                           contentStream,
                           new DeclarationIdentifier (parent, wrapper, identifier));
         }
