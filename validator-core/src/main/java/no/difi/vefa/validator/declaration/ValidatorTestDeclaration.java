@@ -50,8 +50,8 @@ public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements ID
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent)
-                                                                                            throws VefaValidatorException
+  public List <String> detect (final InputStream contentStream,
+                               final List <String> parent) throws VefaValidatorException
   {
     try
     {
@@ -62,7 +62,7 @@ public class ValidatorTestDeclaration extends SimpleXmlDeclaration implements ID
         do
         {
           if (source.getEventType () == XMLStreamConstants.START_ELEMENT &&
-            source.getNamespaceURI ().equals (m_sNamespace))
+              source.getNamespaceURI ().equals (m_sNamespace))
           {
             for (int i = 0; i < source.getAttributeCount (); i++)
             {

@@ -42,8 +42,8 @@ public class PreparerProvider
       Files.walkFileTree (source, new SimpleFileVisitor <Path> ()
       {
         @Override
-        public FileVisitResult visitFile (final Path path, final BasicFileAttributes basicFileAttributes)
-                                                                                                          throws IOException
+        public FileVisitResult visitFile (final Path path,
+                                          final BasicFileAttributes basicFileAttributes) throws IOException
         {
           final String filename = path.toString ().substring (source.toString ().length () + 1);
           prepare (source.resolve (filename), target.resolve (filename), type);

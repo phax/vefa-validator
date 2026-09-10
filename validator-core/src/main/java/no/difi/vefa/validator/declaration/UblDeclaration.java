@@ -53,8 +53,8 @@ public class UblDeclaration extends AbstractXmlDeclaration
 
   @SuppressWarnings ("unchecked")
   @Override
-  public List <String> detect (final InputStream streamContent, final List <String> parent)
-                                                                                            throws VefaValidatorException
+  public List <String> detect (final InputStream streamContent,
+                               final List <String> parent) throws VefaValidatorException
   {
     final NonBlockingByteArrayOutputStream baos = new NonBlockingByteArrayOutputStream ();
     try (final InputStream is = new NonBlockingByteArrayInputStream (StreamUtils.readAllAndReset (streamContent)))

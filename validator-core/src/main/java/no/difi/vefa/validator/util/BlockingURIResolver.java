@@ -4,13 +4,15 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
-public class BlockingURIResolver implements URIResolver {
+public class BlockingURIResolver implements URIResolver
+{
 
-    @Override
-    public Source resolve(String href, String base) throws TransformerException {
-        if (href.contains(":/"))
-            throw new TransformerException("Blocking request to '" + href + "'.");
+  @Override
+  public Source resolve (String href, String base) throws TransformerException
+  {
+    if (href.contains (":/"))
+      throw new TransformerException ("Blocking request to '" + href + "'.");
 
-        return null;
-    }
+    return null;
+  }
 }

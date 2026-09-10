@@ -26,8 +26,8 @@ import org.junit.Test;
 public class XxeProtectionTest
 {
   /**
-   * Tests whether the default XMLInputFactory (as used in AbstractXmlDeclaration and XsdChecker)
-   * is vulnerable to XXE via external entity resolution.
+   * Tests whether the default XMLInputFactory (as used in AbstractXmlDeclaration and XsdChecker) is
+   * vulnerable to XXE via external entity resolution.
    */
   @Test
   public void testXmlInputFactoryXxeDefault ()
@@ -66,8 +66,8 @@ public class XxeProtectionTest
   }
 
   /**
-   * Tests that the XXE payload with a file:// URI is processable with the default factory
-   * but would fail with a hardened one.
+   * Tests that the XXE payload with a file:// URI is processable with the default factory but would
+   * fail with a hardened one.
    */
   @Test
   public void testXxePayloadProcessing ()
@@ -82,8 +82,7 @@ public class XxeProtectionTest
     final XMLInputFactory defaultFactory = XMLInputFactory.newFactory ();
     try
     {
-      final XMLStreamReader reader = defaultFactory.createXMLStreamReader (
-          new ByteArrayInputStream (xxePayload.getBytes (StandardCharsets.UTF_8)));
+      final XMLStreamReader reader = defaultFactory.createXMLStreamReader (new ByteArrayInputStream (xxePayload.getBytes (StandardCharsets.UTF_8)));
       // If we get here, the factory accepted the DTD-containing document
       reader.close ();
       // This is the insecure behavior — the factory didn't reject DTDs
@@ -101,8 +100,7 @@ public class XxeProtectionTest
 
     try
     {
-      final XMLStreamReader reader = hardenedFactory.createXMLStreamReader (
-          new ByteArrayInputStream (xxePayload.getBytes (StandardCharsets.UTF_8)));
+      final XMLStreamReader reader = hardenedFactory.createXMLStreamReader (new ByteArrayInputStream (xxePayload.getBytes (StandardCharsets.UTF_8)));
       // Even if it parses, entity expansion should not occur
       while (reader.hasNext ())
       {

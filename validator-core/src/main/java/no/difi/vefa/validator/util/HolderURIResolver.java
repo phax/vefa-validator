@@ -9,27 +9,30 @@ import javax.xml.transform.stream.StreamSource;
 
 import no.difi.vefa.validator.api.IArtifactHolder;
 
-public class HolderURIResolver implements URIResolver {
+public class HolderURIResolver implements URIResolver
+{
 
-    private IArtifactHolder artifactHolder;
+  private IArtifactHolder artifactHolder;
 
-    private Path rootPath;
+  private Path rootPath;
 
-    public HolderURIResolver(IArtifactHolder artifactHolder, String rootPath) {
-        this.artifactHolder = artifactHolder;
-        this.rootPath = Paths.get(rootPath).getParent();
-    }
+  public HolderURIResolver (IArtifactHolder artifactHolder, String rootPath)
+  {
+    this.artifactHolder = artifactHolder;
+    this.rootPath = Paths.get (rootPath).getParent ();
+  }
 
-    @Override
-    public Source resolve(String href, String base) {
-        Path target = (base == "" ? rootPath : Paths.get(base.substring(7)).getParent()).resolve(href);
+  @Override
+  public Source resolve (String href, String base)
+  {
+    Path target = (base == "" ? rootPath : Paths.get (base.substring (7)).getParent ()).resolve (href);
 
-        String newPath = ("/" + target.toString().replaceAll("\\\\", "/")).replaceAll("/(.+?)/\\.\\.", "").substring(1);
+    String newPath = ("/" + target.toString ().replaceAll ("\\\\", "/")).replaceAll ("/(.+?)/\\.\\.", "").substring (1);
 
-        StreamSource streamSource = new StreamSource(artifactHolder.getInputStream(newPath));
-        streamSource.setPublicId("holder:" + newPath);
-        streamSource.setSystemId("holder:" + newPath);
+    StreamSource streamSource = new StreamSource (artifactHolder.getInputStream (newPath));
+    streamSource.setPublicId ("holder:" + newPath);
+    streamSource.setSystemId ("holder:" + newPath);
 
-        return streamSource;
-    }
+    return streamSource;
+  }
 }

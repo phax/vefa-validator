@@ -52,11 +52,16 @@ public class XsdChecker implements IChecker
       String humanMessage = e.getMessage ();
       if (humanMessage.startsWith ("cvc-complex-type.2.4."))
       {
-        // cvc-complex-type.2.4.a — "Invalid content was found starting with element X. One of {...} is expected."
-        // cvc-complex-type.2.4.b — "The content of element X is not complete. One of {...} is expected."
-        // cvc-complex-type.2.4.c — "The matching wildcard is strict, but no declaration can be found for element X."
-        // cvc-complex-type.2.4.d — "Invalid content was found starting with element X. No child element is expected at this point."
-        // cvc-complex-type.2.4.e — "Element X can occur a maximum of N times in the current sequence. This limit was exceeded."
+        // cvc-complex-type.2.4.a — "Invalid content was found starting with element X. One of {...}
+        // is expected."
+        // cvc-complex-type.2.4.b — "The content of element X is not complete. One of {...} is
+        // expected."
+        // cvc-complex-type.2.4.c — "The matching wildcard is strict, but no declaration can be
+        // found for element X."
+        // cvc-complex-type.2.4.d — "Invalid content was found starting with element X. No child
+        // element is expected at this point."
+        // cvc-complex-type.2.4.e — "Element X can occur a maximum of N times in the current
+        // sequence. This limit was exceeded."
         // cvc-complex-type.2.4.f — "Element X has invalid content. Expected element(s) {...}."
         try
         {

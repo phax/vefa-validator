@@ -8,16 +8,18 @@ import no.difi.xsd.vefa.validator._1.FlagType;
 /**
  * @author erlend
  */
-public class TestTask {
+public class TestTask
+{
 
-    public boolean perform(Build build) {
-        for (IValidation validation : Tester.perform(build.getTargetFolder(), build.getTestFolders()))
-            build.addTestValidation(validation);
+  public boolean perform (Build build)
+  {
+    for (IValidation validation : Tester.perform (build.getTargetFolder (), build.getTestFolders ()))
+      build.addTestValidation (validation);
 
-        for (IValidation validation : build.getTestValidations())
-            if (validation.getReport().getFlag().compareTo(FlagType.EXPECTED) > 0)
-                return false;
+    for (IValidation validation : build.getTestValidations ())
+      if (validation.getReport ().getFlag ().compareTo (FlagType.EXPECTED) > 0)
+        return false;
 
-        return true;
-    }
+    return true;
+  }
 }

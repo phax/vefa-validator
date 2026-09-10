@@ -159,8 +159,9 @@ class ValidatorInstance implements Closeable
    *        Complete configuration
    * @return Result of validation.
    */
-  protected Section check (final FileType fileType, final VefaDocument document, final Configuration configuration)
-                                                                                                                    throws VefaValidatorException
+  protected Section check (final FileType fileType,
+                           final VefaDocument document,
+                           final Configuration configuration) throws VefaValidatorException
   {
     final IChecker checker;
     try

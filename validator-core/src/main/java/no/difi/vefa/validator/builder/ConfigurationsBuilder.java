@@ -4,37 +4,44 @@ import no.difi.xsd.vefa.validator._1.ConfigurationType;
 import no.difi.xsd.vefa.validator._1.Configurations;
 import no.difi.xsd.vefa.validator._1.PackageType;
 
-public class ConfigurationsBuilder {
+public class ConfigurationsBuilder
+{
 
-    private Configurations configurations = new Configurations();
+  private Configurations configurations = new Configurations ();
 
-    public static ConfigurationsBuilder instance() {
-        return new ConfigurationsBuilder();
-    }
+  public static ConfigurationsBuilder instance ()
+  {
+    return new ConfigurationsBuilder ();
+  }
 
-    private ConfigurationsBuilder() {
-        configurations.setTimestamp(0L);
-    }
+  private ConfigurationsBuilder ()
+  {
+    configurations.setTimestamp (0L);
+  }
 
-    public ConfigurationsBuilder pkg(String title) {
-        return pkg(title, null);
-    }
+  public ConfigurationsBuilder pkg (String title)
+  {
+    return pkg (title, null);
+  }
 
-    public ConfigurationsBuilder pkg(String title, String url) {
-        PackageType packageType = new PackageType();
-        packageType.setValue(title);
-        packageType.setUrl(url);
+  public ConfigurationsBuilder pkg (String title, String url)
+  {
+    PackageType packageType = new PackageType ();
+    packageType.setValue (title);
+    packageType.setUrl (url);
 
-        configurations.getPackage().add(packageType);
-        return this;
-    }
+    configurations.getPackage ().add (packageType);
+    return this;
+  }
 
-    public ConfigurationsBuilder configuration(ConfigurationType configuration) {
-        configurations.getConfiguration().add(configuration);
-        return this;
-    }
+  public ConfigurationsBuilder configuration (ConfigurationType configuration)
+  {
+    configurations.getConfiguration ().add (configuration);
+    return this;
+  }
 
-    public Configurations build() {
-        return configurations;
-    }
+  public Configurations build ()
+  {
+    return configurations;
+  }
 }

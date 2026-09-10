@@ -30,8 +30,8 @@ public class EspdDeclaration extends AbstractXmlDeclaration
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent)
-                                                                                            throws VefaValidatorException
+  public List <String> detect (final InputStream contentStream,
+                               final List <String> parent) throws VefaValidatorException
   {
     final List <String> results = new ArrayList <> ();
 

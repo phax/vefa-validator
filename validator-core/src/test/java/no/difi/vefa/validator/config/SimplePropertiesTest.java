@@ -16,9 +16,9 @@ public class SimplePropertiesTest
   public void simple ()
   {
     final IProperties properties = new SimpleProperties ().set ("some.string", "Hello World!")
-                                                         .set ("some.number", 1)
-                                                         .set ("some.boolean", true)
-                                                         .set ("some.object", Long.valueOf (123));
+                                                          .set ("some.number", 1)
+                                                          .set ("some.boolean", true)
+                                                          .set ("some.object", Long.valueOf (123));
 
     assertTrue (properties.contains ("some.string"));
     assertTrue (properties.contains ("some.number"));

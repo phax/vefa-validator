@@ -14,8 +14,8 @@ import javax.xml.transform.TransformerFactory;
 import org.junit.Test;
 
 /**
- * Tests verifying TransformerFactory XXE protection.
- * Relates to finding F-04 in the security audit (ValidatorTestDeclaration.TRANSFORMER_FACTORY).
+ * Tests verifying TransformerFactory XXE protection. Relates to finding F-04 in the security audit
+ * (ValidatorTestDeclaration.TRANSFORMER_FACTORY).
  */
 public class TransformerFactoryXxeTest
 {
@@ -76,16 +76,20 @@ public class TransformerFactoryXxeTest
       factory.setAttribute (XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
       assertEquals ("ACCESS_EXTERNAL_DTD should be empty after hardening",
-                    "", factory.getAttribute (XMLConstants.ACCESS_EXTERNAL_DTD));
+                    "",
+                    factory.getAttribute (XMLConstants.ACCESS_EXTERNAL_DTD));
       assertEquals ("ACCESS_EXTERNAL_STYLESHEET should be empty after hardening",
-                    "", factory.getAttribute (XMLConstants.ACCESS_EXTERNAL_STYLESHEET));
+                    "",
+                    factory.getAttribute (XMLConstants.ACCESS_EXTERNAL_STYLESHEET));
     }
     catch (final IllegalArgumentException e)
     {
       // Some TransformerFactory implementations (e.g., Saxon) don't support these attributes.
       // In that case, hardening must be done through other means (e.g., URIResolver).
-      System.out.println ("TransformerFactory (" + factory.getClass ().getName () +
-                          ") does not support ACCESS_EXTERNAL_* attributes: " + e.getMessage ());
+      System.out.println ("TransformerFactory (" +
+                          factory.getClass ().getName () +
+                          ") does not support ACCESS_EXTERNAL_* attributes: " +
+                          e.getMessage ());
     }
   }
 }

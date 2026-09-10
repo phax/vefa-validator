@@ -26,12 +26,12 @@ public class SimpleXmlDeclaration extends AbstractXmlDeclaration
   {
     final String c = new String (content, StandardCharsets.UTF_8);
     return m_sNamespace.equals (XmlUtils.extractRootNamespace (c)) &&
-      (m_sLocalName == null || m_sLocalName.equals (XmlUtils.extractLocalName (c)));
+           (m_sLocalName == null || m_sLocalName.equals (XmlUtils.extractLocalName (c)));
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent)
-                                                                                            throws VefaValidatorException
+  public List <String> detect (final InputStream contentStream,
+                               final List <String> parent) throws VefaValidatorException
   {
     try
     {

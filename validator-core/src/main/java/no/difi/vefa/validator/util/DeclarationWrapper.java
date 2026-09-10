@@ -46,8 +46,8 @@ public class DeclarationWrapper implements IDeclarationWithChildren, IDeclaratio
   }
 
   @Override
-  public List <String> detect (final InputStream contentStream, final List <String> parent)
-                                                                                            throws VefaValidatorException
+  public List <String> detect (final InputStream contentStream,
+                               final List <String> parent) throws VefaValidatorException
   {
     return declaration.detect (contentStream, parent);
   }

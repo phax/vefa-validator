@@ -14,37 +14,40 @@ import org.apache.commons.cli.Options;
 import no.difi.vefa.validator.api.IValidation;
 import no.difi.xsd.vefa.validator._1.FlagType;
 
-public class Cli {
+public class Cli
+{
 
-    public static void main(String... args) throws Exception {
-        System.exit(perform(args));
-    }
+  public static void main (String... args) throws Exception
+  {
+    System.exit (perform (args));
+  }
 
-    public static int perform(String... args) throws Exception {
-        Options options = new Options();
-        options.addOption("a", "artifacts", true, "Artifacts");
-        options.addOption("x", "exitcode", false, "Status in exit code");
+  public static int perform (String... args) throws Exception
+  {
+    Options options = new Options ();
+    options.addOption ("a", "artifacts", true, "Artifacts");
+    options.addOption ("x", "exitcode", false, "Status in exit code");
 
-        CommandLineParser parser = new DefaultParser();
-        final CommandLine cmd = parser.parse(options, args);
+    CommandLineParser parser = new DefaultParser ();
+    final CommandLine cmd = parser.parse (options, args);
 
-        List<Path> testFolders = new ArrayList<>();
-        for (String arg : cmd.getArgs())
-            testFolders.add(Paths.get(arg));
+    List <Path> testFolders = new ArrayList <> ();
+    for (String arg : cmd.getArgs ())
+      testFolders.add (Paths.get (arg));
 
-        String artifacts = cmd.getOptionValue("a", "https://vefa.difi.no/validator/repo/");
-        List<IValidation> validations;
-        if (artifacts.startsWith("http"))
-            validations = Tester.perform(URI.create(artifacts), testFolders);
-        else
-            validations = Tester.perform(Paths.get(artifacts), testFolders);
+    String artifacts = cmd.getOptionValue ("a", "https://vefa.difi.no/validator/repo/");
+    List <IValidation> validations;
+    if (artifacts.startsWith ("http"))
+      validations = Tester.perform (URI.create (artifacts), testFolders);
+    else
+      validations = Tester.perform (Paths.get (artifacts), testFolders);
 
-        int result = 0;
-        if (cmd.hasOption("x"))
-            for (IValidation validation : validations)
-                if (validation.getReport().getFlag().compareTo(FlagType.EXPECTED) > 0)
-                    result = Math.max(result, validation.getReport().getFlag().compareTo(FlagType.EXPECTED));
+    int result = 0;
+    if (cmd.hasOption ("x"))
+      for (IValidation validation : validations)
+        if (validation.getReport ().getFlag ().compareTo (FlagType.EXPECTED) > 0)
+          result = Math.max (result, validation.getReport ().getFlag ().compareTo (FlagType.EXPECTED));
 
-        return result;
-    }
+    return result;
+  }
 }

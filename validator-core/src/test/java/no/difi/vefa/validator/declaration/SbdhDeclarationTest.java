@@ -30,9 +30,7 @@ public class SbdhDeclarationTest
   @Test
   public void simpleSbdh () throws Exception
   {
-
-    try (
-        InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/peppol-bis-invoice-sbdh.xml")))
+    try (InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/peppol-bis-invoice-sbdh.xml")))
     {
       final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (inputStream);
       assertEquals (declarationIdentifier.getIdentifier ().get (1), "SBDH:1.0");
@@ -44,9 +42,7 @@ public class SbdhDeclarationTest
   @Test
   public void simpleSbdhOnly () throws Exception
   {
-
-    try (
-        InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/sbdh-only.xml")))
+    try (InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/sbdh-only.xml")))
     {
       final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (inputStream);
       assertEquals (declarationIdentifier.getIdentifier ().get (1), "SBDH:1.0");

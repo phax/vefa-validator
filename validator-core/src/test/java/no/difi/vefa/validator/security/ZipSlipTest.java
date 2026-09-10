@@ -19,15 +19,15 @@ import no.difi.vefa.validator.api.CachedFile;
 import no.difi.vefa.validator.declaration.ZipDeclaration;
 
 /**
- * Tests demonstrating the Zip Slip vulnerability in ZipDeclaration.children().
- * Relates to finding F-03 in the security audit.
+ * Tests demonstrating the Zip Slip vulnerability in ZipDeclaration.children(). Relates to finding
+ * F-03 in the security audit.
  */
 public class ZipSlipTest
 {
   /**
-   * Creates a malicious ZIP archive containing an entry with a path traversal name.
-   * Verifies that ZipDeclaration.children() does NOT sanitize the entry name,
-   * thus confirming the Zip Slip vulnerability.
+   * Creates a malicious ZIP archive containing an entry with a path traversal name. Verifies that
+   * ZipDeclaration.children() does NOT sanitize the entry name, thus confirming the Zip Slip
+   * vulnerability.
    */
   @Test
   public void testZipSlipPathTraversal () throws Exception

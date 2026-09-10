@@ -18,8 +18,8 @@ class RepositorySourceInstance extends AbstractArtifactsSourceInstance
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (RepositorySourceInstance.class);
 
-  public RepositorySourceInstance (final IProperties properties, final List <URI> rootUris)
-                                                                                            throws VefaValidatorException
+  public RepositorySourceInstance (final IProperties properties,
+                                   final List <URI> rootUris) throws VefaValidatorException
   {
     super (properties);
 

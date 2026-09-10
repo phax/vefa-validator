@@ -40,7 +40,7 @@ public class VefaSaxonErrorListener implements ErrorListener
   public void fatalError (final TransformerException exception)
   {
     if (Objects.nonNull (exception.getMessage ()) &&
-      exception.getMessage ().startsWith ("Exception thrown by URIResolver"))
+        exception.getMessage ().startsWith ("Exception thrown by URIResolver"))
       LOGGER.error (exception.getCause ().getMessage ());
     else
       LOGGER.error (exception.getMessage (), exception);

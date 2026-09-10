@@ -26,12 +26,10 @@ public class UnCefactDeclarationTest
   public void simplePeppol () throws Exception
   {
     final InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/uncefact-peppol.xml"));
-    assertEquals (declarationDetector.detect (inputStream)
-                                     .getIdentifier ()
-                                     .get (0),
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0),
                   "CrossIndustryInvoice" +
-                                               "::urn:fdc:peppol.eu:2017:poacc:billing:01:1.0" +
-                                               "::urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0");
+                                                                                     "::urn:fdc:peppol.eu:2017:poacc:billing:01:1.0" +
+                                                                                     "::urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0");
   }
 
   @Test
