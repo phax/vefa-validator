@@ -14,12 +14,14 @@ public class MultipleValidators2
   @Test
   public void simple ()
   {
-    final Validator validator1 = ValidatorBuilder.newValidator ().setSource (new ClasspathSource ("/rules/")).build ();
-    final Validator validator2 = ValidatorBuilder.newValidator ().setSource (new ClasspathSource ("/rules/")).build ();
-
-    assertNotSame (validator1, validator2);
-
-    validator1.close ();
-    validator2.close ();
+    try (final Validator validator1 = ValidatorBuilder.newValidator ()
+                                                      .setSource (new ClasspathSource ("/rules/"))
+                                                      .build ();
+         final Validator validator2 = ValidatorBuilder.newValidator ()
+                                                      .setSource (new ClasspathSource ("/rules/"))
+                                                      .build ())
+    {
+      assertNotSame (validator1, validator2);
+    }
   }
 }

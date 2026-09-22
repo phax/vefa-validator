@@ -133,12 +133,12 @@ public class Tester implements Closeable
     }
   }
 
-  public void append (String description, final IValidation validation, final int numberInSet)
+  public void append (final String pdescription, final IValidation validation, final int numberInSet)
   {
     validations.add (validation);
     tests++;
 
-    description = description.replaceAll ("[ \\t\\r\\n]+", " ");
+    final String description = pdescription.replaceAll ("[ \\t\\r\\n]+", " ");
 
     final String prefix = numberInSet < 0 ? "" : "  ";
 

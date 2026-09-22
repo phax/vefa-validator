@@ -51,7 +51,6 @@ public class UblDeclaration extends AbstractXmlDeclaration
                                              parent.get (0));
   }
 
-  @SuppressWarnings ("unchecked")
   @Override
   public List <String> detect (final InputStream streamContent,
                                final List <String> parent) throws VefaValidatorException
