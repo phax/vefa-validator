@@ -56,7 +56,7 @@ public class Build
     {
       configurations = new Configurations ();
       configurations.setName (getSetting ("name"));
-      configurations.setTimestamp (System.currentTimeMillis ());
+      configurations.setTimestamp (Long.valueOf (System.currentTimeMillis ()));
     }
 
     return configurations;
