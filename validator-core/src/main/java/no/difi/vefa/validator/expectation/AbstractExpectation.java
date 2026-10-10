@@ -18,6 +18,9 @@ public abstract class AbstractExpectation implements IExpectation
   protected Map <String, Integer> warnings = new HashMap <> ();
   protected Map <String, Integer> errors = new HashMap <> ();
   protected Map <String, Integer> fatals = new HashMap <> ();
+  private final Map <String, Integer> m_aFiredWarnings = new HashMap <> ();
+  private final Map <String, Integer> m_aFiredErrors = new HashMap <> ();
+  private final Map <String, Integer> m_aFiredFatals = new HashMap <> ();
 
   @Override
   public String getDescription ()
@@ -25,12 +28,35 @@ public abstract class AbstractExpectation implements IExpectation
     return description;
   }
 
-  private static boolean _isExpected (final String identifier, final Map <String, Integer> target)
+  private static boolean _isExpected (final String identifier,
+                                      final Map <String, Integer> target,
+                                      final Map <String, Integer> fired)
   {
+    // Always count the actual findings, so that the verification can report them
+    fired.merge (identifier, 1, Integer::sum);
     if (!target.containsKey (identifier) || target.get (identifier) == 0)
       return false;
     target.put (identifier, target.get (identifier) - 1);
     return true;
+  }
+
+  private static String _getNotFiredText (final String key,
+                                          final String sLevel,
+                                          final int nMissing,
+                                          final Map <String, Integer> fired)
+  {
+    final int nActual = fired.getOrDefault (key, Integer.valueOf (0)).intValue ();
+    return "Rule '" +
+           key +
+           "' (" +
+           sLevel +
+           ") not fired " +
+           nMissing +
+           " time(s). Expected " +
+           (nActual + nMissing) +
+           " but found " +
+           nActual +
+           ".";
   }
 
   @Override
@@ -54,15 +80,15 @@ public abstract class AbstractExpectation implements IExpectation
         switch (assertionType.getFlag ())
         {
           case FATAL:
-            if (_isExpected (assertionType.getIdentifier (), fatals))
+            if (_isExpected (assertionType.getIdentifier (), fatals, m_aFiredFatals))
               assertionType.setFlag (FlagType.EXPECTED);
             break;
           case ERROR:
-            if (_isExpected (assertionType.getIdentifier (), errors))
+            if (_isExpected (assertionType.getIdentifier (), errors, m_aFiredErrors))
               assertionType.setFlag (FlagType.EXPECTED);
             break;
           case WARNING:
-            if (_isExpected (assertionType.getIdentifier (), warnings))
+            if (_isExpected (assertionType.getIdentifier (), warnings, m_aFiredWarnings))
               assertionType.setFlag (FlagType.EXPECTED);
             break;
         }
@@ -77,21 +103,21 @@ public abstract class AbstractExpectation implements IExpectation
       final String key = e.getKey ();
       final int nCount = e.getValue ().intValue ();
       if (nCount > 0)
-        section.add ("SYSTEM-004", "Rule '" + key + "' (FATAL) not fired " + nCount + " time(s).", FlagType.ERROR);
+        section.add ("SYSTEM-004", _getNotFiredText (key, "FATAL", nCount, m_aFiredFatals), FlagType.ERROR);
     }
     for (final var e : errors.entrySet ())
     {
       final String key = e.getKey ();
       final int nCount = e.getValue ().intValue ();
       if (nCount > 0)
-        section.add ("SYSTEM-005", "Rule '" + key + "' (ERROR) not fired " + nCount + " time(s).", FlagType.ERROR);
+        section.add ("SYSTEM-005", _getNotFiredText (key, "ERROR", nCount, m_aFiredErrors), FlagType.ERROR);
     }
     for (final var e : warnings.entrySet ())
     {
       final String key = e.getKey ();
       final int nCount = e.getValue ().intValue ();
       if (nCount > 0)
-        section.add ("SYSTEM-006", "Rule '" + key + "' (WARNING) not fired " + nCount + " time(s).", FlagType.ERROR);
+        section.add ("SYSTEM-006", _getNotFiredText (key, "WARNING", nCount, m_aFiredWarnings), FlagType.ERROR);
     }
     for (final var e : successes.entrySet ())
     {
