@@ -15,6 +15,9 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 * `phelger/vefa-validator:latest` - latest release version
 * `phelger/vefa-validator:edge` - latest snapshot version
 
+v2.4.5 - work in progress
+* Added the system property `vefa.validator.debug.saveSvrl` (`-Dvefa.validator.debug.saveSvrl=true`) to store the raw SVRL of each Schematron check as `svrl-<UUID>.xml` in the current working directory. For debugging only.
+
 v2.4.4 - 2026-08-04
 * Extended the README with a user guide covering the supported document formats, their detection constraints and all default values
 * Removed Google Guice as the dependency injection framework — the validator is now wired with plain Java constructor calls in `ValidatorBuilder.build()` and `ValidatorFactory`. The public `ValidatorBuilder` API (`newValidator().setProperties(...).setSource(...).build()`) is unchanged.

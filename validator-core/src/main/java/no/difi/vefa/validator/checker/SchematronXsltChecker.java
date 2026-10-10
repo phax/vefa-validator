@@ -1,7 +1,9 @@
 package no.difi.vefa.validator.checker;
 
+import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 import javax.xml.transform.stream.StreamSource;
 
@@ -15,6 +17,8 @@ import com.helger.io.resource.ClassPathResource;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
+import net.sf.saxon.s9api.Destination;
+import net.sf.saxon.s9api.TeeDestination;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
@@ -32,6 +36,12 @@ public class SchematronXsltChecker implements IChecker
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (SchematronXsltChecker.class);
   private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (SectionType.class);
+
+  /**
+   * System property that, if set to <code>true</code>, stores each created SVRL in the current working
+   * directory as <code>svrl-&lt;UUID&gt;.xml</code>. Only intended for debugging.
+   */
+  public static final String SYSTEM_PROPERTY_SAVE_SVRL = "vefa.validator.debug.saveSvrl";
 
   private static final XsltExecutable SVRL_PARSER;
   static
@@ -56,6 +66,14 @@ public class SchematronXsltChecker implements IChecker
     m_aXsltExecutable = xsltExecutable;
   }
 
+  @NonNull
+  private static Destination _wrapWithSvrlFile (@NonNull final Destination aDestination)
+  {
+    final File aSvrlFile = new File ("svrl-" + UUID.randomUUID ().toString () + ".xml");
+    LOGGER.info ("Saving SVRL to '" + aSvrlFile.getAbsolutePath () + "'");
+    return new TeeDestination (aDestination, ValidatorFactory.SAXON_PROCESSOR.newSerializer (aSvrlFile));
+  }
+
   @Override
   public void check (@NonNull final VefaDocument document, @NonNull final Section section) throws VefaValidatorException
   {
@@ -74,7 +92,7 @@ public class SchematronXsltChecker implements IChecker
         schematron.setErrorListener (VefaSaxonErrorListener.INSTANCE);
         schematron.setMessageHandler (VefaSaxonMessageListener.INSTANCE);
         schematron.setSource (new StreamSource (document.getInputStream ()));
-        schematron.setDestination (parser);
+        schematron.setDestination (Boolean.getBoolean (SYSTEM_PROPERTY_SAVE_SVRL) ? _wrapWithSvrlFile (parser) : parser);
 
         schematron.transform ();
 
