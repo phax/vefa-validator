@@ -38,8 +38,10 @@ public class SchematronXsltChecker implements IChecker
   private static final JAXBContext JAXB_CONTEXT = JAXBHelper.context (SectionType.class);
 
   /**
-   * System property that, if set to <code>true</code>, stores each created SVRL in the current working
-   * directory as <code>svrl-&lt;UUID&gt;.xml</code>. Only intended for debugging.
+   * System property that stores each created SVRL as <code>svrl-&lt;UUID&gt;.xml</code>. The value
+   * <code>true</code> uses the current working directory, any other non-empty value (except
+   * <code>false</code>) is used as the target directory, which is created if needed. Only intended for
+   * debugging.
    */
   public static final String SYSTEM_PROPERTY_SAVE_SVRL = "vefa.validator.debug.saveSvrl";
 
@@ -67,9 +69,13 @@ public class SchematronXsltChecker implements IChecker
   }
 
   @NonNull
-  private static Destination _wrapWithSvrlFile (@NonNull final Destination aDestination)
+  private static Destination _wrapWithSvrlFile (@NonNull final Destination aDestination,
+                                                @NonNull final String sTargetDir)
   {
-    final File aSvrlFile = new File ("svrl-" + UUID.randomUUID ().toString () + ".xml");
+    final File aDir = "true".equalsIgnoreCase (sTargetDir) ? new File (".") : new File (sTargetDir);
+    if (!aDir.isDirectory () && !aDir.mkdirs ())
+      throw new IllegalStateException ("Failed to create SVRL target directory '" + aDir.getAbsolutePath () + "'");
+    final File aSvrlFile = new File (aDir, "svrl-" + UUID.randomUUID ().toString () + ".xml");
     LOGGER.info ("Saving SVRL to '" + aSvrlFile.getAbsolutePath () + "'");
     return new TeeDestination (aDestination, ValidatorFactory.SAXON_PROCESSOR.newSerializer (aSvrlFile));
   }
@@ -92,7 +98,9 @@ public class SchematronXsltChecker implements IChecker
         schematron.setErrorListener (VefaSaxonErrorListener.INSTANCE);
         schematron.setMessageHandler (VefaSaxonMessageListener.INSTANCE);
         schematron.setSource (new StreamSource (document.getInputStream ()));
-        schematron.setDestination (Boolean.getBoolean (SYSTEM_PROPERTY_SAVE_SVRL) ? _wrapWithSvrlFile (parser) : parser);
+        final String sSaveSvrl = System.getProperty (SYSTEM_PROPERTY_SAVE_SVRL);
+        final boolean bSaveSvrl = sSaveSvrl != null && !sSaveSvrl.isEmpty () && !"false".equalsIgnoreCase (sSaveSvrl);
+        schematron.setDestination (bSaveSvrl ? _wrapWithSvrlFile (parser, sSaveSvrl) : parser);
 
         schematron.transform ();
 

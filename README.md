@@ -16,7 +16,7 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 * `phelger/vefa-validator:edge` - latest snapshot version
 
 v2.4.5 - work in progress
-* Added the system property `vefa.validator.debug.saveSvrl` (`-Dvefa.validator.debug.saveSvrl=true`) to store the raw SVRL of each Schematron check as `svrl-<UUID>.xml` in the current working directory. For debugging only.
+* Added the system property `vefa.validator.debug.saveSvrl` to store the raw SVRL of each Schematron check as `svrl-<UUID>.xml`. `-Dvefa.validator.debug.saveSvrl=true` uses the current working directory, any other value is used as the (auto-created) target directory, e.g. `-Dvefa.validator.debug.saveSvrl=/svrl`. In Docker pass it via `-e JAVA_TOOL_OPTIONS=...`. For debugging only.
 
 v2.4.4 - 2026-08-04
 * Extended the README with a user guide covering the supported document formats, their detection constraints and all default values
