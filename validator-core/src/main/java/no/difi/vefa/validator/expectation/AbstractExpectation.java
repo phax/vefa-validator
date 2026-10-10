@@ -126,7 +126,9 @@ public abstract class AbstractExpectation implements IExpectation
       if (nCount == 1)
         section.add (key, "Rule not fired.", FlagType.SUCCESS);
       else
-        section.add ("SYSTEM-009", "Rule '" + key + "' fired " + (nCount - 1) + " time(s).", FlagType.ERROR);
+        section.add ("SYSTEM-009",
+                     "Rule '" + key + "' fired " + (nCount - 1) + " time(s). Expected 0 but found " + (nCount - 1) + ".",
+                     FlagType.ERROR);
     }
   }
 }
