@@ -15,7 +15,7 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 * `phelger/vefa-validator:latest` - latest release version
 * `phelger/vefa-validator:edge` - latest snapshot version
 
-v2.4.5 - work in progress
+v2.4.5 - 2026-10-13
 * Added the system property `vefa.validator.debug.saveSvrl` to store the raw SVRL of each Schematron check as `svrl-<UUID>.xml`. `-Dvefa.validator.debug.saveSvrl=true` uses the current working directory, any other value is used as the (auto-created) target directory, e.g. `-Dvefa.validator.debug.saveSvrl=/svrl`. In Docker pass it via `-e JAVA_TOOL_OPTIONS=...`. For debugging only.
 * Improved the validator test expectation messages `SYSTEM-004`, `SYSTEM-005`, `SYSTEM-006` and `SYSTEM-009` to contain the expected as well as the actual number of findings, e.g. `Rule 'BR-CL-10' (ERROR) not fired 2 time(s). Expected 3 but found 1.`
 
