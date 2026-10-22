@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 
 # Block the compromised eMudhra intermediate CA certificates (16 certificates, including the
 # ones cross-signed by Sectigo AAA), see https://github.com/phax/phoss-ap/issues/115
