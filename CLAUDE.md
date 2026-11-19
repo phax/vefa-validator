@@ -61,3 +61,4 @@ Each module depends on all modules above it.
 - DI framework: Google Guice 7
 - XML processing: Saxon 12.9, ph-schematron
 - Utilities: ph-commons (`ICommonsList`, `CommonsArrayList`, etc.)
+- ZIP entries (`ZipDeclaration.children`) are read with `ZipWalker` from ph-commons `ph-io` (since 12.7.2), with global limits (`ZipDeclaration.setSettings`); ASiC-E files (`AsiceDeclaration.children`) are read with ph-asic, which applies the same limits via `LimitedZipInputStream` (since ph-asic 4.1.1); nested validation is limited by the property `limits.nesting.max_depth` (`ValidationInstance` tracks the depth, `SYSTEM-011` when reached)

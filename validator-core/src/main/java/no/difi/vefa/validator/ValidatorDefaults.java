@@ -23,6 +23,10 @@ public final class ValidatorDefaults
                                         .set ("feature.suppress_notloaded", Boolean.FALSE)
                                         .set ("feature.infourl", Boolean.FALSE)
 
+                                        // limits
+                                        .set ("limits.nesting.max_depth",
+                                              Integer.valueOf (ValidationInstance.DEFAULT_MAX_NESTING_DEPTH))
+
                                         // pools.checker
                                         .set ("pools.checker.size", Integer.valueOf (CheckerCacheLoader.DEFAULT_SIZE))
                                         .set ("pools.checker.expire", Long.valueOf (TimeUnit.DAYS.toMinutes (1)))

@@ -76,25 +76,25 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
   }
 
   @Override
-  public Iterable <CachedFile> children (final InputStream inputStream)
+  public Iterable <CachedFile> children (final InputStream inputStream) throws VefaValidatorException
   {
-    try
+    // The reader limits the number of entries and the total uncompressed size
+    try (final IAsicReader asicReader = AsicReaderFactory.newFactory ().open (inputStream))
     {
-      final IAsicReader asicReader = AsicReaderFactory.newFactory ().open (inputStream);
       final List <CachedFile> files = new ArrayList <> ();
 
       String filename;
       while ((filename = asicReader.getNextFile ()) != null)
       {
-        files.add (CachedFile.of (filename,
-                                  StreamHelper.getAllBytes (new NonClosingInputStream (asicReader.inputStream ()))));
+        // readAllBytes, because a read error (e.g. an exceeded limit) must not be swallowed
+        files.add (CachedFile.of (filename, new NonClosingInputStream (asicReader.inputStream ()).readAllBytes ()));
       }
 
       return files;
     }
-    catch (final IOException e)
+    catch (final IOException | IllegalStateException e)
     {
-      return null;
+      throw new VefaValidatorException ("Failed to read the ASiC-E container: " + e.getMessage (), e);
     }
   }
 }

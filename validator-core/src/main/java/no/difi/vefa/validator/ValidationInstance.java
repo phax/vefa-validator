@@ -41,9 +41,14 @@ import no.difi.xsd.vefa.validator._1.TriggerType;
  */
 class ValidationInstance implements IValidation
 {
+  /** The default maximum nesting depth of nested validation (property "limits.nesting.max_depth") */
+  public static final int DEFAULT_MAX_NESTING_DEPTH = 5;
+
   private static final Logger log = LoggerFactory.getLogger (ValidationInstance.class);
 
   private final ValidatorInstance m_aValidatorInstance;
+  /** 0 for the validated document, 1 for its children etc. */
+  private final int m_nNestingDepth;
   private final IProperties m_aProperties;
   private Configuration m_aConfiguration;
 
@@ -74,10 +79,15 @@ class ValidationInstance implements IValidation
    *        Instance of validator.
    * @param validationSource
    *        Source to validate.
+   * @param nNestingDepth
+   *        The nesting depth of the document: 0 for the validated document, 1 for its children etc.
    */
-  private ValidationInstance (final ValidatorInstance validatorInstance, final IValidationSource validationSource)
+  private ValidationInstance (final ValidatorInstance validatorInstance,
+                              final IValidationSource validationSource,
+                              final int nNestingDepth)
   {
     this.m_aValidatorInstance = validatorInstance;
+    this.m_nNestingDepth = nNestingDepth;
     this.m_aProperties = new CombinedProperties (validationSource.getProperties (), validatorInstance.getProperties ());
 
     this.m_aReport = new Report ();
@@ -272,11 +282,24 @@ class ValidationInstance implements IValidation
     {
       if (m_aDeclaration.supportsChildren () && m_aProperties.getBoolean ("feature.nesting"))
       {
+        // Protects against e.g. a ZIP that contains itself
+        final int nMaxNestingDepth = m_aProperties.getInteger ("limits.nesting.max_depth", DEFAULT_MAX_NESTING_DEPTH);
+        if (m_nNestingDepth >= nMaxNestingDepth)
+        {
+          m_aSection.add ("SYSTEM-011",
+                          "The embedded documents are not validated, because the maximum nesting depth of " +
+                                        nMaxNestingDepth +
+                                        " is reached",
+                          FlagType.FATAL);
+          return;
+        }
+
         final Iterable <CachedFile> iterable = m_aDeclaration.children (m_aDocument.getInputStream ());
         for (final CachedFile cachedFile : iterable)
         {
-          _addChildValidation (ValidationInstance.of (m_aValidatorInstance,
-                                                      new ValidationSourceImpl (cachedFile.getContentStream (), null)),
+          _addChildValidation (new ValidationInstance (m_aValidatorInstance,
+                                                       new ValidationSourceImpl (cachedFile.getContentStream (), null),
+                                                       m_nNestingDepth + 1),
                                cachedFile.getFilename ());
         }
       }
@@ -330,6 +353,6 @@ class ValidationInstance implements IValidation
   public static ValidationInstance of (final ValidatorInstance validatorInstance,
                                        final IValidationSource validationSource)
   {
-    return new ValidationInstance (validatorInstance, validationSource);
+    return new ValidationInstance (validatorInstance, validationSource, 0);
   }
 }

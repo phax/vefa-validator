@@ -1,6 +1,8 @@
 package no.difi.vefa.validator;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -89,6 +91,24 @@ public class Testing
                                                           new SimpleProperties ().set ("feature.nesting", true));
     assertEquals (validation.getReport ().getFlag (), FlagType.OK);
     assertEquals (validation.getChildren ().size (), 3);
+  }
+
+  @Test
+  public void maxNestingDepthTest () throws IOException
+  {
+    // The test set itself is depth 0 - its tests would be depth 1
+    final IValidation validation = s_aValidator.validate (new ClassPathResource ("/documents/NOGOV-T10-R014.xml"),
+                                                          new SimpleProperties ().set ("feature.nesting", true)
+                                                                                 .set ("limits.nesting.max_depth", 0));
+    assertEquals (FlagType.FATAL, validation.getReport ().getFlag ());
+    assertNull (validation.getChildren ());
+
+    boolean bFound = false;
+    for (final SectionType sectionType : validation.getReport ().getSection ())
+      for (final AssertionType assertion : sectionType.getAssertion ())
+        if ("SYSTEM-011".equals (assertion.getIdentifier ()))
+          bFound = true;
+    assertTrue (bFound);
   }
 
   @Test

@@ -15,6 +15,12 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 * `phelger/vefa-validator:latest` - latest release version
 * `phelger/vefa-validator:edge` - latest snapshot version
 
+v2.4.6 - work in progress
+* Requires at least ph-commons 12.7.2 and ph-asic 4.1.1
+* The entries of a generic ZIP are now read with `ZipWalker` from ph-commons: content that is not a ZIP archive, a broken archive, more than 10.000 entries or more than 100 MB uncompressed size are reported as `SYSTEM-001` (`FATAL`) instead of being read without limit (or failing with a `NullPointerException`). The limits can be changed with `ZipDeclaration.setSettings`
+* The files of an ASiC-E container are read with the limits of ph-asic 4.1.1; a container that cannot be read is reported as `SYSTEM-001` (`FATAL`) instead of failing with a `NullPointerException`
+* Nested validation is now limited to a nesting depth of 5 (new property `limits.nesting.max_depth`), so that e.g. a ZIP containing itself is not validated endlessly. When the limit is reached, the embedded documents are not validated and the new `SYSTEM-011` (`FATAL`) is reported
+
 v2.4.5 - 2026-10-13
 * Added the system property `vefa.validator.debug.saveSvrl` to store the raw SVRL of each Schematron check as `svrl-<UUID>.xml`. `-Dvefa.validator.debug.saveSvrl=true` uses the current working directory, any other value is used as the (auto-created) target directory, e.g. `-Dvefa.validator.debug.saveSvrl=/svrl`. In Docker pass it via `-e JAVA_TOOL_OPTIONS=...`. For debugging only.
 * Improved the validator test expectation messages `SYSTEM-004`, `SYSTEM-005`, `SYSTEM-006` and `SYSTEM-009` to contain the expected as well as the actual number of findings, e.g. `Rule 'BR-CL-10' (ERROR) not fired 2 time(s). Expected 3 but found 1.`
@@ -247,6 +253,7 @@ Formats not listed here (EDIFACT, JSON, PDF, plain text, …) are not recognised
 #### Generic ZIP
 
 * If the first entry is named `mimetype`, its content becomes the identifier (which is how ODF/OOXML-style containers are identified), otherwise `application/zip` is used.
+* The entries are read completely into memory, limited to 10.000 entries and 100 MB uncompressed size in total (`ZipDeclaration.setSettings`). Exceeding a limit, a broken archive or content that is no ZIP archive yields `SYSTEM-001` (`FATAL`). A ZIP inside the ZIP is returned as entry and validated on the next nesting level.
 * There is **no built-in configuration** for generic ZIP files. Without a matching configuration from an artifact, validation ends as `Unknown document type` — and consequently no nested validation of the entries takes place.
 
 #### Validator test files
@@ -267,6 +274,7 @@ Nested (recursive) validation is **off by default** and is enabled with `feature
 
 Children appear as nested `Report` elements (`report/report`) and via `IValidation.getChildren()`; `getChildren()` returns `null` when there are none.
 Nesting only happens when the outer document itself has a matching configuration and has not already failed fatally.
+The nesting depth is limited by `limits.nesting.max_depth` (default `5`, the validated document has depth 0); when it is reached, the embedded documents are not validated and `SYSTEM-011` (`FATAL`) is reported.
 
 ### Matching a configuration
 
@@ -315,6 +323,7 @@ Assertions produced by the engine itself:
 | `SYSTEM-008` | `ERROR` | Checker failed |
 | `SYSTEM-009` | `ERROR` | Rule expected to succeed did fire (expectations only) |
 | `SYSTEM-010` | `ERROR` | Trigger failed |
+| `SYSTEM-011` | `FATAL` | Embedded documents not validated, because the maximum nesting depth is reached |
 | `XSD` | `FATAL` | XSD validation error |
 | `ASICE-001` | `INFO` | Signing certificate of an ASiC-E container |
 | `ASICE-002` | `FATAL` | ASiC-E container verification failed |
@@ -349,6 +358,7 @@ Properties are resolved in this order, first hit wins: properties of the individ
 | `feature.nesting` | boolean | `false` | Validate embedded documents (SBDH payload, ASiC-E/ZIP entries, test sets) |
 | `feature.suppress_notloaded` | boolean | `false` | Do not report `SYSTEM-007` for artifacts that could not be loaded |
 | `feature.infourl` | boolean | `false` | Copy `file/@infoUrl` to the assertions, replacing `{}` with the rule identifier |
+| `limits.nesting.max_depth` | int | `5` | Maximum nesting depth of nested validation (`SYSTEM-011` when reached) |
 | `pools.checker.size` | int | `250` | Maximum number of compiled checkers kept in the cache |
 | `pools.checker.expire` | int (minutes) | `1440` (1 day) | Lifetime of a cached checker, counted **from insertion** (`expireAfterWrite`) |
 

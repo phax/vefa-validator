@@ -75,7 +75,7 @@
       <dependency>
         <groupId>com.helger.commons</groupId>
         <artifactId>ph-commons-bom</artifactId>
-        <version>12.7.1</version>
+        <version>12.7.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -89,7 +89,7 @@
       <dependency>
         <groupId>com.helger</groupId>
         <artifactId>ph-asic</artifactId>
-        <version>4.1.0</version>
+        <version>4.1.1-SNAPSHOT</version>
       </dependency>
 
       <!-- Validator -->

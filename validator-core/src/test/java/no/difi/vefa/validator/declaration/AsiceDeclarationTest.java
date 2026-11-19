@@ -2,15 +2,20 @@ package no.difi.vefa.validator.declaration;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import org.junit.Test;
 
 import com.helger.asic.AsicVerifierFactory;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 import com.helger.base.io.stream.StreamHelper;
+
+import no.difi.vefa.validator.lang.VefaValidatorException;
 
 public class AsiceDeclarationTest
 {
@@ -53,5 +58,19 @@ public class AsiceDeclarationTest
     xmlDeclaration.convert (byteArrayOutputStream.getAsInputStream (), converted);
 
     AsicVerifierFactory.newFactory ().verify (converted.getAsInputStream ());
+  }
+
+  @Test
+  public void childrenOfBrokenContainer ()
+  {
+    try
+    {
+      declaration.children (new NonBlockingByteArrayInputStream ("not a zip".getBytes (StandardCharsets.ISO_8859_1)));
+      fail ();
+    }
+    catch (final VefaValidatorException ex)
+    {
+      assertTrue (ex.getMessage (), ex.getMessage ().contains ("not a ZIP archive"));
+    }
   }
 }
