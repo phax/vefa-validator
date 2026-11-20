@@ -29,4 +29,7 @@ RUN BLOCKED="$JAVA_HOME/lib/security/blocked.certs" && \
 
 ADD target/vefa-validator /vefa-validator
 
+# Disable the HotSpot Base64 intrinsic as mitigation for CVE-2026-114938 ("Java2Shell")
+ENV JAVA_OPTS="-XX:-UseBASE64Intrinsics"
+
 ENTRYPOINT ["sh", "/vefa-validator/bin/run.sh"]

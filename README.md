@@ -16,6 +16,7 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 * `phelger/vefa-validator:edge` - latest snapshot version
 
 v2.4.6 - work in progress
+* **Security: the Docker image disables the HotSpot Base64 intrinsic (`-XX:-UseBASE64Intrinsics`) as mitigation for CVE-2026-114938 ("Java2Shell").** `bin/run.sh` now passes the environment variable `JAVA_OPTS` to the JVM
 * Requires at least ph-commons 12.7.2 and ph-asic 4.1.1
 * The entries of a generic ZIP are now read with `ZipWalker` from ph-commons: content that is not a ZIP archive, a broken archive, more than 10.000 entries or more than 100 MB uncompressed size are reported as `SYSTEM-001` (`FATAL`) instead of being read without limit (or failing with a `NullPointerException`). The limits can be changed with `ZipDeclaration.setSettings`
 * The files of an ASiC-E container are read with the limits of ph-asic 4.1.1; a container that cannot be read is reported as `SYSTEM-001` (`FATAL`) instead of failing with a `NullPointerException`
