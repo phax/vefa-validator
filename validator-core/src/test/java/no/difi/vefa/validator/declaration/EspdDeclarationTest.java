@@ -32,7 +32,7 @@ public class EspdDeclarationTest
     try (InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/ESPDResponse-2.xml")))
     {
       final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (inputStream);
-      assertEquals (declarationIdentifier.getIdentifier ().get (0),
+      assertEquals (declarationIdentifier.getIdentifier ().getFirst (),
                     "urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1::ESPDResponse::SomeCustomization");
     }
   }
@@ -43,7 +43,7 @@ public class EspdDeclarationTest
     try (InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/ESPDResponse.xml")))
     {
       final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (inputStream);
-      assertEquals (declarationIdentifier.getIdentifier ().get (0),
+      assertEquals (declarationIdentifier.getIdentifier ().getFirst (),
                     "urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1::ESPDResponse::1");
     }
   }
@@ -66,7 +66,7 @@ public class EspdDeclarationTest
                        "xmlns:espd=\"urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1\">";
 
     final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes (StandardCharsets.UTF_8)));
-    assertEquals (declarationIdentifier.getIdentifier ().get (0),
+    assertEquals (declarationIdentifier.getIdentifier ().getFirst (),
                   "urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1::ESPDResponse");
   }
 
@@ -89,7 +89,7 @@ public class EspdDeclarationTest
                        "<VersionID></VersionID>";
 
     final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes (StandardCharsets.UTF_8)));
-    assertEquals (declarationIdentifier.getIdentifier ().get (0),
+    assertEquals (declarationIdentifier.getIdentifier ().getFirst (),
                   "urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1::ESPDResponse");
   }
 
@@ -112,7 +112,7 @@ public class EspdDeclarationTest
                        "</espd:ESPDResponse>";
 
     final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (new NonBlockingByteArrayInputStream (xml.getBytes (StandardCharsets.UTF_8)));
-    assertEquals (declarationIdentifier.getIdentifier ().get (0),
+    assertEquals (declarationIdentifier.getIdentifier ().getFirst (),
                   "urn:grow:names:specification:ubl:schema:xsd:ESPDResponse-1::ESPDResponse");
   }
 }

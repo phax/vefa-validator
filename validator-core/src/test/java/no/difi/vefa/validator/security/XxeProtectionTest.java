@@ -72,11 +72,12 @@ public class XxeProtectionTest
   @Test
   public void testXxePayloadProcessing ()
   {
-    final String xxePayload = "<?xml version=\"1.0\"?>\n" +
-                              "<!DOCTYPE foo [\n" +
-                              "  <!ENTITY xxe SYSTEM \"file:///dev/null\">\n" +
-                              "]>\n" +
-                              "<root>&xxe;</root>";
+    final String xxePayload = """
+        <?xml version="1.0"?>
+        <!DOCTYPE foo [
+          <!ENTITY xxe SYSTEM "file:///dev/null">
+        ]>
+        <root>&xxe;</root>""";
 
     // Default factory (vulnerable) — should parse the DTD declaration
     final XMLInputFactory defaultFactory = XMLInputFactory.newFactory ();

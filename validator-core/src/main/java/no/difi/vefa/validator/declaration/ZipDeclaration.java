@@ -121,26 +121,21 @@ public class ZipDeclaration implements IDeclarationWithChildren
       return EContinue.CONTINUE;
     });
 
-    switch (aResult.getResult ())
+    return switch (aResult.getResult ())
     {
-      case SUCCESS:
-        return ret;
-      case MAX_ENTRY_COUNT_EXCEEDED:
-        throw new VefaValidatorException ("The ZIP archive contains more than " +
-                                          aSettings.getMaxEntryCount () +
-                                          " entries");
-      case MAX_TOTAL_UNCOMPRESSED_BYTES_EXCEEDED:
-        throw new VefaValidatorException ("The total uncompressed size of the ZIP archive exceeds " +
-                                          aSettings.getMaxTotalUncompressedBytes () +
-                                          " bytes");
-      case NOT_A_ZIP:
-        throw new VefaValidatorException ("The content is not a ZIP archive");
-      default:
-        throw new VefaValidatorException ("Failed to read the ZIP archive" +
-                                          (aResult.getEntryPath () == null ? "" : " at entry '" +
-                                                                                  aResult.getEntryPath () +
-                                                                                  "'"),
-                                          aResult.getException ());
-    }
+      case SUCCESS -> ret;
+      case MAX_ENTRY_COUNT_EXCEEDED -> throw new VefaValidatorException ("The ZIP archive contains more than " +
+                                                                         aSettings.getMaxEntryCount () +
+                                                                         " entries");
+      case MAX_TOTAL_UNCOMPRESSED_BYTES_EXCEEDED -> throw new VefaValidatorException ("The total uncompressed size of the ZIP archive exceeds " +
+                                                                                      aSettings.getMaxTotalUncompressedBytes () +
+                                                                                      " bytes");
+      case NOT_A_ZIP -> throw new VefaValidatorException ("The content is not a ZIP archive");
+      default -> throw new VefaValidatorException ("Failed to read the ZIP archive" +
+                                                   (aResult.getEntryPath () == null ? "" : " at entry '" +
+                                                                                           aResult.getEntryPath () +
+                                                                                           "'"),
+                                                   aResult.getException ());
+    };
   }
 }

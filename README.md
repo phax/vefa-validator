@@ -17,6 +17,7 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 
 v2.5.0 - work in progress
 * Changed baseline to Java 21+
+* Code uses Java 21 language features (pattern matching for `instanceof`, switch expressions, text blocks, `List.getFirst`)
 * Updated to ph-schematron 11.0.0 and Saxon-HE 13.1
 * Requires at least ph-commons 12.7.2 and ph-asic 4.1.1
 * **Security: the Docker image disables the HotSpot Base64 intrinsic (`-XX:-UseBASE64Intrinsics`) as mitigation for CVE-2026-114938 ("Java2Shell").** `bin/run.sh` now passes the environment variable `JAVA_OPTS` to the JVM

@@ -38,7 +38,7 @@ public class AsiceXmlDeclaration extends AbstractXmlDeclaration implements
   @Override
   public boolean verify (final byte [] content, final List <String> parent)
   {
-    return NAMESPACE.equals (parent.get (0));
+    return NAMESPACE.equals (parent.getFirst ());
   }
 
   @Override

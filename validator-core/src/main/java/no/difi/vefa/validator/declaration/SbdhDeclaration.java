@@ -26,13 +26,13 @@ public class SbdhDeclaration extends AbstractXmlDeclaration implements IDeclarat
   @Override
   public boolean verify (final byte [] content, final List <String> parent)
   {
-    return parent.get (0).startsWith (NAMESPACE);
+    return parent.getFirst ().startsWith (NAMESPACE);
   }
 
   @Override
   public List <String> detect (final InputStream contentStream, final List <String> parent)
   {
-    return Arrays.asList (parent.get (0), "SBDH:1.0");
+    return Arrays.asList (parent.getFirst (), "SBDH:1.0");
   }
 
   @Override

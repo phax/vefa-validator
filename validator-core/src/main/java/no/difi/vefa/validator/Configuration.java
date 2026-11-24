@@ -118,21 +118,11 @@ class Configuration extends ConfigurationType implements IFlagFilter
     {
       switch (m_aRuleActions.get (assertionType.getIdentifier ()))
       {
-        case SET_FUTURE_ERROR:
-          assertionType.setFlag (FlagType.FUTURE_ERROR);
-          break;
-        case SET_ERROR:
-          assertionType.setFlag (FlagType.ERROR);
-          break;
-        case SET_WARNING:
-          assertionType.setFlag (FlagType.WARNING);
-          break;
-        case SET_FATAL:
-          assertionType.setFlag (FlagType.FATAL);
-          break;
-        case SUPPRESS:
-          assertionType.setFlag (null);
-          break;
+        case SET_FUTURE_ERROR -> assertionType.setFlag (FlagType.FUTURE_ERROR);
+        case SET_ERROR -> assertionType.setFlag (FlagType.ERROR);
+        case SET_WARNING -> assertionType.setFlag (FlagType.WARNING);
+        case SET_FATAL -> assertionType.setFlag (FlagType.FATAL);
+        case SUPPRESS -> assertionType.setFlag (null);
       }
     }
   }

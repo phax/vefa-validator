@@ -38,7 +38,7 @@ public class UblDeclarationTest
                      "<CustomizationID>customization</CustomizationID><ProfileID>profile</ProfileID></Invoice:Invoice>";
 
     final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes (StandardCharsets.UTF_8));
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (), "profile#customization");
   }
 
   @Test
@@ -50,7 +50,7 @@ public class UblDeclarationTest
                      "<cbc:ProfileID>profile</cbc:ProfileID>" +
                      "</Invoice:Invoice>";
     final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes (StandardCharsets.UTF_8));
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (), "profile#customization");
   }
 
   @Test
@@ -62,7 +62,7 @@ public class UblDeclarationTest
                      "<ns1:ProfileID>profile</ns1:ProfileID>" +
                      "</Invoice:Invoice>";
     final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes (StandardCharsets.UTF_8));
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (), "profile#customization");
   }
 
   @Test
@@ -74,7 +74,7 @@ public class UblDeclarationTest
                      "<ProfileID  >profile</ProfileID   >" +
                      "</Invoice:Invoice>";
     final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes (StandardCharsets.UTF_8));
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (), "profile#customization");
   }
 
   @Test
@@ -86,7 +86,7 @@ public class UblDeclarationTest
                      "<ProfileID\t>profile</ProfileID\t>" +
                      "</Invoice:Invoice>";
     final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes (StandardCharsets.UTF_8));
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (), "profile#customization");
   }
 
   @Test
@@ -100,7 +100,7 @@ public class UblDeclarationTest
                      "schemeID=\"urn:oioubl:id:profileid-1.2\">Procurement-OrdSimR-BilSim-1.0</cbc:ProfileID>" +
                      "</Invoice:Invoice>";
     final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes (StandardCharsets.UTF_8));
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0),
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (),
                   "Procurement-OrdSimR-BilSim-1.0#OIOUBL-2.02");
   }
 
@@ -115,7 +115,7 @@ public class UblDeclarationTest
                      "<cbc:ProfileID>profile</cbc:ProfileID>" +
                      "</Invoice:Invoice>";
     final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes (StandardCharsets.UTF_8));
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0),
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (),
                   "profile#" +
                                                                                      "urn:www.cenbii.eu:transaction:biitrns010:ver2.0:extended:" +
                                                                                      "urn:www.peppol.eu:bis:peppol4a:ver2.0");
@@ -134,7 +134,7 @@ public class UblDeclarationTest
                      "<ProfileID>profile</ProfileID>" +
                      "</Invoice:Invoice>";
     final NonBlockingByteArrayInputStream inputStream = new NonBlockingByteArrayInputStream (s.getBytes (StandardCharsets.UTF_8));
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0), "profile#customization");
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (), "profile#customization");
   }
 
   @Test

@@ -18,7 +18,7 @@ public class ConfigurationsBuilderTest
                                                     .build ();
 
     assertEquals (cfg.getConfiguration ().size (), 1);
-    assertNull (cfg.getPackage ().get (0).getUrl ());
-    assertEquals (cfg.getPackage ().get (0).getValue (), "Test");
+    assertNull (cfg.getPackage ().getFirst ().getUrl ());
+    assertEquals (cfg.getPackage ().getFirst ().getValue (), "Test");
   }
 }

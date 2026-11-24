@@ -35,12 +35,13 @@ public class XmlUtilsTest
   @Test
   public void simpleUbl ()
   {
-    final String xml = "<ubl:Invoice\n" +
-                       "    xmlns=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\"\n" +
-                       "    xmlns:ubl=\"urn:oasis:names:specification:ubl:schema:xsd:Invoice-2\"\n" +
-                       "    xmlns:cac=\"urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2\"\n" +
-                       "    xmlns:cbc=\"urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2\"\n" +
-                       "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
+    final String xml = """
+        <ubl:Invoice
+            xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+            xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+            xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+            xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">""";
     assertEquals (XmlUtils.extractRootNamespace (xml), "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
     assertEquals (XmlUtils.extractLocalName (xml), "Invoice");
   }

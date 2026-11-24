@@ -27,7 +27,7 @@ public class NoblDeclaration extends AbstractXmlDeclaration
   @Override
   public boolean verify (final byte [] content, final List <String> parent)
   {
-    return PATTERN.matcher (parent.get (0)).matches ();
+    return PATTERN.matcher (parent.getFirst ()).matches ();
   }
 
   @Override
@@ -35,7 +35,7 @@ public class NoblDeclaration extends AbstractXmlDeclaration
   {
     final List <String> results = new ArrayList <> ();
 
-    final String type = parent.get (0).split ("::")[1];
+    final String type = parent.getFirst ().split ("::")[1];
 
     final StringBuilder aSB = new StringBuilder ();
     aSB.append (type);

@@ -19,7 +19,7 @@ public class DocumentTest
                                                     null);
 
     assertNotNull (document.getInputStream ());
-    assertEquals (document.getDeclarations ().get (0), "identifier");
+    assertEquals (document.getDeclarations ().getFirst (), "identifier");
     assertNull (document.getExpectation ());
   }
 

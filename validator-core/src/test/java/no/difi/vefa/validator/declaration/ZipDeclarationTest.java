@@ -66,7 +66,7 @@ public class ZipDeclarationTest
   {
     final List <CachedFile> aChildren = _children (_zip ("a.xml", "<a/>", "dir/b.xml", "<b/>"));
     assertEquals (2, aChildren.size ());
-    assertEquals ("a.xml", aChildren.get (0).getFilename ());
+    assertEquals ("a.xml", aChildren.getFirst ().getFilename ());
     assertEquals ("dir/b.xml", aChildren.get (1).getFilename ());
     assertArrayEquals ("<b/>".getBytes (StandardCharsets.UTF_8), aChildren.get (1).getContentStream ().readAllBytes ());
   }
@@ -85,8 +85,8 @@ public class ZipDeclarationTest
     }
     final List <CachedFile> aChildren = _children (aBAOS.toByteArray ());
     assertEquals (1, aChildren.size ());
-    assertEquals ("inner.zip", aChildren.get (0).getFilename ());
-    assertArrayEquals (aInner, aChildren.get (0).getContentStream ().readAllBytes ());
+    assertEquals ("inner.zip", aChildren.getFirst ().getFilename ());
+    assertArrayEquals (aInner, aChildren.getFirst ().getContentStream ().readAllBytes ());
   }
 
   @Test

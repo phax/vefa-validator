@@ -48,7 +48,7 @@ public class UblDeclaration extends AbstractXmlDeclaration
   public boolean verify (final byte [] content, @NonNull final List <String> parent)
   {
     return RegExHelper.stringMatchesPattern ("urn:oasis:names:specification:ubl:schema:xsd:(.+)-2::(.+)",
-                                             parent.get (0));
+                                             parent.getFirst ());
   }
 
   @Override

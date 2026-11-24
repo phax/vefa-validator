@@ -140,7 +140,7 @@ class ValidatorInstance implements Closeable
       }
     }
 
-    throw new UnknownDocumentTypeException ("Configuration for '" + declarations.get (0) + "' not found.");
+    throw new UnknownDocumentTypeException ("Configuration for '" + declarations.getFirst () + "' not found.");
   }
 
   protected DeclarationIdentifier detect (final InputStream contentStream) throws IOException

@@ -26,7 +26,7 @@ public class EspdDeclaration extends AbstractXmlDeclaration
   @Override
   public boolean verify (final byte [] content, final List <String> parent) throws VefaValidatorException
   {
-    return validParents.contains (parent.get (0));
+    return validParents.contains (parent.getFirst ());
   }
 
   @Override
@@ -50,17 +50,17 @@ public class EspdDeclaration extends AbstractXmlDeclaration
             if ("CustomizationID".equals (((StartElement) xmlEvent).getName ().getLocalPart ()))
             {
               xmlEvent = xmlEventReader.nextEvent ();
-              if (xmlEvent instanceof Characters)
+              if (xmlEvent instanceof final Characters aChars)
               {
-                results.add (parent.get (0) + "::" + ((Characters) xmlEvent).getData ());
+                results.add (parent.getFirst () + "::" + aChars.getData ());
               }
             }
             if ("VersionID".equals (((StartElement) xmlEvent).getName ().getLocalPart ()))
             {
               xmlEvent = xmlEventReader.nextEvent ();
-              if (xmlEvent instanceof Characters)
+              if (xmlEvent instanceof final Characters aChars)
               {
-                results.add (parent.get (0) + "::" + ((Characters) xmlEvent).getData ());
+                results.add (parent.getFirst () + "::" + aChars.getData ());
               }
             }
           }

@@ -66,7 +66,9 @@ public class DeclarationWrapper implements IDeclarationWithChildren, IDeclaratio
   @Override
   public Iterable <CachedFile> children (final InputStream inputStream) throws VefaValidatorException
   {
-    return ((IDeclarationWithChildren) declaration).children (inputStream);
+    if (declaration instanceof final IDeclarationWithChildren aDeclWithChildren)
+      return aDeclWithChildren.children (inputStream);
+    throw new IllegalStateException ("Declaration '" + declaration + "' does not support children");
   }
 
   public boolean supportsConverter ()
@@ -77,7 +79,10 @@ public class DeclarationWrapper implements IDeclarationWithChildren, IDeclaratio
   @Override
   public void convert (final InputStream inputStream, final OutputStream outputStream) throws VefaValidatorException
   {
-    ((IDeclarationWithConverter) declaration).convert (inputStream, outputStream);
+    if (declaration instanceof final IDeclarationWithConverter aDeclWithConverter)
+      aDeclWithConverter.convert (inputStream, outputStream);
+    else
+      throw new IllegalStateException ("Declaration '" + declaration + "' does not support conversion");
   }
 
   @Override

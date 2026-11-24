@@ -24,13 +24,10 @@ public class Cli
 
     switch (args[0])
     {
-      case COMMAND_BUILD:
-        no.difi.vefa.validator.build.Cli.main (realArgs);
-        break;
-      case COMMAND_TESTER:
-        no.difi.vefa.validator.tester.Cli.main (realArgs);
-        break;
-      default:
+      case COMMAND_BUILD -> no.difi.vefa.validator.build.Cli.main (realArgs);
+      case COMMAND_TESTER -> no.difi.vefa.validator.tester.Cli.main (realArgs);
+      default ->
+      {
         log.error (LOG_PREFIX +
                    "Unknown command: '" +
                    args[0] +
@@ -39,7 +36,7 @@ public class Cli
                    " and " +
                    COMMAND_TESTER);
         System.exit (1);
-        break;
+      }
     }
   }
 }

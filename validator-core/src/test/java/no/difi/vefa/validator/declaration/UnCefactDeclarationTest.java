@@ -26,7 +26,7 @@ public class UnCefactDeclarationTest
   public void simplePeppol () throws Exception
   {
     final InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/uncefact-peppol.xml"));
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0),
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (),
                   "CrossIndustryInvoice" +
                                                                                      "::urn:fdc:peppol.eu:2017:poacc:billing:01:1.0" +
                                                                                      "::urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0");
@@ -36,7 +36,7 @@ public class UnCefactDeclarationTest
   public void simpleTC434 () throws Exception
   {
     final InputStream inputStream = new BufferedInputStream (getClass ().getResourceAsStream ("/documents/uncefact-tc434.xml"));
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0),
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (),
                   "CrossIndustryInvoice::urn:cen.eu:en16931:2017");
   }
 
@@ -44,7 +44,7 @@ public class UnCefactDeclarationTest
   public void simpleSimple () throws Exception
   {
     final InputStream inputStream = getClass ().getResourceAsStream ("/documents/uncefact-simple.xml");
-    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().get (0),
+    assertEquals (declarationDetector.detect (inputStream).getIdentifier ().getFirst (),
                   "urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100::CrossIndustryInvoice");
   }
 }

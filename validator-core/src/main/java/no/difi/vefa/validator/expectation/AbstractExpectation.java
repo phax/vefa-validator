@@ -79,18 +79,25 @@ public abstract class AbstractExpectation implements IExpectation
       {
         switch (assertionType.getFlag ())
         {
-          case FATAL:
+          case FATAL ->
+          {
             if (_isExpected (assertionType.getIdentifier (), fatals, m_aFiredFatals))
               assertionType.setFlag (FlagType.EXPECTED);
-            break;
-          case ERROR:
+          }
+          case ERROR ->
+          {
             if (_isExpected (assertionType.getIdentifier (), errors, m_aFiredErrors))
               assertionType.setFlag (FlagType.EXPECTED);
-            break;
-          case WARNING:
+          }
+          case WARNING ->
+          {
             if (_isExpected (assertionType.getIdentifier (), warnings, m_aFiredWarnings))
               assertionType.setFlag (FlagType.EXPECTED);
-            break;
+          }
+          default ->
+          {
+            // No expectation handling for other flags
+          }
         }
       }
   }

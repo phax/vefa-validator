@@ -30,7 +30,7 @@ public class BuildTest
     assertEquals (build.getTestFolders ().size (), 0);
     build.addTestFolder (path.resolve ("testFolder").toFile ());
     assertEquals (build.getTestFolders ().size (), 1);
-    assertEquals (build.getTestFolders ().get (0), path.resolve ("testFolder"));
+    assertEquals (build.getTestFolders ().getFirst (), path.resolve ("testFolder"));
 
     assertEquals (build.getTestValidations ().size (), 0);
     build.addTestValidation (Mockito.mock (IValidation.class));

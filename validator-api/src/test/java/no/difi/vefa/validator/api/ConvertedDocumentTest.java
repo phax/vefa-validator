@@ -21,7 +21,7 @@ public class ConvertedDocumentTest
 
     assertNotNull (document.getInputStream ());
     assertNotNull (document.getSource ());
-    assertEquals (document.getDeclarations ().get (0), "identifier");
+    assertEquals (document.getDeclarations ().getFirst (), "identifier");
     assertNull (document.getExpectation ());
   }
 

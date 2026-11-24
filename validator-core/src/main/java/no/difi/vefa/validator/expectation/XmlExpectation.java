@@ -33,29 +33,16 @@ public class XmlExpectation extends AbstractExpectation
       final String [] parts = section.split (":", 2);
       switch (parts[0].toLowerCase ())
       {
-        case "content":
-        case "description":
-          description = parts[1].trim ().replaceAll ("\\n", " ").replace ("  ", " ");
-          break;
-        case "success":
-        case "successes":
-          extractRules (parts, successes);
-          break;
-        case "warning":
-        case "warnings":
-          extractRules (parts, warnings);
-          break;
-        case "error":
-        case "errors":
-          extractRules (parts, errors);
-          break;
-        case "fatal":
-        case "fatals":
-          extractRules (parts, fatals);
-          break;
-        case "scope":
-          extractList (parts, scopes);
-          break;
+        case "content", "description" -> description = parts[1].trim ().replaceAll ("\\n", " ").replace ("  ", " ");
+        case "success", "successes" -> extractRules (parts, successes);
+        case "warning", "warnings" -> extractRules (parts, warnings);
+        case "error", "errors" -> extractRules (parts, errors);
+        case "fatal", "fatals" -> extractRules (parts, fatals);
+        case "scope" -> extractList (parts, scopes);
+        default ->
+        {
+          // Unknown sections are ignored
+        }
       }
     }
   }

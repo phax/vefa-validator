@@ -30,14 +30,14 @@ public class UnCefactDeclaration extends AbstractXmlDeclaration
   @Override
   public boolean verify (final byte [] content, final List <String> parent)
   {
-    return RegExHelper.stringMatchesPattern ("urn:un:unece:uncefact:data:standard:(.+)::(.+)", parent.get (0));
+    return RegExHelper.stringMatchesPattern ("urn:un:unece:uncefact:data:standard:(.+)::(.+)", parent.getFirst ());
   }
 
   @Override
   public List <String> detect (final InputStream aIS, final List <String> parent)
   {
     final StringBuilder aSB = new StringBuilder ();
-    aSB.append (parent.get (0).split ("::")[1]);
+    aSB.append (parent.getFirst ().split ("::")[1]);
 
     try
     {

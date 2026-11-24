@@ -57,7 +57,7 @@ public class Testing
 
     assertEquals (validation.getReport ().getFlag (), FlagType.ERROR);
     assertEquals (validation.getReport ().getSection ().get (5).getAssertion ().size (), 5);
-    assertEquals (validation.getDocument ().getDeclarations ().get (0),
+    assertEquals (validation.getDocument ().getDeclarations ().getFirst (),
                   "xml.ubl::urn:www.cenbii.eu:profile:bii04:ver2.0#" +
                                                                         "urn:www.cenbii.eu:transaction:biitrns010:ver2.0:extended:" +
                                                                         "urn:www.peppol.eu:bis:peppol4a:ver2.0:extended:" +
@@ -77,7 +77,7 @@ public class Testing
     }
 
     assertEquals (validation.getReport ().getFlag (), FlagType.OK);
-    assertEquals (validation.getDocument ().getDeclarations ().get (0),
+    assertEquals (validation.getDocument ().getDeclarations ().getFirst (),
                   "xml.ubl::urn:www.cenbii.eu:profile:bii05:ver2.0#" +
                                                                         "urn:www.cenbii.eu:transaction:biitrns010:ver2.0:extended:" +
                                                                         "urn:www.peppol.eu:bis:peppol5a:ver2.0:extended:" +

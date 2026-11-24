@@ -53,7 +53,7 @@ public class DeclarationIdentifier
   @Override
   public String toString ()
   {
-    final String identifier = identifiers.get (0);
+    final String identifier = identifiers.getFirst ();
 
     if (identifier.startsWith ("configuration::"))
       return identifier;

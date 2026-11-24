@@ -25,7 +25,7 @@ public class ConfigurationBuilderTest
     assertEquals (cfg.getStandardId (), "test#test");
     assertEquals (cfg.getWeight (), -10L);
     assertEquals (cfg.getTrigger ().size (), 1);
-    assertEquals (cfg.getTrigger ().get (0).getIdentifier (), "test");
+    assertEquals (cfg.getTrigger ().getFirst ().getIdentifier (), "test");
     assertEquals (cfg.getBuild (), "unit-test");
   }
 

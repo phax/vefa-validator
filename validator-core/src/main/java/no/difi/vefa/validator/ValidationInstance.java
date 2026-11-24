@@ -139,10 +139,10 @@ class ValidationInstance implements IValidation
   private void _loadDocument (final InputStream inputStream) throws VefaValidatorException, IOException
   {
     final NonBlockingByteArrayInputStream aBAIS;
-    if (inputStream instanceof NonBlockingByteArrayInputStream)
+    if (inputStream instanceof final NonBlockingByteArrayInputStream aNBBAIS)
     {
       // Use stream as-is.
-      aBAIS = (NonBlockingByteArrayInputStream) inputStream;
+      aBAIS = aNBBAIS;
     }
     else
     {

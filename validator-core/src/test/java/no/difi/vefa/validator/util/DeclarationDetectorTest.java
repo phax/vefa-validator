@@ -32,7 +32,7 @@ public class DeclarationDetectorTest
     final InputStream inputStream = new NonBlockingByteArrayInputStream (bytes);
     final DeclarationIdentifier declarationIdentifier = declarationDetector.detect (inputStream);
     assertEquals (declarationIdentifier.getDeclaration ().getType (), "xml.ubl");
-    assertEquals (declarationIdentifier.getIdentifier ().get (0),
+    assertEquals (declarationIdentifier.getIdentifier ().getFirst (),
                   "urn:www.cenbii.eu:profile:bii05:ver2.0#urn:www.cenbii.eu:transaction:biitrns010:ver2.0:extended:urn:www.peppol.eu:bis:peppol5a:ver2.0:extended:urn:www.difi.no:ehf:faktura:ver2.0");
     assertNotNull (declarationIdentifier.getParent ());
   }
