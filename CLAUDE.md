@@ -13,7 +13,7 @@ mvn -pl validator-core -Dtest=Testing#simpleOk test  # Run a single test method
 make package                               # Makefile shortcut for clean package
 ```
 
-Java 17+ required. CI tests on Java 17, 21, 25.
+Java 21+ required. CI tests on Java 21, 25.
 
 ## Project Structure
 
@@ -59,6 +59,6 @@ Each module depends on all modules above it.
 - Group ID: `com.helger.vefa` (forked from `no.difi.vefa`)
 - Test framework: JUnit 4 (not JUnit 5)
 - DI framework: Google Guice 7
-- XML processing: Saxon 12.9, ph-schematron
+- XML processing: Saxon 13.1, ph-schematron 11
 - Utilities: ph-commons (`ICommonsList`, `CommonsArrayList`, etc.)
 - ZIP entries (`ZipDeclaration.children`) are read with `ZipWalker` from ph-commons `ph-io` (since 12.7.2), with global limits (`ZipDeclaration.setSettings`); ASiC-E files (`AsiceDeclaration.children`) are read with ph-asic, which applies the same limits via `LimitedZipInputStream` (since ph-asic 4.1.1); nested validation is limited by the property `limits.nesting.max_depth` (`ValidationInstance` tracks the depth, `SYSTEM-011` when reached)

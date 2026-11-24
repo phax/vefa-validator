@@ -15,9 +15,11 @@ Docker image - see https://hub.docker.com/r/phelger/vefa-validator/tags
 * `phelger/vefa-validator:latest` - latest release version
 * `phelger/vefa-validator:edge` - latest snapshot version
 
-v2.4.6 - work in progress
-* **Security: the Docker image disables the HotSpot Base64 intrinsic (`-XX:-UseBASE64Intrinsics`) as mitigation for CVE-2026-114938 ("Java2Shell").** `bin/run.sh` now passes the environment variable `JAVA_OPTS` to the JVM
+v2.5.0 - work in progress
+* Changed baseline to Java 21+
+* Updated to ph-schematron 11.0.0 and Saxon-HE 13.1
 * Requires at least ph-commons 12.7.2 and ph-asic 4.1.1
+* **Security: the Docker image disables the HotSpot Base64 intrinsic (`-XX:-UseBASE64Intrinsics`) as mitigation for CVE-2026-114938 ("Java2Shell").** `bin/run.sh` now passes the environment variable `JAVA_OPTS` to the JVM
 * The entries of a generic ZIP are now read with `ZipWalker` from ph-commons: content that is not a ZIP archive, a broken archive, more than 10.000 entries or more than 100 MB uncompressed size are reported as `SYSTEM-001` (`FATAL`) instead of being read without limit (or failing with a `NullPointerException`). The limits can be changed with `ZipDeclaration.setSettings`
 * The files of an ASiC-E container are read with the limits of ph-asic 4.1.1; a container that cannot be read is reported as `SYSTEM-001` (`FATAL`) instead of failing with a `NullPointerException`
 * Nested validation is now limited to a nesting depth of 5 (new property `limits.nesting.max_depth`), so that e.g. a ZIP containing itself is not validated endlessly. When the limit is reached, the embedded documents are not validated and the new `SYSTEM-011` (`FATAL`) is reported
@@ -401,7 +403,7 @@ All artifacts are read into memory when the `Validator` is built; updates in the
 
 ### General constraints
 
-* **Java 17 or later.** CI builds and tests on Java 17, 21 and 25.
+* **Java 21 or later.** CI builds and tests on Java 21 and 25.
 * `Validator` is thread safe and intended to be created once. `ValidationInstance` objects (the results) are per validation.
 * Documents are held **completely in memory** during validation; converted documents (`xml.asice`, `xml.test`) exist twice in memory. Nested validation multiplies this per embedded document.
 * Detection is heuristic and works on the first 50 KB only — a document whose identifying elements appear later is only recognised at the generic `xml` level. The exception is UBL, which processes the whole document.
