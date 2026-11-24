@@ -75,6 +75,7 @@ public class AsiceDeclaration extends AbstractXmlDeclaration implements
     StreamHelper.copyByteStream ().from (inputStream).closeFrom (false).to (outputStream).closeTo (false).build ();
   }
 
+  @SuppressWarnings ("resource")
   @Override
   public Iterable <CachedFile> children (final InputStream inputStream) throws VefaValidatorException
   {
